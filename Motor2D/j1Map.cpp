@@ -4,6 +4,7 @@
 #include "j1Render.h"
 #include "j1Textures.h"
 #include "j1Map.h"
+#include "j1Collision.h"
 #include <math.h>
 
 j1Map::j1Map() : j1Module(), map_loaded(false)
@@ -32,20 +33,33 @@ void j1Map::Draw()
 		return;
 
 	// TODO 5: Prepare the loop to draw all tilesets + Blit
+	p2List_item<MapLayer*>* layer;
+	layer = data.layers.start;
 	p2List_item<TileSet*>* tileset;
 	tileset = data.tilesets.start;
-	while (tileset != NULL)
+
+	while (layer != NULL)
 	{
 		for (int x = 0; x < data.width; x++) {
 			for (int y = 0; y < data.height; y++) {
-				uint gid = data.layers.start->data->Get(x, y);
+				uint gid = layer->data->Get(x, y);
 				if (gid == 0) continue;
+
+				while (tileset != NULL) {
+					if (tileset->data->Contains(gid)) break;
+					tileset = tileset->next;
+				}
+				if (tileset == NULL) {
+					LOG("Cant find tileset for gid %i", gid); 
+					continue;
+				}
 				SDL_Rect rect = tileset->data->GetTileRect(gid);
 				iPoint position = MapToWorld(x, y);
 				App->render->Blit(tileset->data->texture, position.x, position.y, &rect);
 			}
 		}
-		tileset = tileset->next;
+		layer = layer->next;
+		tileset = data.tilesets.start;
 	}
 		// TODO 9: Complete the draw function
 
@@ -89,7 +103,6 @@ bool j1Map::CleanUp()
 	}
 	data.tilesets.clear();
 
-	// TODO 2: clean up all layer data
 	// Remove all layers
 	p2List_item<MapLayer*>* layer_item;
 	layer_item = data.layers.start;
@@ -99,6 +112,17 @@ bool j1Map::CleanUp()
 		layer_item = layer_item->next;
 	}
 	data.layers.clear();
+
+	//Remove all colliders
+	p2List_item<Collider*>* collider;
+	collider = data.colliders.start;
+	while (collider != NULL)
+	{
+		collider->data->to_delete = true;
+		RELEASE(collider->data);
+		collider = collider->next;
+	}
+	data.colliders.clear();
 
 	// Clean up the pugui tree
 	map_file.reset();
@@ -144,9 +168,7 @@ bool j1Map::Load(const char* file_name)
 
 		data.tilesets.add(set);
 	}
-
-	// TODO 4: Iterate all layers and load each of them
-	// Load layer info ----------------------------------------------
+	// Load all layers info
 	pugi::xml_node layer;
 	for (layer = map_file.child("map").child("layer"); layer && ret; layer = layer.next_sibling("layer"))
 	{
@@ -159,6 +181,10 @@ bool j1Map::Load(const char* file_name)
 
 		data.layers.add(set);
 	}
+
+	//Load collision layer and create colliders
+	pugi::xml_node objects = map_file.child("map").child("objectgroup");
+	ret = LoadCollisionLayer(objects);
 
 	if(ret == true)
 	{
@@ -177,8 +203,6 @@ bool j1Map::Load(const char* file_name)
 			item = item->next;
 		}
 
-		// TODO 4: Add info here about your loaded layers
-		// Adapt this vcode with your own variables
 		p2List_item<MapLayer*>* item_layer = data.layers.start;
 		while(item_layer != NULL)
 		{
@@ -270,6 +294,7 @@ bool j1Map::LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set)
 	set->tile_height = tileset_node.attribute("tileheight").as_int();
 	set->margin = tileset_node.attribute("margin").as_int();
 	set->spacing = tileset_node.attribute("spacing").as_int();
+	set->tile_count = tileset_node.attribute("tilecount").as_int();
 	pugi::xml_node offset = tileset_node.child("tileoffset");
 
 	if(offset != NULL)
@@ -328,7 +353,6 @@ bool j1Map::LoadLayer(pugi::xml_node & node, MapLayer * layer)
 	layer->width = node.attribute("width").as_uint();
 	layer->height = node.attribute("height").as_uint();
 
-
 	uint size = layer->width*layer->height;
 	layer->data = new uint[size];
 	memset(layer->data, 0, sizeof(unsigned int) * size);
@@ -343,7 +367,12 @@ bool j1Map::LoadLayer(pugi::xml_node & node, MapLayer * layer)
 	return true;
 }
 
-// TODO 3: Create the definition for a function that loads a single layer
-//bool j1Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
-//{
-//}
+bool j1Map::LoadCollisionLayer(pugi::xml_node & node)
+{
+	pugi::xml_node collider;
+	for (collider = node.child("object"); collider; collider = collider.next_sibling("object")) {
+		SDL_Rect rect = { collider.attribute("x").as_int(),collider.attribute("y").as_int(), collider.attribute("width").as_int(), collider.attribute("height").as_int() };
+		data.colliders.add(App->collision->AddCollider(rect, COLLIDER_PLATFORM));
+	}
+	return true;
+}
