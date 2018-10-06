@@ -12,6 +12,8 @@ class j1Render;
 class j1Textures;
 class j1Audio;
 class j1Scene;
+class j1Scene_Forest;
+class j1Scene2;
 class j1Map;
 class j1Collision;
 
@@ -38,7 +40,7 @@ public:
 	bool CleanUp();
 
 	// Add a new module to handle
-	void AddModule(j1Module* module);
+	void AddModule(j1Module* module, bool state);
 
 	// Exposing some properties for reading
 	int GetArgc() const;
@@ -82,7 +84,8 @@ public:
 	j1Render*			render;
 	j1Textures*			tex;
 	j1Audio*			audio;
-	j1Scene*			scene;
+	j1Scene_Forest*		scene_forest;
+	j1Scene2*			scene2;
 	j1Map*				map;
 	j1Collision*		collision;
 
@@ -103,6 +106,6 @@ private:
 	mutable p2SString	save_game;
 };
 
-extern j1App* App; // No student is asking me about that ... odd :-S
+extern j1App* App;
 
 #endif

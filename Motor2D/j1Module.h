@@ -19,9 +19,9 @@ public:
 	j1Module() : active(false)
 	{}
 
-	void Init()
+	void Init(bool state)
 	{
-		active = true;
+		active = state;
 	}
 
 	// Called before render is available
@@ -73,6 +73,26 @@ public:
 	virtual bool OnCollision(Collider* c1, Collider* c2) const
 	{
 		return true;
+	}
+
+	bool IsActive() const { return active; }
+
+	void Activate()
+	{
+		if (active == false)
+		{
+			active = true;
+			Start();
+		}
+	}
+
+	void Deactivate()
+	{
+		if (active == true)
+		{
+			active = false;
+			CleanUp();
+		}
 	}
 
 public:

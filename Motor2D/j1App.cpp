@@ -9,6 +9,8 @@
 #include "j1Textures.h"
 #include "j1Audio.h"
 #include "j1Scene.h"
+#include "j1Scene_Forest.h"
+#include "j1Scene2.h"
 #include "j1Collision.h"
 #include "j1Map.h"
 #include "j1App.h"
@@ -24,22 +26,24 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	render = new j1Render();
 	tex = new j1Textures();
 	audio = new j1Audio();
-	scene = new j1Scene();
+	scene_forest = new j1Scene_Forest();
+	scene2 = new j1Scene2();
 	map = new j1Map();
 	collision = new j1Collision();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
-	AddModule(input);
-	AddModule(win);
-	AddModule(tex);
-	AddModule(audio);
-	AddModule(map);
-	AddModule(scene);
-	AddModule(collision);
+	AddModule(input, true);
+	AddModule(win, true);
+	AddModule(tex, true);
+	AddModule(audio, true);
+	AddModule(map, true);
+	AddModule(scene_forest, true);
+	AddModule(scene2, false);
+	AddModule(collision, true);
 
 	// render last to swap buffer
-	AddModule(render);
+	AddModule(render, true);
 }
 
 // Destructor
@@ -57,9 +61,9 @@ j1App::~j1App()
 	modules.clear();
 }
 
-void j1App::AddModule(j1Module* module)
+void j1App::AddModule(j1Module* module, bool state)
 {
-	module->Init();
+	module->Init(state);
 	modules.add(module);
 }
 
@@ -107,7 +111,7 @@ bool j1App::Start()
 
 	while(item != NULL && ret == true)
 	{
-		ret = item->data->Start();
+		if (item->data->IsActive()) ret = item->data->Start();
 		item = item->next;
 	}
 

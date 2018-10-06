@@ -32,7 +32,6 @@ void j1Map::Draw()
 	if(map_loaded == false)
 		return;
 
-	// TODO 5: Prepare the loop to draw all tilesets + Blit
 	p2List_item<MapLayer*>* layer;
 	layer = data.layers.start;
 	p2List_item<TileSet*>* tileset;
@@ -56,12 +55,12 @@ void j1Map::Draw()
 				SDL_Rect rect = tileset->data->GetTileRect(gid);
 				iPoint position = MapToWorld(x, y);
 				App->render->Blit(tileset->data->texture, position.x, position.y, &rect);
+				tileset = data.tilesets.start;
 			}
 		}
 		layer = layer->next;
-		tileset = data.tilesets.start;
+
 	}
-		// TODO 9: Complete the draw function
 
 }
 
@@ -119,7 +118,6 @@ bool j1Map::CleanUp()
 	while (collider != NULL)
 	{
 		collider->data->to_delete = true;
-		RELEASE(collider->data);
 		collider = collider->next;
 	}
 	data.colliders.clear();

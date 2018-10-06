@@ -22,9 +22,13 @@
     <path>data.zip</path>
   </file_system>
 
-  <scene>
+  <scene_forest>
     <map_file>test.tmx</map_file>
-  </scene>
+  </scene_forest>
+  
+  <scene2>
+    <map_file>test2.tmx</map_file>
+  </scene2>
 
   <map>
     <folder>maps/</folder>

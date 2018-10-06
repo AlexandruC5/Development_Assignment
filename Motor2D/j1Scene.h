@@ -32,7 +32,7 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-private:
+protected:
 
 	p2SString map_file = "";
 };
