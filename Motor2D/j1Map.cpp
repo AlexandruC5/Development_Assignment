@@ -39,6 +39,10 @@ void j1Map::Draw()
 
 	while (layer != NULL)
 	{
+		SDL_Rect* rect2 = new SDL_Rect();
+		rect2->w = 1024;
+		rect2->h = 768;
+		App->render->Blit(data.background_img, 0, 0, rect2, 0.1f);
 		for (int x = 0; x < data.width; x++) {
 			for (int y = 0; y < data.height; y++) {
 				uint gid = layer->data->Get(x, y);
@@ -127,7 +131,7 @@ bool j1Map::CleanUp()
 }
 
 // Load new map
-bool j1Map::Load(const char* file_name)
+bool j1Map::Load(const char* file_name, const char* background_img)
 {
 	bool ret = true;
 	p2SString tmp("%s%s", folder.GetString(), file_name);
@@ -141,8 +145,9 @@ bool j1Map::Load(const char* file_name)
 	}
 
 	// Load general info ----------------------------------------------
-	if(ret == true)
+	if (ret == true)
 	{
+		data.background_img = App->tex->Load(PATH(folder.GetString(), background_img));
 		ret = LoadMap();
 	}
 

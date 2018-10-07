@@ -35,6 +35,7 @@ public:
 protected:
 
 	p2SString map_file = "";
+	p2SString background_file = "";
 };
 
 #endif // __j1SCENE_H__

@@ -69,6 +69,7 @@ struct MapData
 	p2List<TileSet*>	tilesets;
 	p2List<MapLayer*>	layers;
 	p2List<Collider*>	colliders;
+	SDL_Texture*		background_img;
 };
 
 class j1Map : public j1Module
@@ -90,7 +91,7 @@ public:
 	bool CleanUp();
 
 	// Load new map
-	bool Load(const char* path);
+	bool Load(const char* path,const char* background_img);
 	
 	//Translates x,y coordinates from map positions to world positions
 	iPoint MapToWorld(int x, int y) const;

@@ -26,6 +26,7 @@ bool j1SceneForest::Awake(pugi::xml_node& conf)
 {
 	LOG("Loading Scene");
 	map_file = conf.child("map_file").child_value();
+	background_file = conf.child("background").child_value();
 	bool ret = true;
 
 	return ret;
@@ -34,7 +35,7 @@ bool j1SceneForest::Awake(pugi::xml_node& conf)
 // Called before the first frame
 bool j1SceneForest::Start()
 {
-	App->map->Load(map_file.GetString());
+	App->map->Load(map_file.GetString(),background_file.GetString());
 	return true;
 }
 

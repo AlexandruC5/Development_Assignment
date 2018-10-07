@@ -24,10 +24,12 @@
 
   <scene_forest>
     <map_file>lvl_1.tmx</map_file>
+	<background>BG.png</background>
   </scene_forest>
   
   <scene2>
     <map_file>test2.tmx</map_file>
+	<background>BG.png</background>
   </scene2>
 
   <map>
