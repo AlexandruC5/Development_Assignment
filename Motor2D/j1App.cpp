@@ -9,7 +9,7 @@
 #include "j1Textures.h"
 #include "j1Audio.h"
 #include "j1Scene.h"
-#include "j1Scene_Forest.h"
+#include "j1SceneForest.h"
 #include "j1Scene2.h"
 #include "j1SwapScene.h"
 #include "j1Collision.h"
@@ -27,7 +27,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	render = new j1Render();
 	tex = new j1Textures();
 	audio = new j1Audio();
-	scene_forest = new j1Scene_Forest();
+	scene_forest = new j1SceneForest();
 	scene2 = new j1Scene2();
 	swap_scene = new j1SwapScene();
 	map = new j1Map();

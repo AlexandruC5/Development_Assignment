@@ -1,5 +1,5 @@
-#ifndef __j1SwapScene_H__
-#define __j1SwapScene_H__
+#ifndef __J1SWAPSCENE_H__
+#define __J1SWAPSCENE_H__
 
 #include "j1Module.h"
 #include "SDL\include\SDL_rect.h"

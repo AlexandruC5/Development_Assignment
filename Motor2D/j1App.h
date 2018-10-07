@@ -12,7 +12,7 @@ class j1Render;
 class j1Textures;
 class j1Audio;
 class j1Scene;
-class j1Scene_Forest;
+class j1SceneForest;
 class j1Scene2;
 class j1SwapScene;
 class j1Map;
@@ -85,7 +85,7 @@ public:
 	j1Render*			render;
 	j1Textures*			tex;
 	j1Audio*			audio;
-	j1Scene_Forest*		scene_forest;
+	j1SceneForest*		scene_forest;
 	j1Scene2*			scene2;
 	j1Map*				map;
 	j1Collision*		collision;

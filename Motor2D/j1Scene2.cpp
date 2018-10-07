@@ -5,7 +5,7 @@
 #include "j1Render.h"
 #include "j1Map.h"
 #include "j1SwapScene.h"
-#include "j1Scene_Forest.h"
+#include "j1SceneForest.h"
 #include "j1Scene2.h"
 
 

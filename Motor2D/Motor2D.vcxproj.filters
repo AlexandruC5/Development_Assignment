@@ -37,13 +37,13 @@
     <ClCompile Include="j1Collision.cpp">
       <Filter>Desenvolupament  ========\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="j1Scene_Forest.cpp">
-      <Filter>Desenvolupament  ========\Scenes</Filter>
-    </ClCompile>
     <ClCompile Include="j1Scene2.cpp">
       <Filter>Desenvolupament  ========\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="j1SwapScene.cpp">
+      <Filter>Desenvolupament  ========\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="j1SceneForest.cpp">
       <Filter>Desenvolupament  ========\Scenes</Filter>
     </ClCompile>
   </ItemGroup>
@@ -102,13 +102,13 @@
     <ClInclude Include="j1Collision.h">
       <Filter>Desenvolupament  ========\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="j1Scene_Forest.h">
-      <Filter>Desenvolupament  ========\Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="j1Scene2.h">
       <Filter>Desenvolupament  ========\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="j1SwapScene.h">
+      <Filter>Desenvolupament  ========\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="j1SceneForest.h">
       <Filter>Desenvolupament  ========\Scenes</Filter>
     </ClInclude>
   </ItemGroup>

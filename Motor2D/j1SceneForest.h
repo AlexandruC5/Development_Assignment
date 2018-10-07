@@ -1,12 +1,14 @@
-#pragma once
+#ifndef __J1SCENEFOREST_H__
+#define __J1SCENEFOREST_H__
+
 #include "j1Scene.h"
-class j1Scene_Forest : public j1Scene
+class j1SceneForest : public j1Scene
 {
 public:
-	j1Scene_Forest();
+	j1SceneForest();
 
 	// Destructor
-	virtual ~j1Scene_Forest();
+	virtual ~j1SceneForest();
 
 	// Called before render is available
 	bool Awake(pugi::xml_node& conf);
@@ -21,3 +23,4 @@ public:
 	bool CleanUp();
 };
 
+#endif

@@ -29,7 +29,7 @@ struct MapLayer {
 struct TileSet
 {
 	SDL_Rect GetTileRect(int id) const;
-	bool Contains(int id) const 
+	bool Contains(uint id) const 
 	{
 		return (id >= firstgid && id <= firstgid + tile_count - 1);
 	}

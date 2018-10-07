@@ -9,20 +9,20 @@
 #include "j1SwapScene.h"
 #include "j1Map.h"
 #include "j1Scene2.h"
-#include "j1Scene_Forest.h"
+#include "j1SceneForest.h"
 
 
-j1Scene_Forest::j1Scene_Forest() : j1Scene()
+j1SceneForest::j1SceneForest() : j1Scene()
 {
 	name.create("scene_forest");
 }
 
 // Destructor
-j1Scene_Forest::~j1Scene_Forest()
+j1SceneForest::~j1SceneForest()
 {}
 
 // Called before render is available
-bool j1Scene_Forest::Awake(pugi::xml_node& conf)
+bool j1SceneForest::Awake(pugi::xml_node& conf)
 {
 	LOG("Loading Scene");
 	map_file = conf.child("map_file").child_value();
@@ -32,14 +32,14 @@ bool j1Scene_Forest::Awake(pugi::xml_node& conf)
 }
 
 // Called before the first frame
-bool j1Scene_Forest::Start()
+bool j1SceneForest::Start()
 {
 	App->map->Load(map_file.GetString());
 	return true;
 }
 
 // Called each loop iteration
-bool j1Scene_Forest::Update(float dt)
+bool j1SceneForest::Update(float dt)
 {
 	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
 		App->LoadGame();
@@ -68,7 +68,7 @@ bool j1Scene_Forest::Update(float dt)
 	return true;
 }
 
-bool j1Scene_Forest::CleanUp()
+bool j1SceneForest::CleanUp()
 {
 	return true;
 }

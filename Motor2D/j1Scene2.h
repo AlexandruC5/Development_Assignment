@@ -1,3 +1,6 @@
+#ifndef __J1SCENE2_H__
+#define __J1SCENE2_H__
+
 #include "j1Scene.h"
 class j1Scene2 : public j1Scene
 {
@@ -20,3 +23,4 @@ public:
 	bool CleanUp();
 };
 
+#endif
