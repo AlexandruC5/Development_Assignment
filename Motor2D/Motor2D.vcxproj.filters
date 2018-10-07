@@ -46,6 +46,9 @@
     <ClCompile Include="j1SceneForest.cpp">
       <Filter>Desenvolupament  ========\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="j1Player.cpp">
+      <Filter>Desenvolupament  ========\Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -110,6 +113,12 @@
     </ClInclude>
     <ClInclude Include="j1SceneForest.h">
       <Filter>Desenvolupament  ========\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Player.h">
+      <Filter>Desenvolupament  ========\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Animation.h">
+      <Filter>Desenvolupament  ========</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
