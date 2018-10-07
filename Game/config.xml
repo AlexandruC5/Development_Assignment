@@ -7,7 +7,7 @@
   </app>
 	
   <renderer>
-    <vsync value="false"/>
+    <vsync value="true"/>
   </renderer>
 
   <window>
@@ -29,6 +29,20 @@
   <scene2>
     <map_file>test2.tmx</map_file>
   </scene2>
+
+  <player>
+    <folder>textures/</folder>
+    <sprite>player_spritesheet.png</sprite>
+    <speed maxSpeed="10.0F"/>
+    <acceleration value="0.2F"/>
+    <animations>
+      <idle speed="0.1F">
+        <frame x="17" y="75" width="94" height="53"/>
+        <frame x="143" y="76" width="98" height="52"/>
+        <frame x="270" y="78" width="101" height="50"/>
+      </idle>
+    </animations>
+  </player>
 
   <map>
     <folder>maps/</folder>

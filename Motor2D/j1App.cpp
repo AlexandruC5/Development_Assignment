@@ -11,6 +11,7 @@
 #include "j1Scene.h"
 #include "j1SceneForest.h"
 #include "j1Scene2.h"
+#include "j1Player.h"
 #include "j1Collision.h"
 #include "j1Map.h"
 #include "j1SwapScene.h"
@@ -30,6 +31,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	scene_forest = new j1SceneForest();
 	scene2 = new j1Scene2();
 	map = new j1Map();
+	player = new j1Player();
 	swap_scene = new j1SwapScene();
 	collision = new j1Collision();
 
@@ -40,10 +42,12 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(tex, true);
 	AddModule(audio, true);
 	AddModule(map, true);
+	AddModule(player, true);
 	AddModule(scene_forest, true);
 	AddModule(scene2, false);
 	AddModule(collision, true);	
 	AddModule(swap_scene, true);
+
 
 	// render last to swap buffer
 	AddModule(render, true);
