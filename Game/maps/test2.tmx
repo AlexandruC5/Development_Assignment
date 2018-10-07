@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="25" tilewidth="128" tileheight="128" nextobjectid="6">
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="25" tilewidth="128" tileheight="128" nextobjectid="7">
  <tileset firstgid="1" name="map1_tileset" tilewidth="128" tileheight="128" tilecount="25" columns="5">
   <image source="map1_tileset.png" width="640" height="640"/>
  </tileset>
@@ -64,8 +64,8 @@
    <tile gid="2"/>
    <tile gid="2"/>
    <tile gid="2"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -635,5 +635,6 @@
  <objectgroup color="#ff0000" name="Colliders">
   <object id="1" x="1408" y="640.061" width="1408" height="127.939"/>
   <object id="5" x="0" y="384.546" width="1408" height="129.909"/>
+  <object id="6" x="0" y="255.712" width="1408" height="129.909"/>
  </objectgroup>
 </map>

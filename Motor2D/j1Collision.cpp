@@ -53,15 +53,13 @@ bool j1Collision::PreUpdate()
 
 			c2 = colliders[k];
 
-			if (c1->enable && c2->enable) {
-				if (c1->CheckCollision(c2->rect) == true)
-				{
-					if (matrix[c1->type][c2->type] && c1->callback)
-						c1->callback->OnCollision(c1, c2);
+			if (c1->CheckCollision(c2->rect) && c1->enabled)
+			{
+				if (matrix[c1->type][c2->type] && c1->callback)
+					c1->callback->OnCollision(c1, c2);
 
-					if (matrix[c2->type][c1->type] && c2->callback)
-						c2->callback->OnCollision(c2, c1);
-				}
+				if (matrix[c2->type][c1->type] && c2->callback)
+					c2->callback->OnCollision(c2, c1);
 			}
 		}
 	}
@@ -101,6 +99,8 @@ void j1Collision::DebugDraw()
 			break;
 		case COLLIDER_PLAYER: // green
 			App->render->DrawQuad(colliders[i]->rect, 0, 255, 0, alpha, true);
+			break;
+		default:
 			break;
 		}
 	}
@@ -143,7 +143,7 @@ Collider* j1Collision::AddCollider(SDL_Rect rect, COLLIDER_TYPE type, j1Module* 
 
 bool Collider::CheckCollision(const SDL_Rect& r) const
 {
-	if (enable) {
+	if (enabled) {
 		if ((r.x < rect.x + rect.w) && (rect.x < r.x + r.w)
 			&& (r.y < rect.y + rect.h) && (rect.y < r.y + r.h)) {
 			return true;

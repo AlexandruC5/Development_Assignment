@@ -2,12 +2,10 @@
 #include "p2Log.h"
 #include "j1App.h"
 #include "j1Input.h"
-#include "j1Textures.h"
-#include "j1Audio.h"
 #include "j1Render.h"
-#include "j1Window.h"
 #include "j1Map.h"
-#include "j1Scene_Forest.h"
+#include "j1SwapScene.h"
+#include "j1SceneForest.h"
 #include "j1Scene2.h"
 
 
@@ -62,9 +60,7 @@ bool j1Scene2::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN) 
 	{
-		App->map->CleanUp();
-		App->scene_forest->Activate();
-		Deactivate();
+		App->swap_scene->FadeToBlack(this, App->scene_forest);
 	}
 
 	return true;

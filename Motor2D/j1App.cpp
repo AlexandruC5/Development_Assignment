@@ -9,10 +9,11 @@
 #include "j1Textures.h"
 #include "j1Audio.h"
 #include "j1Scene.h"
-#include "j1Scene_Forest.h"
+#include "j1SceneForest.h"
 #include "j1Scene2.h"
 #include "j1Collision.h"
 #include "j1Map.h"
+#include "j1SwapScene.h"
 #include "j1App.h"
 
 // Constructor
@@ -26,9 +27,10 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	render = new j1Render();
 	tex = new j1Textures();
 	audio = new j1Audio();
-	scene_forest = new j1Scene_Forest();
+	scene_forest = new j1SceneForest();
 	scene2 = new j1Scene2();
 	map = new j1Map();
+	swap_scene = new j1SwapScene();
 	collision = new j1Collision();
 
 	// Ordered for awake / Start / Update
@@ -40,7 +42,8 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(map, true);
 	AddModule(scene_forest, true);
 	AddModule(scene2, false);
-	AddModule(collision, true);
+	AddModule(collision, true);	
+	AddModule(swap_scene, true);
 
 	// render last to swap buffer
 	AddModule(render, true);

@@ -83,7 +83,8 @@
     <ClCompile Include="j1Input.cpp" />
     <ClCompile Include="j1Map.cpp" />
     <ClCompile Include="j1Scene.cpp" />
-    <ClCompile Include="j1Scene_Forest.cpp" />
+    <ClCompile Include="j1SceneForest.cpp" />
+    <ClCompile Include="j1SwapScene.cpp" />
     <ClCompile Include="p2Log.cpp" />
     <ClCompile Include="j1Render.cpp" />
     <ClCompile Include="j1Textures.cpp" />
@@ -95,7 +96,8 @@
     <ClInclude Include="j1Collision.h" />
     <ClInclude Include="j1Map.h" />
     <ClInclude Include="j1Scene.h" />
-    <ClInclude Include="j1Scene_Forest.h" />
+    <ClInclude Include="j1SceneForest.h" />
+    <ClInclude Include="j1SwapScene.h" />
     <ClInclude Include="p2DynArray.h" />
     <ClInclude Include="j1Audio.h" />
     <ClInclude Include="j1Input.h" />
