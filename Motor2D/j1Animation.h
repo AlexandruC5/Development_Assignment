@@ -29,12 +29,12 @@ public:
 		else return false;
 	}
 
-	int GetCurrentFrameIndex()
+	float GetCurrentFrameIndex()
 	{
 		return current_frame;
 	}
 
-	void setCurrentFrameIndex(int i)
+	void setCurrentFrameIndex(float i)
 	{
 		current_frame = i;
 	}

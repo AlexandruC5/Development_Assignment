@@ -37,12 +37,12 @@ void j1Map::Draw()
 	p2List_item<TileSet*>* tileset;
 	tileset = data.tilesets.start;
 
+	SDL_Rect* rect2 = new SDL_Rect();
+	rect2->w = 1024;
+	rect2->h = 768;
+	App->render->Blit(data.background_img, 0, 0, rect2, 0.1f);
 	while (layer != NULL)
 	{
-		SDL_Rect* rect2 = new SDL_Rect();
-		rect2->w = 1024;
-		rect2->h = 768;
-		App->render->Blit(data.background_img, 0, 0, rect2, 0.1f);
 		for (int x = 0; x < data.width; x++) {
 			for (int y = 0; y < data.height; y++) {
 				uint gid = layer->data->Get(x, y);
@@ -61,7 +61,6 @@ void j1Map::Draw()
 			}
 		}
 		layer = layer->next;
-
 	}
 
 }
@@ -151,7 +150,7 @@ bool j1Map::Load(const char* file_name, const char* background_img)
 		ret = LoadMap();
 	}
 
-	// Load all tilesets info ----------------------------------------------
+	// Load all tilesets info ------------------------------------------
 	pugi::xml_node tileset;
 	for(tileset = map_file.child("map").child("tileset"); tileset && ret; tileset = tileset.next_sibling("tileset"))
 	{
