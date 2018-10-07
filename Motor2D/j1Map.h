@@ -7,6 +7,8 @@
 #include "j1Module.h"
 #include "math.h"
 
+struct SDL_Texture;
+
 struct MapLayer {
 	p2SString name = "";
 	uint width = 0u;
@@ -15,7 +17,7 @@ struct MapLayer {
 
 	~MapLayer(){
 		if (data != nullptr) {
-			delete data;
+			delete[] data;
 		}
 	}
 	inline uint Get(int x, int y) const {
@@ -29,7 +31,7 @@ struct TileSet
 	SDL_Rect GetTileRect(int id) const;
 	bool Contains(int id) const 
 	{
-		return (id >= firstgid && id <= firstgid + tile_count);
+		return (id >= firstgid && id <= firstgid + tile_count - 1);
 	}
 
 	p2SString			name;
@@ -46,6 +48,8 @@ struct TileSet
 	uint				num_tiles_height;
 	uint				offset_x;
 	uint				offset_y;
+
+	~TileSet();
 };
 
 enum MapTypes

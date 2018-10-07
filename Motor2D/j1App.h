@@ -14,6 +14,7 @@ class j1Audio;
 class j1Scene;
 class j1Scene_Forest;
 class j1Scene2;
+class j1SwapScene;
 class j1Map;
 class j1Collision;
 
@@ -88,6 +89,7 @@ public:
 	j1Scene2*			scene2;
 	j1Map*				map;
 	j1Collision*		collision;
+	j1SwapScene*		swap_scene;
 
 private:
 

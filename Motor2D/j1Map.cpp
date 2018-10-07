@@ -3,9 +3,9 @@
 #include "j1App.h"
 #include "j1Render.h"
 #include "j1Textures.h"
-#include "j1Map.h"
 #include "j1Collision.h"
 #include <math.h>
+#include "j1Map.h"
 
 j1Map::j1Map() : j1Module(), map_loaded(false)
 {
@@ -44,14 +44,12 @@ void j1Map::Draw()
 				uint gid = layer->data->Get(x, y);
 				if (gid == 0) continue;
 
-				while (tileset != NULL) {
-					if (tileset->data->Contains(gid)) break;
-					tileset = tileset->next;
-				}
+				while (tileset != NULL && !tileset->data->Contains(gid)) tileset = tileset->next;
 				if (tileset == NULL) {
 					LOG("Cant find tileset for gid %i", gid); 
 					continue;
 				}
+
 				SDL_Rect rect = tileset->data->GetTileRect(gid);
 				iPoint position = MapToWorld(x, y);
 				App->render->Blit(tileset->data->texture, position.x, position.y, &rect);
@@ -373,4 +371,8 @@ bool j1Map::LoadCollisionLayer(pugi::xml_node & node)
 		data.colliders.add(App->collision->AddCollider(rect, COLLIDER_PLATFORM));
 	}
 	return true;
+}
+
+TileSet::~TileSet() {
+	App->tex->UnLoad(texture);
 }

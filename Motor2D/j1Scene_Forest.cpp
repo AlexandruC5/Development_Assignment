@@ -6,6 +6,7 @@
 #include "j1Audio.h"
 #include "j1Render.h"
 #include "j1Window.h"
+#include "j1SwapScene.h"
 #include "j1Map.h"
 #include "j1Scene2.h"
 #include "j1Scene_Forest.h"
@@ -62,9 +63,7 @@ bool j1Scene_Forest::Update(float dt)
 	
 	if (App->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN)
 	{
-		Deactivate();
-		App->map->CleanUp();
-		App->scene2->Activate();
+		App->swap_scene->FadeToBlack(this, App->scene2);
 	}
 	return true;
 }
