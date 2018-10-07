@@ -7,8 +7,6 @@
 #include "j1Module.h"
 #include "math.h"
 
-struct SDL_Texture;
-
 struct MapLayer {
 	p2SString name = "";
 	uint width = 0u;

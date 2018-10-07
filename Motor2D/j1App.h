@@ -14,9 +14,9 @@ class j1Audio;
 class j1Scene;
 class j1SceneForest;
 class j1Scene2;
-class j1SwapScene;
 class j1Map;
-class j1Collision;
+class j1Collision; 
+class j1SwapScene;
 
 class j1App
 {

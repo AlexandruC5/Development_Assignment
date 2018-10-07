@@ -2,7 +2,6 @@
 #define __J1SWAPSCENE_H__
 
 #include "j1Module.h"
-#include "SDL\include\SDL_rect.h"
 
 class j1SwapScene : public j1Module
 {
@@ -23,8 +22,8 @@ private:
 		fade_from_black
 	} current_step = fade_step::none;
 
-	Uint32 start_time = 0;
-	Uint32 total_time = 0;
+	uint start_time = 0;
+	uint total_time = 0;
 	SDL_Rect screen;
 	j1Module* module_enable = nullptr;
 	j1Module* module_disable = nullptr;

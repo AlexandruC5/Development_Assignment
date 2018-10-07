@@ -1,11 +1,9 @@
-#include <math.h>
 #include "j1App.h"
 #include "p2Log.h"
 #include "j1Window.h"
-#include "j1SwapScene.h"
-#include "j1Map.h"
 #include "j1Render.h"
-#include "SDL/include/SDL_timer.h"
+#include "j1Map.h"
+#include "j1SwapScene.h"
 
 j1SwapScene::j1SwapScene()
 {
@@ -19,8 +17,8 @@ j1SwapScene::~j1SwapScene()
 bool j1SwapScene::Start()
 {
 	LOG("Preparing Fade Screen");
-	uint width = 0u;
-	uint height = 0u;
+	uint width = 0U;
+	uint height = 0U;
 	App->win->GetWindowSize(width, height);
 	screen = { 0, 0, (int)(width * App->win->GetScale()), (int)(height * App->win->GetScale()) };
 
@@ -55,15 +53,17 @@ bool j1SwapScene::Update(float dt)
 
 	case fade_step::fade_from_black:
 	{
-		normalized = 1.0f - normalized;
+		normalized = 1.0F - normalized;
 
 		if (now >= total_time)
 			current_step = fade_step::none;
 	} break;
+	default:
+		break;
 	}
 
 	// Finally render the black square with alpha on the screen
-	SDL_SetRenderDrawColor(App->render->renderer, 0, 0, 0, (Uint8)(normalized * 255.0f));
+	SDL_SetRenderDrawColor(App->render->renderer, 0, 0, 0, (Uint8)(normalized * 255.0F));
 	SDL_RenderFillRect(App->render->renderer, &screen);
 
 	return true;
@@ -78,7 +78,7 @@ bool j1SwapScene::FadeToBlack(j1Module* module_off, j1Module* module_on, float t
 	{
 		current_step = fade_step::fade_to_black;
 		start_time = SDL_GetTicks();
-		total_time = (Uint32)(time * 0.5f * 1000.0f);
+		total_time = (Uint32)(time * 0.5F * 1000.0F);
 		module_disable = module_off;
 		module_enable = module_on;
 		ret = true;
