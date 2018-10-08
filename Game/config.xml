@@ -52,6 +52,11 @@
         <frame x="267" y="203" width="110" height="54"/>
         <frame x="397" y="204" width="103" height="51"/>
       </move>
+      <jump speed="0.3F">
+        <frame x="784" y="192" width="98" height="92"/>
+        <frame x="909" y="150" width="98" height="92"/>
+        <frame x="1037" y="143" width="98" height="92"/>
+      </jump>
     </animations>
   </player>
 

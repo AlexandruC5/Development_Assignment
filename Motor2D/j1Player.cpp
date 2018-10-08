@@ -46,6 +46,13 @@ bool j1Player::Start()
 	}
 	move.speed = player_config.child("animations").child("move").attribute("speed").as_float();
 
+	for (frame = player_config.child("animations").child("jump").child("frame"); frame; frame = frame.next_sibling("frame"))
+	{
+		jump.PushBack({ frame.attribute("x").as_int(), frame.attribute("y").as_int(), frame.attribute("width").as_int(), frame.attribute("height").as_int() });
+	}
+	jump.speed = player_config.child("animations").child("jump").attribute("speed").as_float();
+	jump.loop = false;
+
 	//load player stats
 	movement_speed = player_config.child("movement_speed").attribute("value").as_float();
 	jump_speed = player_config.child("jump_speed").attribute("value").as_float();
@@ -128,6 +135,7 @@ void j1Player::IdleUpdate()
 	{
 		target_speed.y = -jump_speed;
 		state = JUMPING;
+		current_animation = jump;
 		isGrounded = false;
 	}
 	else if (!isGrounded) state = JUMPING;
@@ -156,6 +164,7 @@ void j1Player::MovingUpdate()
 	{
 		target_speed.y = -jump_speed;
 		state = JUMPING;
+		current_animation = jump;
 		isGrounded = false;
 	}
 	else if (!isGrounded) state = JUMPING;
