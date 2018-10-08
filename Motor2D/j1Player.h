@@ -34,6 +34,7 @@ private:
 	Animation jump;
 	Animation current_animation;
 public:
+	fPoint new_position = { 0.0F, 0.0F };
 	fPoint position = { 0.0F, 0.0F };
 	fPoint velocity = { 0.0F, 0.0F };
 	Player_State state = IDLE;
@@ -44,6 +45,7 @@ public:
 	bool Start();
 	bool PostUpdate();
 	bool Update(float dt);
+	bool PreUpdate();
 	bool CleanUp();
 	bool OnCollision(Collider* c1, Collider* c2);
 

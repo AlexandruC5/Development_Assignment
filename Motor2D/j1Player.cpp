@@ -3,6 +3,7 @@
 #include "j1Textures.h"
 #include "j1Collision.h"
 #include "p2Defs.h"
+#include "p2Log.h"
 #include "j1Input.h"
 #include "j1Player.h"
 
@@ -64,7 +65,7 @@ bool j1Player::PostUpdate()
 	return true;
 }
 
-bool j1Player::Update(float dt)
+bool j1Player::PreUpdate() 
 {
 	switch (state) {
 	case IDLE: IdleUpdate();
@@ -83,6 +84,13 @@ bool j1Player::Update(float dt)
 	if (fabs(velocity.x) < threshold) velocity.x = 0.0F;
 	if (fabs(velocity.y) < threshold) velocity.y = 0.0F;
 
+	coll->SetPos(position.x + velocity.x, position.y + velocity.y); //move collider only to check for possible collisions
+
+	return true;
+}
+
+bool j1Player::Update(float dt)
+{
 	position += velocity;
 	coll->SetPos(position.x, position.y);
 	
@@ -177,15 +185,15 @@ void j1Player::JumpingUpdate()
 		if (App->input->GetKey(SDL_SCANCODE_D) == App->input->GetKey(SDL_SCANCODE_A))
 		{
 			state = IDLE;
-			target_speed = { 0.0F, 0.0F };
 			current_animation = idle;
 		}
 		else 
 		{
 			state = MOVING;
-			target_speed.y = 0.0F;
 			current_animation = move;
 		}
+		target_speed.y = 0.0F;
+		velocity.y = 0.0F;
 	}
 }
 
@@ -193,8 +201,7 @@ bool j1Player::OnCollision(Collider* c1, Collider* c2)
 {
 	if (c2->type == COLLIDER_PLATFORM) 
 	{
-		position.y = c2->rect.y - coll->rect.h;
-		velocity.y = 0.0F;
+		velocity.y = (c2->rect.y - position.y) - coll->rect.h;
 		isGrounded = true;
 	}
 	return true;
