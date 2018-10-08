@@ -1,9 +1,18 @@
-<!-- Save game for the game -->
-
+<?xml version="1.0"?>
 <game_state>
-
-  <renderer>
-    <camera x="100" y="0"/>
-  </renderer>
-
+	<input />
+	<window />
+	<textures />
+	<audio />
+	<player>
+		<position x="627.062683" y="1562.5553" />
+	</player>
+	<map />
+	<scene_forest />
+	<scene2 />
+	<:anonymous />
+	<:anonymous />
+	<renderer>
+		<camera x="0" y="-1300" />
+	</renderer>
 </game_state>

@@ -48,6 +48,8 @@ public:
 	bool PreUpdate();
 	bool CleanUp();
 	bool OnCollision(Collider* c1, Collider* c2);
+	bool Load(pugi::xml_node&);
+	bool Save(pugi::xml_node&) const;
 
 	void IdleUpdate();
 	void MovingUpdate();

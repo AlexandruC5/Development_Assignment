@@ -215,3 +215,21 @@ bool j1Player::OnCollision(Collider* c1, Collider* c2)
 	}
 	return true;
 }
+
+bool j1Player::Load(pugi::xml_node &player) 
+{
+	position.x = player.child("position").attribute("x").as_float();
+	position.y = player.child("position").attribute("y").as_float();
+
+	return true;
+}
+
+
+bool j1Player::Save(pugi::xml_node &player) const
+{
+	pugi::xml_node pos = player.append_child("position");
+	pos.append_attribute("x") = position.x;
+	pos.append_attribute("y") = position.y;
+
+	return true;
+}
