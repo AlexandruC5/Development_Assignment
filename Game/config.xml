@@ -35,9 +35,11 @@
   <player>
     <folder>textures/</folder>
     <sprite>player_spritesheet.png</sprite>
-    <speed maxSpeed="10.0F"/>
+    <movement_speed value="10.0F"/>
+    <jump_speed value="20.0F"/>
     <threshold value="1.0F"/>
     <acceleration value="0.1F"/>
+    <gravity value="1.0F"/>
     <animations>
       <idle speed="0.1F">
         <frame x="17" y="75" width="94" height="53"/>

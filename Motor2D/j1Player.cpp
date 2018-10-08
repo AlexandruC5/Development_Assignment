@@ -2,6 +2,7 @@
 #include "j1Render.h"
 #include "j1Textures.h"
 #include "j1Collision.h"
+#include "p2Defs.h"
 #include "j1Input.h"
 #include "j1Player.h"
 
@@ -45,11 +46,15 @@ bool j1Player::Start()
 	move.speed = player_config.child("animations").child("move").attribute("speed").as_float();
 
 	//load player stats
-	max_speed = player_config.child("speed").attribute("maxSpeed").as_float();
+	movement_speed = player_config.child("movement_speed").attribute("value").as_float();
+	jump_speed = player_config.child("jump_speed").attribute("value").as_float();
 	acceleration = player_config.child("acceleration").attribute("value").as_float();
 	threshold = player_config.child("threshold").attribute("value").as_float();
+	gravity = player_config.child("gravity").attribute("value").as_float();
 
+	//player setup
 	current_animation = idle;
+	coll = App->collision->AddCollider(idle.GetCurrentFrame(), COLLIDER_PLAYER, this);
 	return true;
 }
 
@@ -66,7 +71,7 @@ bool j1Player::Update(float dt)
 		break;
 	case MOVING: MovingUpdate();
 		break;
-	case JUMPING:
+	case JUMPING: JumpingUpdate();
 		break;
 	case DEAD:
 		break;
@@ -74,6 +79,12 @@ bool j1Player::Update(float dt)
 		break;
 	}
 
+	velocity = target_speed * acceleration + velocity * (1 - acceleration);
+	if (fabs(velocity.x) < threshold) velocity.x = 0.0F;
+	if (fabs(velocity.y) < threshold) velocity.y = 0.0F;
+
+	position += velocity;
+	coll->SetPos(position.x, position.y);
 	
 	return true;
 }
@@ -91,48 +102,100 @@ bool j1Player::CleanUp()
 		coll->to_delete = true;
 		coll = nullptr;
 	}
+	if (!isGrounded) state = JUMPING;
 
 	return true;
 }
 
 void j1Player::IdleUpdate() 
 {
-	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
-	{
-		flipX = true;
-		target_speed.x = max_speed;
-	}
-	else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
-	{
-		flipX = false;
-		target_speed.x = -max_speed;
-	}
-	else target_speed.x = 0.0F;
-
-	if (target_speed.x != 0.0F)
+	target_speed.x = 0.0F;
+	if (App->input->GetKey(SDL_SCANCODE_D) != App->input->GetKey(SDL_SCANCODE_A))
 	{
 		state = MOVING;
 		current_animation = move;
 	}
+
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	{
+		target_speed.y = -jump_speed;
+		state = JUMPING;
+		isGrounded = false;
+	}
+	else if (!isGrounded) state = JUMPING;
 }
 
 void j1Player::MovingUpdate() 
 {
-	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_UP || App->input->GetKey(SDL_SCANCODE_A) == KEY_UP)
+	if (App->input->GetKey(SDL_SCANCODE_D) == App->input->GetKey(SDL_SCANCODE_A))
 	{
+		state = IDLE;
 		target_speed.x = 0.0F;
 		current_animation = idle;
 	}
-	IdleUpdate();
-
-	velocity = target_speed * acceleration + velocity * (1 - acceleration);
-	if (fabs(velocity.x) < threshold) velocity.x = 0.0F;
-	if (fabs(velocity.y) < threshold) velocity.y = 0.0F;
-
-	position += velocity;
-
-	if (velocity.x == 0.0F)
+	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)	
 	{
-		state = IDLE;
+		target_speed.x = movement_speed;
+		flipX = true;
 	}
+	else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	{
+		target_speed.x = -movement_speed;
+		flipX = false;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	{
+		target_speed.y = -jump_speed;
+		state = JUMPING;
+		isGrounded = false;
+	}
+	else if (!isGrounded) state = JUMPING;
+}
+
+void j1Player::JumpingUpdate() 
+{
+	target_speed.y += gravity;
+
+	if (App->input->GetKey(SDL_SCANCODE_D) == App->input->GetKey(SDL_SCANCODE_A))
+	{
+		target_speed.x = 0.0F;
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	{
+		target_speed.x = movement_speed;
+		flipX = true;
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	{
+		target_speed.x = -movement_speed;
+		flipX = false;
+	}
+
+	if (isGrounded) 
+	{
+		if (App->input->GetKey(SDL_SCANCODE_D) == App->input->GetKey(SDL_SCANCODE_A))
+		{
+			state = IDLE;
+			target_speed = { 0.0F, 0.0F };
+			current_animation = idle;
+		}
+		else 
+		{
+			state = MOVING;
+			target_speed.y = 0.0F;
+			current_animation = move;
+		}
+	}
+}
+
+bool j1Player::OnCollision(Collider* c1, Collider* c2) 
+{
+	if (c2->type == COLLIDER_PLATFORM) 
+	{
+		position.y = c2->rect.y - coll->rect.h;
+		velocity.y = 0.0F;
+		isGrounded = true;
+	}
+	return true;
 }

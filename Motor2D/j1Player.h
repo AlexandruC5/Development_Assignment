@@ -19,10 +19,14 @@ private:
 	pugi::xml_node player_config;
 	SDL_Texture* sprite;
 	Collider* coll;
-	float max_speed = 0.0F;
+
+	float movement_speed = 0.0F;
+	float jump_speed = 0.0F;
+	float gravity = 0.0F;
 	float acceleration = 0.0F;
 	float threshold = 0.0F;
 	bool flipX = false;
+	bool isGrounded = false;
 	fPoint target_speed = { 0.0F, 0.0F };
 
 	Animation idle;
@@ -41,9 +45,11 @@ public:
 	bool PostUpdate();
 	bool Update(float dt);
 	bool CleanUp();
+	bool OnCollision(Collider* c1, Collider* c2);
 
 	void IdleUpdate();
 	void MovingUpdate();
+	void JumpingUpdate();
 };
 
 #endif

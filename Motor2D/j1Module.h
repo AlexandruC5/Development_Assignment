@@ -70,7 +70,7 @@ public:
 		return true;
 	}
 
-	virtual bool OnCollision(Collider* c1, Collider* c2) const
+	virtual bool OnCollision(Collider* c1, Collider* c2)
 	{
 		return true;
 	}
