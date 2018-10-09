@@ -58,8 +58,17 @@
         <frame x="909" y="150" width="98" height="92"/>
         <frame x="1037" y="143" width="98" height="92"/>
       </jump>
+      <die speed="0.3F">
+        <frame x="772" y="566" width="115" height="73"/>
+        <frame x="899" y="560" width="118" height="78"/>
+        <frame x="1026" y="560" width="121" height="79"/>
+      </die>
     </animations>
   </player>
+
+  <collision>
+    <max_colliders value="50"/>
+  </collision>
 
   <map>
     <folder>maps/</folder>

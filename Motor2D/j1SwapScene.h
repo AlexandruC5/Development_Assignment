@@ -3,6 +3,7 @@
 
 #include "j1Module.h"
 
+
 class j1SwapScene : public j1Module
 {
 public:
@@ -11,8 +12,11 @@ public:
 
 	bool Start();
 	bool Update(float dt);
-	bool FadeToBlack(j1Module* module_off, j1Module* module_on, float time = 2.0f);
+	bool FadeToBlack(j1Scene* scene_off, j1Scene* scene_on, float time = 2.0f);
+	bool CleanUp();
+	void Reload();
 
+	j1Scene* current_scene = nullptr;
 private:
 
 	enum fade_step
@@ -25,8 +29,8 @@ private:
 	uint start_time = 0;
 	uint total_time = 0;
 	SDL_Rect screen;
-	j1Module* module_enable = nullptr;
-	j1Module* module_disable = nullptr;
+	j1Scene* scene_enable = nullptr;
+	j1Scene* scene_disable = nullptr;
 };
 
 #endif

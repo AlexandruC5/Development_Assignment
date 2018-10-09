@@ -2,6 +2,7 @@
 #include "p2Log.h"
 #include "j1Window.h"
 #include "j1Render.h"
+#include "j1Scene.h"
 #include "j1Map.h"
 #include "j1SwapScene.h"
 
@@ -41,9 +42,9 @@ bool j1SwapScene::Update(float dt)
 	{
 		if (now >= total_time)
 		{
-			module_disable->Deactivate();
+			scene_disable->Deactivate();
 			App->map->CleanUp();
-			module_enable->Activate();
+			scene_enable->Activate();
 
 			total_time += total_time;
 			start_time = SDL_GetTicks();
@@ -70,7 +71,7 @@ bool j1SwapScene::Update(float dt)
 }
 
 // Fade to black. At mid point deactivate one module, then activate the other
-bool j1SwapScene::FadeToBlack(j1Module* module_off, j1Module* module_on, float time)
+bool j1SwapScene::FadeToBlack(j1Scene* module_off, j1Scene* module_on, float time)
 {
 	bool ret = false;
 
@@ -79,10 +80,24 @@ bool j1SwapScene::FadeToBlack(j1Module* module_off, j1Module* module_on, float t
 		current_step = fade_step::fade_to_black;
 		start_time = SDL_GetTicks();
 		total_time = (Uint32)(time * 0.5F * 1000.0F);
-		module_disable = module_off;
-		module_enable = module_on;
+		scene_disable = module_off;
+		scene_enable = module_on;
 		ret = true;
 	}
 
 	return ret;
+}
+
+bool j1SwapScene::CleanUp()
+{
+	scene_disable = nullptr;
+	scene_enable = nullptr;
+	current_scene = nullptr;
+
+	return true;
+}
+
+void j1SwapScene::Reload()
+{
+	FadeToBlack(current_scene, current_scene);
 }

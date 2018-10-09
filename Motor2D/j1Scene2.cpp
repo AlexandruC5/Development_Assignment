@@ -33,6 +33,7 @@ bool j1Scene2::Awake(pugi::xml_node& conf)
 bool j1Scene2::Start()
 {
 	App->map->Load(map_file.GetString(),background_file.GetString());
+	App->swap_scene->current_scene = this;
 	return true;
 }
 

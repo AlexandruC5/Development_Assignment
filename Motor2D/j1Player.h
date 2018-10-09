@@ -16,7 +16,7 @@ enum Player_State {
 class j1Player : public j1Module
 {
 private:
-	pugi::xml_node player_config;
+	p2SString sprite_route;
 	SDL_Texture* sprite;
 	Collider* coll;
 
@@ -32,6 +32,7 @@ private:
 	Animation idle;
 	Animation move;
 	Animation jump;
+	Animation die;
 	Animation current_animation;
 public:
 	fPoint new_position = { 0.0F, 0.0F };
@@ -54,6 +55,8 @@ public:
 	void IdleUpdate();
 	void MovingUpdate();
 	void JumpingUpdate();
+
+	void CheckDeath();
 };
 
 #endif
