@@ -38,8 +38,8 @@ void j1Map::Draw()
 	tileset = data.tilesets.start;
 
 	SDL_Rect* rect2 = new SDL_Rect();
-	rect2->w = map_file.child("map").child("imagelayer").child("image").attribute("width").as_int();
-	rect2->h = map_file.child("map").child("imagelayer").child("image").attribute("height").as_int();
+	rect2->w = 1950;//map_file.child("map").child("imagelayer").child("image").attribute("width").as_int();
+	rect2->h = 1450;//map_file.child("map").child("imagelayer").child("image").attribute("height").as_int();
 	App->render->Blit(data.background_img, 0, 0, rect2, 0.5f);
 	App->render->Blit(data.background_img, rect2->w, 0, rect2, 0.5f);
 	//provisional

@@ -7,6 +7,7 @@
 #include "j1Window.h"
 #include "j1Map.h"
 #include "j1Scene.h"
+#include "j1Player.h"
 
 j1Scene::j1Scene() : j1Module()
 {}
@@ -36,6 +37,51 @@ bool j1Scene::PreUpdate()
 // Called each loop iteration
 bool j1Scene::Update(float dt)
 {
+	if (App->player->position.x >= (-App->render->camera.x + (App->render->camera.w / 2)) && App->player->velocity.x > 0)
+	{
+		App->render->camera.x -= App->player->velocity.x;
+	}
+	if (App->player->position.x <= (-App->render->camera.x + (App->render->camera.w / 4)) && App->player->velocity.x<0 && -App->render->camera.x > 0)
+	{
+		App->render->camera.x += -App->player->velocity.x;
+		if (-App->render->camera.x < 0)
+			App->render->camera.x = 0;
+	}
+
+	if (App->player->position.y <= ((-App->render->camera.y + (App->render->camera.h / 4))) && App->player->velocity.y < 0 && -App->render->camera.y > 0)
+	{
+		App->render->camera.y -= App->player->velocity.y;
+		if (-App->render->camera.y < 0)
+			App->render->camera.y = 0;
+	}
+	if (App->player->position.y >= ((-App->render->camera.y)) && App->player->velocity.y>0 && -App->render->camera.y < (App->map->data.height*App->map->data.tile_height)-App->render->camera.h)
+	{
+		App->render->camera.y -= App->player->velocity.y;
+		if (-App->render->camera.y > App->map->data.height*App->map->data.tile_height)
+			App->render->camera.y = (-App->map->data.height*App->map->data.tile_height)-App->render->camera.h;
+	}
+
+
+
+
+	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
+		App->LoadGame();
+
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
+		App->SaveGame();
+
+	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+		App->render->camera.y -= 1;
+
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+		App->render->camera.y += 1;
+
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+		App->render->camera.x -= 1;
+
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+		App->render->camera.x += 1;
+
 	App->map->Draw();
 
 	p2SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
