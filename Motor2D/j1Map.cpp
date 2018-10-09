@@ -37,13 +37,10 @@ void j1Map::Draw()
 	p2List_item<TileSet*>* tileset;
 	tileset = data.tilesets.start;
 
-	SDL_Rect* rect2 = new SDL_Rect();
-	rect2->w = 1950;//map_file.child("map").child("imagelayer").child("image").attribute("width").as_int();
-	rect2->h = 1450;//map_file.child("map").child("imagelayer").child("image").attribute("height").as_int();
-	App->render->Blit(data.background_img, 0, 0, rect2, 0.5f);
-	App->render->Blit(data.background_img, rect2->w, 0, rect2, 0.5f);
+	App->render->Blit(data.background_img, 0, 0, &data.background_rect, 0.5f);
+	App->render->Blit(data.background_img, data.background_rect.w, 0, &data.background_rect, 0.5f);
 	//provisional
-	App->render->Blit(data.background_img, 2*(rect2->w), 0, rect2, 0.5f);
+	App->render->Blit(data.background_img, 2*(data.background_rect.w), 0, &data.background_rect, 0.5f);
 	while (layer != NULL)
 	{
 		for (int x = 0; x < data.width; x++) {
@@ -151,7 +148,6 @@ bool j1Map::Load(const char* file_name)
 	// Load general info ----------------------------------------------
 	if (ret == true)
 	{
-		data.background_img = App->tex->Load(PATH(folder.GetString(), map_file.child("map").child("imagelayer").child("image").attribute("source").as_string()));
 		ret = LoadMap();
 	}
 
@@ -190,6 +186,11 @@ bool j1Map::Load(const char* file_name)
 	//Load collision layer and create colliders
 	pugi::xml_node objects = map_file.child("map").child("objectgroup");
 	ret = LoadCollisionLayer(objects);
+
+	//Load image layer
+	pugi::xml_node background = map_file.child("map").child("imagelayer");
+	data.background_img = App->tex->Load(PATH(folder.GetString(), background.child("image").attribute("source").as_string()));
+	data.background_rect = { 0,0,background.child("image").attribute("width").as_int(), background.child("image").attribute("height").as_int() };
 
 	if(ret == true)
 	{

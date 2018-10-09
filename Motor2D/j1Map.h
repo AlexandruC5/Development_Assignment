@@ -70,6 +70,7 @@ struct MapData
 	p2List<MapLayer*>	layers;
 	p2List<Collider*>	colliders;
 	SDL_Texture*		background_img;
+	SDL_Rect			background_rect;
 };
 
 class j1Map : public j1Module

@@ -792,7 +792,7 @@
   <object id="12" x="5121.67" y="402.33" width="898" height="52"/>
   <object id="86" x="-208" y="-336" width="212" height="1840"/>
  </objectgroup>
- <imagelayer name="image">
-  <image source="BG.png"/>
+ <imagelayer name="background">
+  <image source="BG.png" width="1925" height="1450"/>
  </imagelayer>
 </map>
