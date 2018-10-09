@@ -74,6 +74,8 @@ bool j1Player::PostUpdate()
 
 bool j1Player::PreUpdate() 
 {
+	isGrounded = App->collision->CheckIfGrounded(coll);
+
 	switch (state) {
 	case IDLE: IdleUpdate();
 		break;
@@ -91,6 +93,7 @@ bool j1Player::PreUpdate()
 	if (fabs(velocity.x) < threshold) velocity.x = 0.0F;
 	if (fabs(velocity.y) < threshold) velocity.y = 0.0F;
 
+	new_position += velocity;
 	coll->SetPos(position.x + velocity.x, position.y + velocity.y); //move collider only to check for possible collisions
 
 	return true;
@@ -98,7 +101,7 @@ bool j1Player::PreUpdate()
 
 bool j1Player::Update(float dt)
 {
-	position += velocity;
+	position = new_position;
 	coll->SetPos(position.x, position.y);
 	
 	return true;
@@ -210,8 +213,21 @@ bool j1Player::OnCollision(Collider* c1, Collider* c2)
 {
 	if (c2->type == COLLIDER_PLATFORM) 
 	{
-		velocity.y = (c2->rect.y - position.y) - coll->rect.h;
-		isGrounded = true;
+		if (velocity.x > 0 && (position.x + c1->rect.w) <= c2->rect.x) {
+			velocity.x = 0.0F;
+			new_position.x = c2->rect.x - c1->rect.w;
+		}
+		else if (velocity.x < 0 && position.x >= (c2->rect.x + c2->rect.w)) 
+		{
+			velocity.x = 0.0F;
+			new_position.x = c2->rect.x+c2->rect.w;
+		}
+		if (position.y+c1->rect.h < c2->rect.y) 
+		{
+			velocity.y = 0.0F;
+			new_position.y = c2->rect.y - c1->rect.h;
+			isGrounded = true;
+		}
 	}
 	return true;
 }
