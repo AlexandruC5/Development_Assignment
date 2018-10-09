@@ -5,7 +5,7 @@
 	<textures />
 	<audio />
 	<player>
-		<position x="627.062683" y="1562.5553" />
+		<position x="949.421814" y="1739" />
 	</player>
 	<map />
 	<scene_forest />
@@ -13,6 +13,6 @@
 	<:anonymous />
 	<:anonymous />
 	<renderer>
-		<camera x="0" y="-1300" />
+		<camera x="-458" y="-1142" />
 	</renderer>
 </game_state>

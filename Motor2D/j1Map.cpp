@@ -38,9 +38,12 @@ void j1Map::Draw()
 	tileset = data.tilesets.start;
 
 	SDL_Rect* rect2 = new SDL_Rect();
-	rect2->w = 1024;
-	rect2->h = 768;
-	App->render->Blit(data.background_img, 0, 0, rect2, 0.1f);
+	rect2->w = map_file.child("map").child("imagelayer").child("image").attribute("width").as_int();
+	rect2->h = map_file.child("map").child("imagelayer").child("image").attribute("height").as_int();
+	App->render->Blit(data.background_img, 0, 0, rect2, 0.5f);
+	App->render->Blit(data.background_img, rect2->w, 0, rect2, 0.5f);
+	//provisional
+	App->render->Blit(data.background_img, 2*(rect2->w), 0, rect2, 0.5f);
 	while (layer != NULL)
 	{
 		for (int x = 0; x < data.width; x++) {
@@ -130,7 +133,7 @@ bool j1Map::CleanUp()
 }
 
 // Load new map
-bool j1Map::Load(const char* file_name, const char* background_img)
+bool j1Map::Load(const char* file_name)
 {
 	bool ret = true;
 	p2SString tmp("%s%s", folder.GetString(), file_name);
@@ -146,7 +149,7 @@ bool j1Map::Load(const char* file_name, const char* background_img)
 	// Load general info ----------------------------------------------
 	if (ret == true)
 	{
-		data.background_img = App->tex->Load(PATH(folder.GetString(), background_img));
+		data.background_img = App->tex->Load(PATH(folder.GetString(), map_file.child("map").child("imagelayer").child("image").attribute("source").as_string()));
 		ret = LoadMap();
 	}
 

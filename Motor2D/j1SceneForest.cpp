@@ -35,7 +35,7 @@ bool j1SceneForest::Awake(pugi::xml_node& conf)
 // Called before the first frame
 bool j1SceneForest::Start()
 {
-	App->map->Load(map_file.GetString(),background_file.GetString());
+	App->map->Load(map_file.GetString());
 	return true;
 }
 

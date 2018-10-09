@@ -91,7 +91,7 @@ public:
 	bool CleanUp();
 
 	// Load new map
-	bool Load(const char* path,const char* background_img);
+	bool Load(const char* path);
 	
 	//Translates x,y coordinates from map positions to world positions
 	iPoint MapToWorld(int x, int y) const;
