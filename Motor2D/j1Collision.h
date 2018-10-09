@@ -1,8 +1,6 @@
 #ifndef __ModuleCollision_H__
 #define __ModuleCollision_H__
 
-#define MAX_COLLIDERS 400
-
 #include "j1Module.h"
 
 enum COLLIDER_TYPE
@@ -13,15 +11,6 @@ enum COLLIDER_TYPE
 	COLLIDER_MAX,
 };
 
-enum COLLISION_SIDE 
-{
-	NO_SIDE = -1,
-	LEFT_COLLISION,
-	RIGHT_COLLISION,
-	TOP_COLLISION,
-	BOTTOM_COLLISION
-};
-
 struct Collider
 {
 	SDL_Rect rect;
@@ -30,6 +19,7 @@ struct Collider
 	j1Module* callback = nullptr;
 	bool enabled = true;
 
+	Collider(){}
 	Collider(SDL_Rect rectangle, COLLIDER_TYPE type, j1Module* callback = nullptr) :
 		rect(rectangle),
 		type(type),
@@ -52,7 +42,7 @@ struct Collider
 	{
 		this->type = type;
 	}
-	bool CheckCollision(const SDL_Rect& r, COLLISION_SIDE side = NO_SIDE) const;
+	bool CheckCollision(const SDL_Rect& r) const;
 };
 
 class j1Collision : public j1Module
@@ -66,6 +56,7 @@ public:
 	bool Update(float dt) override;
 	bool CleanUp() override;
 	bool CheckIfGrounded(Collider* c1) const;
+	bool Awake(pugi::xml_node&);
 
 
 	Collider* AddCollider(SDL_Rect rect, COLLIDER_TYPE type, j1Module* callback = nullptr);
@@ -73,10 +64,10 @@ public:
 
 private:
 
-	Collider * colliders[MAX_COLLIDERS];
+	Collider** colliders = nullptr;
 	bool matrix[COLLIDER_MAX][COLLIDER_MAX];
-	bool debug = true;
-
+	bool debug = false;
+	int max_colliders;
 };
 
 #endif

@@ -5,6 +5,8 @@
 #include "j1Textures.h"
 #include "j1Render.h"
 #include "j1Window.h"
+#include "j1SceneForest.h"
+#include "j1SwapScene.h"
 #include "j1Map.h"
 #include "j1Scene.h"
 #include "j1Player.h"
@@ -61,9 +63,6 @@ bool j1Scene::Update(float dt)
 			App->render->camera.y = (-App->map->data.height*App->map->data.tile_height)-App->render->camera.h;
 	}
 
-
-
-
 	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
 		App->LoadGame();
 
@@ -81,6 +80,9 @@ bool j1Scene::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		App->render->camera.x += 1;
+
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) App->swap_scene->FadeToBlack(App->swap_scene->current_scene, App->scene_forest);
+	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) App->swap_scene->Reload();
 
 	App->map->Draw();
 

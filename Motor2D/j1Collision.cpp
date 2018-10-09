@@ -6,9 +6,7 @@
 
 j1Collision::j1Collision()
 {
-	for (uint i = 0; i < MAX_COLLIDERS; ++i)
-		colliders[i] = nullptr;
-
+	name.create("collision");
 	matrix[COLLIDER_PLATFORM][COLLIDER_PLATFORM] = false;
 	matrix[COLLIDER_PLATFORM][COLLIDER_PLAYER] = true;
 
@@ -20,10 +18,19 @@ j1Collision::j1Collision()
 j1Collision::~j1Collision()
 {}
 
+bool j1Collision::Awake(pugi::xml_node& config) 
+{
+	max_colliders = config.child("max_colliders").attribute("value").as_int();
+	colliders = new Collider*[max_colliders];
+	for (uint i = 0; i < max_colliders; ++i)
+		colliders[i] = nullptr;
+
+	return true;
+}
 bool j1Collision::PreUpdate()
 {
 	// Remove all colliders scheduled for deletion
-	for (uint i = 0; i < MAX_COLLIDERS; ++i)
+	for (uint i = 0; i < max_colliders; ++i)
 	{
 		if (colliders[i] != nullptr && colliders[i]->to_delete == true)
 		{
@@ -36,7 +43,7 @@ bool j1Collision::PreUpdate()
 	Collider* c1;
 	Collider* c2;
 
-	for (uint i = 0; i < MAX_COLLIDERS; ++i)
+	for (uint i = 0; i < max_colliders; ++i)
 	{
 		// skip empty colliders
 		if (colliders[i] == nullptr)
@@ -45,7 +52,7 @@ bool j1Collision::PreUpdate()
 		c1 = colliders[i];
 
 		// avoid checking collisions already checked
-		for (uint k = i + 1; k < MAX_COLLIDERS; ++k)
+		for (uint k = i + 1; k < max_colliders; ++k)
 		{
 			// skip empty colliders
 			if (colliders[k] == nullptr)
@@ -77,14 +84,14 @@ bool j1Collision::Update(float dt)
 
 void j1Collision::DebugDraw()
 {
-	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
 		debug = !debug;
 
 	if (debug == false)
 		return;
 
 	Uint8 alpha = 80;
-	for (uint i = 0; i < MAX_COLLIDERS; ++i)
+	for (uint i = 0; i < max_colliders; ++i)
 	{
 		if (colliders[i] == nullptr)
 			continue;
@@ -111,7 +118,7 @@ bool j1Collision::CleanUp()
 {
 	LOG("Freeing all colliders");
 
-	for (uint i = 0; i < MAX_COLLIDERS; ++i)
+	for (uint i = 0; i < max_colliders; ++i)
 	{
 		if (colliders[i] != nullptr)
 		{
@@ -119,6 +126,7 @@ bool j1Collision::CleanUp()
 			colliders[i] = nullptr;
 		}
 	}
+	delete[] colliders;
 
 	return true;
 }
@@ -128,7 +136,7 @@ bool j1Collision::CheckIfGrounded(Collider * c1) const
 	SDL_Rect bottom_collider = c1->rect;
 	bottom_collider.h += 1;
 
-	for (uint i = 0; i < MAX_COLLIDERS; ++i)
+	for (uint i = 0; i < max_colliders; ++i)
 		if (colliders[i] != c1 && colliders[i] != nullptr && colliders[i]->CheckCollision(bottom_collider)) return true;
 	return false;
 }
@@ -137,7 +145,7 @@ Collider* j1Collision::AddCollider(SDL_Rect rect, COLLIDER_TYPE type, j1Module* 
 {
 	Collider* ret = nullptr;
 
-	for (uint i = 0; i < MAX_COLLIDERS; ++i)
+	for (uint i = 0; i < max_colliders; ++i)
 	{
 		if (colliders[i] == nullptr)
 		{
@@ -151,14 +159,12 @@ Collider* j1Collision::AddCollider(SDL_Rect rect, COLLIDER_TYPE type, j1Module* 
 
 // -----------------------------------------------------
 
-bool Collider::CheckCollision(const SDL_Rect& r, COLLISION_SIDE side) const
+bool Collider::CheckCollision(const SDL_Rect& r) const
 {
 	if (enabled) {
 		if ((r.x < rect.x + rect.w) && (rect.x < r.x + r.w)
 			&& (r.y < rect.y + rect.h) && (rect.y < r.y + r.h)) {
 
-			/*if ((r.x < rect.x + rect.w) && (r.x + r.w > rect.x + rect.w)) side = LEFT_COLLISION;
-			if (r.y+r.h<rect.y && r)*/
 			return true;
 		}
 		return false;

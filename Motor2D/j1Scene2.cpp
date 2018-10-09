@@ -32,7 +32,9 @@ bool j1Scene2::Awake(pugi::xml_node& conf)
 // Called before the first frame
 bool j1Scene2::Start()
 {
+	App->swap_scene->current_scene = this;
 	App->map->Load(map_file.GetString());
+
 	return true;
 }
 
