@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="70" height="15" tilewidth="128" tileheight="128" nextobjectid="19">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="70" height="15" tilewidth="128" tileheight="128" nextobjectid="25">
  <tileset firstgid="1" name="map1_tileset" tilewidth="128" tileheight="128" tilecount="20" columns="4">
   <image source="map1_tileset.png" width="512" height="641"/>
  </tileset>
@@ -1071,7 +1071,8 @@
   <object id="11" x="2691.47" y="1298.77" width="1022.7" height="52"/>
   <object id="12" x="4481.67" y="1042.33" width="898" height="52"/>
   <object id="14" x="5890.17" y="657.5" width="385" height="55.8333"/>
-  <object id="16" x="986.667" y="1233.33" width="232" height="744"/>
  </objectgroup>
- <imagelayer name="Image Layer 1"/>
+ <imagelayer name="Capa de Imagen 1" offsetx="0" offsety="550">
+  <image source="BG.png" width="1925" height="1450"/>
+ </imagelayer>
 </map>
