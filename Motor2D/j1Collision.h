@@ -13,6 +13,15 @@ enum COLLIDER_TYPE
 	COLLIDER_MAX,
 };
 
+enum COLLISION_SIDE 
+{
+	NO_SIDE = -1,
+	LEFT_COLLISION,
+	RIGHT_COLLISION,
+	TOP_COLLISION,
+	BOTTOM_COLLISION
+};
+
 struct Collider
 {
 	SDL_Rect rect;
@@ -43,7 +52,7 @@ struct Collider
 	{
 		this->type = type;
 	}
-	bool CheckCollision(const SDL_Rect& r) const;
+	bool CheckCollision(const SDL_Rect& r, COLLISION_SIDE side = NO_SIDE) const;
 };
 
 class j1Collision : public j1Module
@@ -56,6 +65,8 @@ public:
 	bool PreUpdate() override;
 	bool Update(float dt) override;
 	bool CleanUp() override;
+	bool CheckIfGrounded(Collider* c1) const;
+
 
 	Collider* AddCollider(SDL_Rect rect, COLLIDER_TYPE type, j1Module* callback = nullptr);
 	void DebugDraw();

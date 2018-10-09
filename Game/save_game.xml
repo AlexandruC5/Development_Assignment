@@ -5,7 +5,11 @@
 	<textures />
 	<audio />
 	<player>
+<<<<<<< HEAD
 		<position x="949.421814" y="1739" />
+=======
+		<position x="690.915161" y="1646.45703" />
+>>>>>>> a0071e31536dc37098ac4f181cb52807a26edb8f
 	</player>
 	<map />
 	<scene_forest />

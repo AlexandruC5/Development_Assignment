@@ -123,6 +123,16 @@ bool j1Collision::CleanUp()
 	return true;
 }
 
+bool j1Collision::CheckIfGrounded(Collider * c1) const
+{
+	SDL_Rect bottom_collider = c1->rect;
+	bottom_collider.h += 1;
+
+	for (uint i = 0; i < MAX_COLLIDERS; ++i)
+		if (colliders[i] != c1 && colliders[i] != nullptr && colliders[i]->CheckCollision(bottom_collider)) return true;
+	return false;
+}
+
 Collider* j1Collision::AddCollider(SDL_Rect rect, COLLIDER_TYPE type, j1Module* callback)
 {
 	Collider* ret = nullptr;
@@ -141,11 +151,14 @@ Collider* j1Collision::AddCollider(SDL_Rect rect, COLLIDER_TYPE type, j1Module* 
 
 // -----------------------------------------------------
 
-bool Collider::CheckCollision(const SDL_Rect& r) const
+bool Collider::CheckCollision(const SDL_Rect& r, COLLISION_SIDE side) const
 {
 	if (enabled) {
 		if ((r.x < rect.x + rect.w) && (rect.x < r.x + r.w)
 			&& (r.y < rect.y + rect.h) && (rect.y < r.y + r.h)) {
+
+			/*if ((r.x < rect.x + rect.w) && (r.x + r.w > rect.x + rect.w)) side = LEFT_COLLISION;
+			if (r.y+r.h<rect.y && r)*/
 			return true;
 		}
 		return false;
