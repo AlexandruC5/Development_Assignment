@@ -66,6 +66,8 @@ struct MapData
 	p2List<Collider*>	colliders;
 	SDL_Texture*		background_img;
 	SDL_Rect			background_rect;
+	p2Point<float>		spawn;
+	SDL_Rect			lvl_end;
 };
 
 class j1Map : public j1Module
@@ -99,6 +101,7 @@ private:
 	bool LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
 	bool LoadCollisionLayer(pugi::xml_node & node);
+	bool LoadUtilsLayer(pugi::xml_node & node);
 	TileSet* GetTileset(uint id) const;
 
 public:
