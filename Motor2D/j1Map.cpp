@@ -370,9 +370,18 @@ bool j1Map::LoadLayer(pugi::xml_node & node, MapLayer * layer)
 bool j1Map::LoadCollisionLayer(pugi::xml_node & node)
 {
 	pugi::xml_node collider;
-	for (collider = node.child("object"); collider; collider = collider.next_sibling("object")) {
+	for (collider = node.child("object"); collider; collider = collider.next_sibling("object")) 
+	{
 		SDL_Rect rect = { collider.attribute("x").as_int(),collider.attribute("y").as_int(), collider.attribute("width").as_int(), collider.attribute("height").as_int() };
-		data.colliders.add(App->collision->AddCollider(rect, COLLIDER_PLATFORM));
+		
+		if (collider.attribute("type").as_string() == "Platform")
+		{
+			data.colliders.add(App->collision->AddCollider(rect, COLLIDER_PLATFORM));
+		}
+		else if(collider.attribute("type").as_string == "Floor")
+		{
+			data.colliders.add(App->collision->AddCollider(rect, COLLIDER_FLOOR));
+		}
 	}
 	return true;
 }
