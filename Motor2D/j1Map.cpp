@@ -41,23 +41,17 @@ void j1Map::Draw()
 	App->render->Blit(data.background_img, data.background_rect.w, 0, &data.background_rect, 0.5f);
 	//provisional
 	App->render->Blit(data.background_img, 2*(data.background_rect.w), 0, &data.background_rect, 0.5f);
+
 	while (layer != NULL)
 	{
 		for (int x = 0; x < data.width; x++) {
 			for (int y = 0; y < data.height; y++) {
 				uint gid = layer->data->Get(x, y);
 				if (gid == 0) continue;
-
-				while (tileset != NULL && !tileset->data->Contains(gid)) tileset = tileset->next;
-				if (tileset == NULL) {
-					LOG("Cant find tileset for gid %i", gid); 
-					continue;
-				}
-
-				SDL_Rect rect = tileset->data->GetTileRect(gid);
+				TileSet* tileset = GetTileset(gid);
+				SDL_Rect rect = tileset->GetTileRect(gid);
 				iPoint position = MapToWorld(x, y);
-				App->render->Blit(tileset->data->texture, position.x, position.y, &rect);
-				tileset = data.tilesets.start;
+				App->render->Blit(tileset->texture, position.x, position.y, &rect);
 			}
 		}
 		layer = layer->next;
@@ -300,7 +294,6 @@ bool j1Map::LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set)
 	set->tile_height = tileset_node.attribute("tileheight").as_int();
 	set->margin = tileset_node.attribute("margin").as_int();
 	set->spacing = tileset_node.attribute("spacing").as_int();
-	set->tile_count = tileset_node.attribute("tilecount").as_int();
 	pugi::xml_node offset = tileset_node.child("tileoffset");
 
 	if(offset != NULL)
@@ -381,6 +374,17 @@ bool j1Map::LoadCollisionLayer(pugi::xml_node & node)
 		data.colliders.add(App->collision->AddCollider(rect, COLLIDER_PLATFORM));
 	}
 	return true;
+}
+
+TileSet* j1Map::GetTileset(uint id) const
+{
+	p2List_item<TileSet*>* tileset = data.tilesets.start;
+	while (tileset != NULL)
+	{
+		if (tileset->next && id < tileset->next->data->firstgid) return tileset->data;
+		tileset = tileset->next;
+	}
+	return data.tilesets.end->data;
 }
 
 TileSet::~TileSet() {

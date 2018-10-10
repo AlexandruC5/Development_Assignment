@@ -27,10 +27,6 @@ struct MapLayer {
 struct TileSet
 {
 	SDL_Rect GetTileRect(int id) const;
-	bool Contains(uint id) const 
-	{
-		return (id >= firstgid && id <= firstgid + tile_count - 1);
-	}
 
 	p2SString			name;
 	uint				firstgid;
@@ -38,7 +34,6 @@ struct TileSet
 	uint				spacing;
 	uint				tile_width;
 	uint				tile_height;
-	uint				tile_count;
 	SDL_Texture*		texture;
 	uint				tex_width;
 	uint				tex_height;
@@ -104,6 +99,7 @@ private:
 	bool LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
 	bool LoadCollisionLayer(pugi::xml_node & node);
+	TileSet* GetTileset(uint id) const;
 
 public:
 
