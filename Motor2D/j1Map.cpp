@@ -6,6 +6,7 @@
 #include "j1Collision.h"
 #include <math.h>
 #include "j1Map.h"
+#include "j1Player.h"
 
 j1Map::j1Map() : j1Module(), map_loaded(false)
 {
@@ -179,13 +180,19 @@ bool j1Map::Load(const char* file_name)
 	}
 
 	//Load collision layer and create colliders
-	pugi::xml_node objects = map_file.child("map").child("objectgroup");
+	pugi::xml_node objects = map_file.child("map").find_child_by_attribute("name", "colliders");
 	ret = LoadCollisionLayer(objects);
 
 	//Load image layer
 	pugi::xml_node background = map_file.child("map").child("imagelayer");
 	data.background_img = App->tex->Load(PATH(folder.GetString(), background.child("image").attribute("source").as_string()));
 	data.background_rect = { 0,0,background.child("image").attribute("width").as_int(), background.child("image").attribute("height").as_int() };
+
+	//Load Utils
+	pugi::xml_node utils = map_file.child("map").find_child_by_attribute("name", "utils");
+	LoadUtilsLayer(utils);
+
+	App->player->position = data.spawn;
 
 	if(ret == true)
 	{
@@ -373,16 +380,28 @@ bool j1Map::LoadCollisionLayer(pugi::xml_node & node)
 	for (collider = node.child("object"); collider; collider = collider.next_sibling("object")) 
 	{
 		SDL_Rect rect = { collider.attribute("x").as_int(),collider.attribute("y").as_int(), collider.attribute("width").as_int(), collider.attribute("height").as_int() };
-		
-		if (collider.attribute("type").as_string() == "Platform")
+		if (collider.attribute("type").as_int() == COLLIDER_PLATFORM)
 		{
 			data.colliders.add(App->collision->AddCollider(rect, COLLIDER_PLATFORM));
 		}
-		else if(collider.attribute("type").as_string == "Floor")
+		else if(collider.attribute("type").as_int() == COLLIDER_FLOOR)
 		{
 			data.colliders.add(App->collision->AddCollider(rect, COLLIDER_FLOOR));
 		}
 	}
+	return true;
+}
+
+bool j1Map::LoadUtilsLayer(pugi::xml_node & node)
+{
+	data.spawn.x = node.find_child_by_attribute("name", "spawn").attribute("x").as_float();
+	data.spawn.y = node.find_child_by_attribute("name", "spawn").attribute("y").as_float();
+
+	data.lvl_end.x = node.find_child_by_attribute("name", "end").attribute("x").as_float();
+	data.lvl_end.y = node.find_child_by_attribute("name", "end").attribute("y").as_float();
+	data.lvl_end.w = node.find_child_by_attribute("name", "end").attribute("width").as_float();
+	data.lvl_end.h = node.find_child_by_attribute("name", "end").attribute("height").as_float();
+
 	return true;
 }
 

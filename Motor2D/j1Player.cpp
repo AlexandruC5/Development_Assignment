@@ -27,7 +27,6 @@ bool j1Player::Awake(pugi::xml_node &conf)
 	sprite_route = conf.child("folder").child_value();
 	sprite_route += conf.child("sprite").child_value();
 
-
 	//load animations
 	pugi::xml_node frame;
 	for (frame = conf.child("animations").child("idle").child("frame"); frame; frame = frame.next_sibling("frame"))
@@ -272,5 +271,6 @@ void j1Player::CheckDeath()
 		state = DEAD;
 		current_animation = die;
 		App->swap_scene->Reload();
+		position = App->map->data.spawn;
 	}
 }
