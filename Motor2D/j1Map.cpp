@@ -51,7 +51,8 @@ void j1Map::Draw()
 				TileSet* tileset = GetTileset(gid);
 				SDL_Rect rect = tileset->GetTileRect(gid);
 				iPoint position = MapToWorld(x, y);
-				App->render->Blit(tileset->texture, position.x, position.y, &rect);
+				if (App->render->InCamera({ position.x, position.y, rect.w, rect.h }))
+					App->render->Blit(tileset->texture, position.x, position.y, &rect);
 			}
 		}
 		layer = layer->next;

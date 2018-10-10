@@ -4,15 +4,15 @@
 	<window />
 	<textures />
 	<audio />
-	<player>
-		<position x="0" y="1227" />
-	</player>
 	<map />
 	<scene_forest />
 	<scene2 />
-	<:anonymous />
+	<player>
+		<position x="157.17897" y="66" />
+	</player>
+	<collision />
 	<:anonymous />
 	<renderer>
-		<camera x="0" y="-1300" />
+		<camera x="0" y="-66" />
 	</renderer>
 </game_state>
