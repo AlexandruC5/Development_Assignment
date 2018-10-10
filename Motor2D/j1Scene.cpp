@@ -31,7 +31,6 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 // Called before the first frame
 bool j1Scene::Start()
 {
-	App->render->camera.y = (App->map->data.height*App->map->data.tile_height) - App->render->camera.h + App->render->camera.h / 6;
 	return true;
 }
 
@@ -63,11 +62,11 @@ bool j1Scene::Update(float dt)
 		if (-App->render->camera.y < 0)
 			App->render->camera.y = 0;
 	}
-	if (App->player->position.y >= ((-App->render->camera.y)) && App->player->velocity.y > 0 && -App->render->camera.y < (App->map->data.height*App->map->data.tile_height)-App->render->camera.h - App->render->camera.h)
+	if (App->player->position.y >= ((-App->render->camera.y)) && App->player->velocity.y>0 && -App->render->camera.y < (App->map->data.height*App->map->data.tile_height)-App->render->camera.h)
 	{
 		App->render->camera.y -= App->player->velocity.y;
-		if (-App->render->camera.y > App->map->data.height*App->map->data.tile_height)
-			App->render->camera.y = (-App->map->data.height*App->map->data.tile_height)-App->render->camera.h + App->render->camera.h;
+		if (App->render->camera.y < (-App->map->data.height*App->map->data.tile_height) + App->render->camera.h)
+			App->render->camera.y = (-App->map->data.height*App->map->data.tile_height) + App->render->camera.h;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
