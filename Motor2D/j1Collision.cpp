@@ -162,12 +162,119 @@ Collider* j1Collision::AddCollider(SDL_Rect rect, COLLIDER_TYPE type, j1Module* 
 bool Collider::CheckCollision(const SDL_Rect& r) const
 {
 	if (enabled) {
-		if ((r.x < rect.x + rect.w) && (rect.x < r.x + r.w)
-			&& (r.y < rect.y + rect.h) && (rect.y < r.y + r.h)) {
-
-			return true;
-		}
-		return false;
+		return ((r.x < rect.x + rect.w) && (rect.x < r.x + r.w)
+			&& (r.y < rect.y + rect.h) && (rect.y < r.y + r.h));
 	}
-	else return false;
+	return false;
+}
+
+Collider* j1Collision::ClosestRightSideCollider(Collider* coll) const
+{
+	int distance = 999;
+	Collider* return_coll = nullptr;
+
+	for (uint i = 0; i < max_colliders; i++) 
+	{
+		if (colliders[i] != nullptr && colliders[i] != coll)
+		{
+			if (colliders[i]->rect.x > coll->rect.x && App->render->InCamera(colliders[i]->rect))
+			{
+				if ((coll->rect.y > colliders[i]->rect.y && coll->rect.y < colliders[i]->rect.y + colliders[i]->rect.h) ||
+					(coll->rect.y + coll->rect.h > colliders[i]->rect.y && coll->rect.y + coll->rect.h < colliders[i]->rect.y + colliders[i]->rect.h))
+				{
+					int new_distance = colliders[i]->rect.x - coll->rect.x;
+					if (new_distance < distance)
+					{
+						distance = new_distance;
+						return_coll = colliders[i];
+					}
+						
+				}
+
+			}
+				
+		}
+	}
+	return return_coll;
+}
+
+Collider* j1Collision::ClosestLeftSideCollider(Collider* coll) const
+{
+	int distance = 999;
+	Collider* return_coll = nullptr;
+
+	for (uint i = 0; i < max_colliders; i++)
+	{
+		if (colliders[i] != nullptr && colliders[i] != coll)
+		{
+			if (colliders[i]->rect.x < coll->rect.x && App->render->InCamera(colliders[i]->rect))
+			{
+				if ((coll->rect.y > colliders[i]->rect.y && coll->rect.y < colliders[i]->rect.y + colliders[i]->rect.h) ||
+					(coll->rect.y + coll->rect.h > colliders[i]->rect.y && coll->rect.y + coll->rect.h < colliders[i]->rect.y + colliders[i]->rect.h))
+				{
+					int new_distance = abs((colliders[i]->rect.x + colliders[i]->rect.w) - coll->rect.x);
+					if (new_distance < distance)
+					{
+						distance = new_distance;
+						return_coll = colliders[i];
+					}
+				}
+			}
+		}
+	}
+	return return_coll;
+}
+
+Collider* j1Collision::ClosestBottomSideCollider(Collider* coll) const
+{
+	int distance = 999;
+	Collider* return_coll = nullptr;
+
+	for (uint i = 0; i < max_colliders; i++)
+	{
+		if (colliders[i] != nullptr && colliders[i] != coll)
+		{
+			if (colliders[i]->rect.y > coll->rect.y && App->render->InCamera(colliders[i]->rect))
+			{
+				if ((coll->rect.x > colliders[i]->rect.x && coll->rect.x < colliders[i]->rect.x + colliders[i]->rect.w) ||
+					(coll->rect.x + coll->rect.w > colliders[i]->rect.x && coll->rect.x + coll->rect.w < colliders[i]->rect.x + colliders[i]->rect.w))
+				{
+					int new_distance = colliders[i]->rect.y - coll->rect.y;
+					if (new_distance < distance)
+					{
+						distance = new_distance;
+						return_coll = colliders[i];
+					}
+				}
+			}
+		}
+	}
+	return return_coll;
+}
+
+Collider* j1Collision::ClosestTopSideCollider(Collider* coll) const
+{
+	int distance = 999;
+	Collider* return_coll = nullptr;
+
+	for (uint i = 0; i < max_colliders; i++)
+	{
+		if (colliders[i] != nullptr && colliders[i] != coll)
+		{
+			if (colliders[i]->rect.y <= coll->rect.y && App->render->InCamera(colliders[i]->rect))
+			{
+				if ((coll->rect.x > colliders[i]->rect.x && coll->rect.x < colliders[i]->rect.x + colliders[i]->rect.w) ||
+					(coll->rect.x + coll->rect.w > colliders[i]->rect.x && coll->rect.x + coll->rect.w < colliders[i]->rect.x + colliders[i]->rect.w))
+				{
+					int new_distance = abs((colliders[i]->rect.y + colliders[i]->rect.h) - coll->rect.y);
+					if (new_distance < distance)
+					{
+						distance = new_distance;
+						return_coll = colliders[i];
+					}
+				}
+			}
+		}
+	}
+	return return_coll;
 }

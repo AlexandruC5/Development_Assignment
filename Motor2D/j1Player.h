@@ -18,7 +18,7 @@ class j1Player : public j1Module
 private:
 	p2SString sprite_route;
 	SDL_Texture* sprite;
-	Collider* coll;
+	Collider* collider;
 
 	float movement_speed = 0.0F;
 	float jump_speed = 0.0F;
@@ -57,6 +57,7 @@ public:
 	void JumpingUpdate();
 
 	void CheckDeath();
+	void FixVelocity();
 };
 
 #endif

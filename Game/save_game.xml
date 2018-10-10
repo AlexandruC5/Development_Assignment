@@ -8,11 +8,11 @@
 	<scene_forest />
 	<scene2 />
 	<player>
-		<position x="157.17897" y="66" />
+		<position x="986.003479" y="1090.91528" />
 	</player>
 	<collision />
 	<:anonymous />
 	<renderer>
-		<camera x="0" y="-66" />
+		<camera x="-735" y="-655" />
 	</renderer>
 </game_state>

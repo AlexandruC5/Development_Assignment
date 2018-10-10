@@ -59,6 +59,10 @@ public:
 	bool Awake(pugi::xml_node&);
 
 
+	Collider* ClosestRightSideCollider(Collider* coll) const;
+	Collider* ClosestLeftSideCollider(Collider* coll) const;
+	Collider* ClosestBottomSideCollider(Collider* coll) const;
+	Collider* ClosestTopSideCollider(Collider* coll) const;
 	Collider* AddCollider(SDL_Rect rect, COLLIDER_TYPE type, j1Module* callback = nullptr);
 	void DebugDraw();
 

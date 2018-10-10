@@ -382,7 +382,7 @@ TileSet* j1Map::GetTileset(uint id) const
 	p2List_item<TileSet*>* tileset = data.tilesets.start;
 	while (tileset != NULL)
 	{
-		if (tileset->next && id < tileset->next->data->firstgid) return tileset->data;
+		if (id < tileset->data->firstgid) return tileset->prev->data;
 		tileset = tileset->next;
 	}
 	return data.tilesets.end->data;

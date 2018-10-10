@@ -73,7 +73,7 @@ bool j1Player::Awake(pugi::xml_node &conf)
 bool j1Player::Start()
 {
 	sprite = App->tex->Load(sprite_route.GetString());
-	coll = App->collision->AddCollider(idle.GetCurrentFrame(), COLLIDER_PLAYER, this);
+	collider = App->collision->AddCollider(idle.GetCurrentFrame(), COLLIDER_PLAYER, this);
 	return true;
 }
 
@@ -84,7 +84,8 @@ bool j1Player::PostUpdate()
 
 bool j1Player::PreUpdate() 
 {
-	isGrounded = App->collision->CheckIfGrounded(coll);
+	isGrounded = App->collision->CheckIfGrounded(collider);
+	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN) isGrounded = true;
 
 	switch (state) {
 	case IDLE: IdleUpdate();
@@ -100,22 +101,46 @@ bool j1Player::PreUpdate()
 	}
 
 	velocity = target_speed * acceleration + velocity * (1 - acceleration);
-	if (fabs(velocity.x) < threshold) velocity.x = 0.0F;
-	if (fabs(velocity.y) < threshold) velocity.y = 0.0F;
+	//FixVelocity();
 
-	new_position += velocity;
-	coll->SetPos(new_position.x, new_position.y);
+
 
 	return true;
 }
 
 bool j1Player::Update(float dt)
 {
-	position = new_position;
-	coll->SetPos(position.x, position.y);
+	Collider* closest_collider = nullptr;
+	if (velocity.x > 0)
+	{
+		closest_collider = App->collision->ClosestRightSideCollider(collider);
+		if (closest_collider) velocity.x = MIN(velocity.x, closest_collider->rect.x - (collider->rect.x + collider->rect.w));
+	}
+	else
+	{
+		closest_collider = App->collision->ClosestLeftSideCollider(collider);
+		if (closest_collider) velocity.x = MAX(velocity.x, (closest_collider->rect.x + closest_collider->rect.w) - collider->rect.x);
+	}
+	if (fabs(velocity.x) < threshold) velocity.x = 0.0F;
+
+	position.x += velocity.x;
+	if (velocity.y < 0)
+	{
+		closest_collider = App->collision->ClosestTopSideCollider(collider);
+		if (closest_collider) velocity.y = MAX(velocity.y, (closest_collider->rect.y + closest_collider->rect.h) - collider->rect.y);
+	}
+	else
+	{
+		closest_collider = App->collision->ClosestBottomSideCollider(collider);
+		if (closest_collider) velocity.y = MIN(velocity.y, closest_collider->rect.y - (collider->rect.y + collider->rect.h));
+
+	}
+	if (fabs(velocity.y) < threshold) velocity.y = 0.0F;
+	position.y += velocity.y;
+
+	collider->SetPos(position.x, position.y);
 
 	CheckDeath();
-
 
 	App->render->Blit(sprite, position.x, position.y, &current_animation.GetCurrentFrame(), 1.0F, flipX);	
 	return true;
@@ -129,10 +154,10 @@ bool j1Player::CleanUp()
 		sprite = nullptr;
 	}
 
-	if (coll) 
+	if (collider) 
 	{
-		coll->to_delete = true;
-		coll = nullptr;
+		collider->to_delete = true;
+		collider = nullptr;
 	}
 	if (!isGrounded) state = JUMPING;
 
@@ -227,7 +252,7 @@ bool j1Player::OnCollision(Collider* c1, Collider* c2)
 {
 	if (c2->type == COLLIDER_PLATFORM) 
 	{
-		if (velocity.x > 0 && (position.x + c1->rect.w) <= c2->rect.x) //RIGHT COLLISION
+		/*if (velocity.x > 0 && (position.x + c1->rect.w) <= c2->rect.x) //RIGHT COLLISION
 		{ 
 			velocity.x = 0.0F;
 			new_position.x = c2->rect.x - c1->rect.w;
@@ -236,7 +261,7 @@ bool j1Player::OnCollision(Collider* c1, Collider* c2)
 		{
 			velocity.x = 0.0F;
 			new_position.x = c2->rect.x+c2->rect.w;
-		}
+		}*/
 		if (position.y+c1->rect.h < c2->rect.y)  //BOTTOM COLLISION
 		{
 			velocity.y = 0.0F;
@@ -273,4 +298,13 @@ void j1Player::CheckDeath()
 		current_animation = die;
 		App->swap_scene->Reload();
 	}
+}
+
+void j1Player::FixVelocity()
+{
+	Collider* closest_collider = nullptr;
+	//horizontal fix
+
+	//vertical fix
+
 }
