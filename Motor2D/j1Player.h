@@ -11,7 +11,8 @@ enum Player_State {
 	IDLE,
 	MOVING,
 	JUMPING,
-	DEAD
+	DEAD,
+	CHARGE,
 };
 class j1Player : public j1Module
 {
@@ -32,6 +33,7 @@ private:
 	Animation move;
 	Animation jump;
 	Animation die;
+	Animation charge;
 	SDL_Rect animation_frame;
 
 	void StepX();
@@ -56,6 +58,7 @@ public:
 	void IdleUpdate();
 	void MovingUpdate();
 	void JumpingUpdate();
+	void ChargingUpdate();
 
 	void CheckDeath();
 	void ResetPlayer();

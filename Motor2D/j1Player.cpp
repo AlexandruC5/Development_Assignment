@@ -54,6 +54,12 @@ bool j1Player::Awake(pugi::xml_node &conf)
 	}
 	die.speed = conf.child("animations").child("die").attribute("speed").as_float();
 
+	for (frame = conf.child("animations").child("charge").child("frame"); frame; frame = frame.next_sibling("frame"))
+	{
+		charge.PushBack({ frame.attribute("x").as_int(), frame.attribute("y").as_int(), frame.attribute("width").as_int(), frame.attribute("height").as_int() });
+	}
+	charge.speed = conf.child("animations").child("charge").attribute("speed").as_float();
+
 
 	//load player stats
 	movement_speed = conf.child("movement_speed").attribute("value").as_float();
@@ -82,6 +88,8 @@ bool j1Player::PreUpdate()
 	case JUMPING: JumpingUpdate();
 		break;
 	case DEAD: animation_frame = die.GetCurrentFrame();
+		break;
+	case CHARGE: ChargingUpdate();
 		break;
 	default:
 		break;
@@ -127,14 +135,18 @@ void j1Player::IdleUpdate()
 	target_speed.x = 0.0F;
 	animation_frame = idle.GetCurrentFrame();
 	if (App->input->GetKey(SDL_SCANCODE_D) != App->input->GetKey(SDL_SCANCODE_A)) state = MOVING;
-
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
 	{
 		target_speed.y = -jump_speed;
 		isGrounded = false;
 		state = JUMPING;
 	}
-	else if (!isGrounded) state = JUMPING;
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
+	{
+      	state = CHARGE;
+	}
+		
+	if (!isGrounded) state = JUMPING;
 
 
 }
@@ -158,13 +170,19 @@ void j1Player::MovingUpdate()
 		flipX = false;
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
 	{
 		target_speed.y = -jump_speed;
 		isGrounded = false;
 		state = JUMPING;
 	}
-	else if (!isGrounded) state = JUMPING;
+
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
+	{
+		state = CHARGE;
+	}
+
+	if (!isGrounded) state = JUMPING;
 }
 
 void j1Player::JumpingUpdate() 
@@ -193,6 +211,17 @@ void j1Player::JumpingUpdate()
 
 		target_speed.y = 0.0F;
 		velocity.y = 0.0F;
+	}
+}
+
+void j1Player::ChargingUpdate()
+{
+	animation_frame = charge.GetCurrentFrame();
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
+	{
+		target_speed.y = -jump_speed;
+		isGrounded = false;
+		state = JUMPING;
 	}
 }
 
