@@ -29,6 +29,7 @@ private:
 	bool flipX = false;
 	bool isGrounded = false;
 	float timer = 0.0f;
+	float charged_time = 0.0f;
 	fPoint target_speed = { 0.0F, 0.0F };
 
 	Animation idle;

@@ -67,6 +67,7 @@ bool j1Player::Awake(pugi::xml_node &conf)
 	acceleration = conf.child("acceleration").attribute("value").as_float();
 	threshold = conf.child("threshold").attribute("value").as_float();
 	gravity = conf.child("gravity").attribute("value").as_float();
+	charged_time = conf.child("charged_jump_time").attribute("value").as_float();
 
 	animation_frame = { 0, 0, conf.child("collider").attribute("width").as_int(), conf.child("collider").attribute("height").as_int() };
 	collider_offset = conf.child("collider").attribute("offset").as_int();
@@ -142,7 +143,7 @@ void j1Player::IdleUpdate()
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
 	{
 		timer+=0.5;
-		if (timer >= 10)
+		if (timer >= charged_time)
 		{
 			state = CHARGE;
 		}
@@ -179,7 +180,7 @@ void j1Player::MovingUpdate()
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
 	{
 		timer+=0.5;
-		if (timer >= 10)
+		if (timer >= charged_time)
 		{
 			state = CHARGE;
 		}
@@ -236,7 +237,7 @@ void j1Player::ChargingUpdate()
 
 void j1Player::Jump(float boost)
 {
-	target_speed.y = -jump_speed + boost;
+	target_speed.y = -jump_speed - boost;
 	isGrounded = false;
 	state = JUMPING;
 	timer = 0;
