@@ -29,6 +29,7 @@ private:
 	bool flipX = true;
 	bool isGrounded = true;
 	float timer = 0.0f;
+	float charged_time = 0.0f;
 	fPoint target_speed = { 0.0F, 0.0F };
 
 	Animation idle;
@@ -61,6 +62,7 @@ public:
 	void MovingUpdate();
 	void JumpingUpdate();
 	void ChargingUpdate();
+	void Jump(float boost);
 
 	void CheckDeath();
 	void ResetPlayer();

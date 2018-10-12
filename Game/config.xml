@@ -36,6 +36,7 @@
   <player>
     <folder>textures/</folder>
     <sprite>player_spritesheet.png</sprite>
+	<charged_jump_time value="5.0f"/>
     <movement_speed value="10.0F"/>
     <jump_speed value="40.0F"/>
     <threshold value="0.1F"/>
