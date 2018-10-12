@@ -27,7 +27,7 @@ private:
 	float threshold = 0.0F;
 	bool flipX = false;
 	bool isGrounded = false;
-	int timer = 0;
+	float timer = 0.0f;
 	fPoint target_speed = { 0.0F, 0.0F };
 
 	Animation idle;
