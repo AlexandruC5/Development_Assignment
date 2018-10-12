@@ -141,8 +141,8 @@ void j1Player::IdleUpdate()
 	if (App->input->GetKey(SDL_SCANCODE_D) != App->input->GetKey(SDL_SCANCODE_A)) state = MOVING;
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
 	{
-		timer+=0.5;
-		if (timer >= 10)
+		timer+=0.5F;
+		if (timer >= 10.0F)
 		{
 			state = CHARGE;
 		}
@@ -152,7 +152,7 @@ void j1Player::IdleUpdate()
 		target_speed.y = -jump_speed;
 		isGrounded = false;
 		state = JUMPING;
-		timer = 0;
+		timer = 0.0F;
 	}
 		
 	if (!isGrounded) state = JUMPING;
@@ -181,8 +181,8 @@ void j1Player::MovingUpdate()
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
 	{
-		timer+=0.5;
-		if (timer >= 10)
+		timer += 0.5F;
+		if (timer >= 10.0F)
 		{
 			state = CHARGE;
 		}
@@ -193,7 +193,7 @@ void j1Player::MovingUpdate()
 		target_speed.y = -jump_speed;
 		isGrounded = false;
 		state = JUMPING;
-		timer = 0;
+		timer = 0.0F;
 	}
 
 	if (!isGrounded) state = JUMPING;
@@ -247,12 +247,16 @@ bool j1Player::Load(pugi::xml_node &player)
 {
 	position.x = player.child("position").attribute("x").as_float();
 	position.y = player.child("position").attribute("y").as_float();
-	state = (Player_State)player.child("state").attribute("value").as_int();
-	isGrounded = player.child("is_grounded").attribute("value").as_bool();
+
 	velocity.x = player.child("velocity").attribute("x").as_float();
 	velocity.y = player.child("velocity").attribute("y").as_float();
+
 	target_speed.x = player.child("target_speed").attribute("x").as_float();
 	target_speed.y = player.child("target_speed").attribute("y").as_float();
+
+	state = (Player_State)player.child("state").attribute("value").as_int();
+	isGrounded = player.child("is_grounded").attribute("value").as_bool();
+	flipX = player.child("flipX").attribute("value").as_bool();
 
 	collider->SetPos(position.x, position.y + collider_offset);
 
@@ -265,14 +269,18 @@ bool j1Player::Save(pugi::xml_node &player) const
 	pugi::xml_node position_node = player.append_child("position");
 	position_node.append_attribute("x") = position.x;
 	position_node.append_attribute("y") = position.y;
-	player.append_child("state").append_attribute("value") = (int)state;
-	player.append_child("is_grounded").append_attribute("value") = isGrounded;
+
 	pugi::xml_node velocity_node = player.append_child("velocity");
 	velocity_node.append_attribute("x") = velocity.x;
 	velocity_node.append_attribute("y") = velocity.y;
+
 	pugi::xml_node target_speed_node = player.append_child("target_speed");
 	target_speed_node.append_attribute("x") = target_speed.x;
 	target_speed_node.append_attribute("y") = target_speed.y;
+
+	player.append_child("state").append_attribute("value") = (int)state;
+	player.append_child("is_grounded").append_attribute("value") = isGrounded;
+	player.append_child("flipX").append_attribute("value") = flipX;
 
 	return true;
 }
@@ -289,8 +297,9 @@ void j1Player::CheckDeath()
 
 void j1Player::StepX()
 {
+	LOG("distance RIGHT = %f, LEFT = %f", App->collision->DistanceToRightCollider(collider), App->collision->DistanceToLeftCollider(collider));
 	if (velocity.x > 0) velocity.x = MIN(velocity.x, App->collision->DistanceToRightCollider(collider));
-	else velocity.x = MAX(velocity.x, App->collision->DistanceToLeftCollider(collider));
+	else if(velocity.x < 0) velocity.x = MAX(velocity.x, App->collision->DistanceToLeftCollider(collider));
 	if (fabs(velocity.x) < threshold) velocity.x = 0.0F;
 
 	position.x += velocity.x;
@@ -299,6 +308,7 @@ void j1Player::StepX()
 
 void j1Player::StepY()
 {
+	LOG("distance TOP = %f, BOT = %f", App->collision->DistanceToTopCollider(collider),App->collision->DistanceToBottomCollider(collider));
 	if (velocity.y < 0) velocity.y = MAX(velocity.y, App->collision->DistanceToTopCollider(collider));
 	else
 	{
@@ -317,4 +327,5 @@ void j1Player::ResetPlayer()
 	state = IDLE;
 	velocity = { 0.0F,0.0F };
 	target_speed = { 0.0F,0.0F };
+	flipX = true;
 }

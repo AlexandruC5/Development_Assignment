@@ -26,8 +26,8 @@ private:
 	float acceleration = 0.0F;
 	float threshold = 0.0F;
 	int collider_offset = 0;
-	bool flipX = false;
-	bool isGrounded = false;
+	bool flipX = true;
+	bool isGrounded = true;
 	float timer = 0.0f;
 	fPoint target_speed = { 0.0F, 0.0F };
 

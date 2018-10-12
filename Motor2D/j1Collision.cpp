@@ -150,7 +150,7 @@ float j1Collision::DistanceToRightCollider(Collider* coll) const
 	{
 		if (colliders[i] != nullptr && colliders[i] != coll && colliders[i]->type != COLLIDER_TRIGGER && colliders[i]->type != COLLIDER_PLATFORM)
 		{
-			if (colliders[i]->rect.x > coll->rect.x)
+			if (colliders[i]->rect.x > coll->rect.x && App->render->InCamera(colliders[i]->rect))
 			{
 				if (coll->rect.y < colliders[i]->rect.y + colliders[i]->rect.h  && coll->rect.y + coll->rect.h > colliders[i]->rect.y)
 				{
@@ -174,7 +174,7 @@ float j1Collision::DistanceToLeftCollider(Collider* coll) const
 	{
 		if (colliders[i] != nullptr && colliders[i] != coll && colliders[i]->type != COLLIDER_TRIGGER && colliders[i]->type != COLLIDER_PLATFORM)
 		{
-			if (colliders[i]->rect.x < coll->rect.x)
+			if (colliders[i]->rect.x < coll->rect.x && App->render->InCamera(colliders[i]->rect))
 			{
 				if (coll->rect.y < colliders[i]->rect.y + colliders[i]->rect.h  && coll->rect.y + coll->rect.h > colliders[i]->rect.y)
 				{
@@ -198,7 +198,7 @@ float j1Collision::DistanceToBottomCollider(Collider* coll) const
 	{
 		if (colliders[i] != nullptr && colliders[i] != coll && colliders[i]->type != COLLIDER_TRIGGER)
 		{
-			if (colliders[i]->rect.y >= coll->rect.y + coll->rect.h)
+			if (colliders[i]->rect.y >= coll->rect.y + coll->rect.h && App->render->InCamera(colliders[i]->rect))
 			{
 				if (coll->rect.x < colliders[i]->rect.x + colliders[i]->rect.w  && coll->rect.x + coll->rect.w > colliders[i]->rect.x)
 				{
@@ -222,7 +222,7 @@ float j1Collision::DistanceToTopCollider(Collider* coll) const
 	{
 		if (colliders[i] != nullptr && colliders[i] != coll && colliders[i]->type != COLLIDER_TRIGGER && colliders[i]->type != COLLIDER_PLATFORM)
 		{
-			if (colliders[i]->rect.y <= coll->rect.y)
+			if (colliders[i]->rect.y <= coll->rect.y && App->render->InCamera(colliders[i]->rect))
 			{
 				if (coll->rect.x < colliders[i]->rect.x + colliders[i]->rect.w  && coll->rect.x + coll->rect.w > colliders[i]->rect.x)
 				{

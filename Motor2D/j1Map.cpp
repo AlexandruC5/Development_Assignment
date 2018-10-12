@@ -372,7 +372,7 @@ bool j1Map::LoadLayer(pugi::xml_node & node, MapLayer * layer)
 	memset(layer->data, 0, sizeof(unsigned int) * size);
 
 	pugi::xml_node tile;
-	uint i = 0u;
+	uint i = 0U;
 	for (tile = node.child("data").child("tile"); tile; tile = tile.next_sibling("tile")) {
 		layer->data[i] = tile.attribute("gid").as_uint();
 		i++;

@@ -58,7 +58,6 @@ bool j1SceneForest::Update(float dt)
 
 bool j1SceneForest::OnCollision(Collider* c1, Collider* c2)
 {
-	if (c2->type == COLLIDER_PLAYER)
-	App->swap_scene->FadeToBlack(this, App->scene2);
+	if (c2->type == COLLIDER_PLAYER) App->swap_scene->FadeToBlack(this, App->scene2);
 	return true;
 }
