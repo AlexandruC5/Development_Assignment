@@ -29,8 +29,8 @@
   </scene_forest>
   
   <scene2>
-    <map_file>test2.tmx</map_file>
-	  <background>BG.png</background>
+    <map_file>lvl_2.tmx</map_file>
+	  <background>BG2.png</background>
   </scene2>
 
   <player>
