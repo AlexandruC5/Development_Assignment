@@ -61,6 +61,7 @@ public:
 	void MovingUpdate();
 	void JumpingUpdate();
 	void ChargingUpdate();
+	void Jump(float boost);
 
 	void CheckDeath();
 	void ResetPlayer();

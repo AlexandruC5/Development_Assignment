@@ -149,10 +149,7 @@ void j1Player::IdleUpdate()
 	}
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
 	{
-		target_speed.y = -jump_speed;
-		isGrounded = false;
-		state = JUMPING;
-		timer = 0;
+		Jump(0);
 	}
 		
 	if (!isGrounded) state = JUMPING;
@@ -190,10 +187,7 @@ void j1Player::MovingUpdate()
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
 	{
-		target_speed.y = -jump_speed;
-		isGrounded = false;
-		state = JUMPING;
-		timer = 0;
+		Jump(0);
 	}
 
 	
@@ -238,11 +232,16 @@ void j1Player::ChargingUpdate()
 		timer+=0.5;
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
 	{
-		target_speed.y = -jump_speed-timer;
-		isGrounded = false;
-		state = JUMPING;
-		timer = 0;
+		Jump(timer);
 	}
+}
+
+void j1Player::Jump(float boost)
+{
+	target_speed.y = -jump_speed + boost;
+	isGrounded = false;
+	state = JUMPING;
+	timer = 0;
 }
 
 bool j1Player::Load(pugi::xml_node &player) 
