@@ -11,9 +11,11 @@ public:
 	~j1SwapScene();
 
 	bool Start();
-	bool Update(float dt);
+	bool PostUpdate();
 	bool FadeToBlack(j1Scene* scene_off, j1Scene* scene_on, float time = 2.0f);
 	bool CleanUp();
+	bool Load(pugi::xml_node&);
+	bool Save(pugi::xml_node&) const;
 	void Reload();
 
 	j1Scene* current_scene = nullptr;

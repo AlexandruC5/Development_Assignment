@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<game_state>
+	<input />
+	<window />
+	<textures />
+	<audio />
+	<map />
+	<scene_forest />
+	<scene2 />
+	<swap_scene>
+		<scene value="scene_forest" />
+	</swap_scene>
+	<player>
+		<position x="2797.53589" y="-45.4566498" />
+	</player>
+	<collision />
+	<renderer>
+		<camera x="-2292" y="0" />
+	</renderer>
+</game_state>

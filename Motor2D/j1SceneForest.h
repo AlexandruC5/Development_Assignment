@@ -18,9 +18,6 @@ public:
 
 	// Called each loop iteration
 	bool Update(float dt) override;
-
-	// Called before quitting
-	bool CleanUp();
 };
 
 #endif

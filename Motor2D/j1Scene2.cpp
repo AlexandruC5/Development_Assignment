@@ -68,8 +68,3 @@ bool j1Scene2::Update(float dt)
 
 	return true;
 }
-
-bool j1Scene2::CleanUp()
-{
-	return true;
-}

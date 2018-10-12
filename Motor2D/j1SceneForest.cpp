@@ -53,8 +53,3 @@ bool j1SceneForest::Update(float dt)
 	}
 	return true;
 }
-
-bool j1SceneForest::CleanUp()
-{
-	return true;
-}

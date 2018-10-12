@@ -3,12 +3,14 @@
 #include "j1Window.h"
 #include "j1Render.h"
 #include "j1Scene.h"
+#include "j1SceneForest.h"
+#include "j1Scene2.h"
 #include "j1Map.h"
 #include "j1SwapScene.h"
 
 j1SwapScene::j1SwapScene()
 {
-
+	name.create("swap_scene");
 }
 
 j1SwapScene::~j1SwapScene()
@@ -28,7 +30,7 @@ bool j1SwapScene::Start()
 }
 
 // Update: draw background
-bool j1SwapScene::Update(float dt)
+bool j1SwapScene::PostUpdate()
 {
 	if (current_step == fade_step::none)
 		return true;
@@ -43,7 +45,6 @@ bool j1SwapScene::Update(float dt)
 		if (now >= total_time)
 		{
 			scene_disable->Deactivate();
-			App->map->CleanUp();
 			scene_enable->Activate();
 
 			total_time += total_time;
@@ -94,6 +95,26 @@ bool j1SwapScene::CleanUp()
 	scene_enable = nullptr;
 	current_scene = nullptr;
 
+	return true;
+}
+
+bool j1SwapScene::Load(pugi::xml_node &node)
+{
+	p2SString scene_name = node.child("scene").attribute("value").as_string();
+	if (scene_name != current_scene->name)
+	{
+		current_scene->Deactivate();
+		if (scene_name == "scene_forest") App->scene_forest->Activate();
+		else App->scene2->Activate();
+	}
+	return true;
+}
+
+bool j1SwapScene::Save(pugi::xml_node &node) const
+{
+	pugi::xml_node scene_node;
+	scene_node = node.append_child("scene");
+	scene_node.append_attribute("value") = current_scene->name.GetString();
 	return true;
 }
 
