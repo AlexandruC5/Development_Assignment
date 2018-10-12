@@ -7,28 +7,18 @@
 	<scene_forest />
 	<scene2 />
 	<map />
-<<<<<<< HEAD
-	<player>
-		<position x="8355.90723" y="454.239929" />
-	</player>
-	<collision />
-	<:anonymous />
-	<renderer>
-		<camera x="-7970" y="-269" />
-=======
 	<swap_scene>
 		<scene value="scene_forest" />
 	</swap_scene>
 	<player>
-		<position x="286.919556" y="1076.09229" />
-		<state value="3" />
-		<is_grounded value="false" />
-		<velocity x="8.14697838" y="-22.5660782" />
-		<target_speed x="10" y="-31" />
+		<position x="1519.01892" y="951.412292" />
+		<state value="1" />
+		<is_grounded value="true" />
+		<velocity x="0" y="0" />
+		<target_speed x="0" y="0" />
 	</player>
 	<collision />
 	<renderer>
-		<camera x="0" y="-640" />
->>>>>>> 7b1fcf53ea8a47662c1b8fa68f7bdac61ac1a2a1
+		<camera x="-992" y="-640" />
 	</renderer>
 </game_state>

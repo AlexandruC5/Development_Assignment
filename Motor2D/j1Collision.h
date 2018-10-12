@@ -19,7 +19,6 @@ struct Collider
 	bool to_delete = false;
 	COLLIDER_TYPE type;
 	j1Module* callback = nullptr;
-	bool enabled = true;
 
 	Collider(){}
 	Collider(SDL_Rect rectangle, COLLIDER_TYPE type, j1Module* callback = nullptr) :

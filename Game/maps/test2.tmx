@@ -286,7 +286,7 @@
   <object id="11" x="-4" y="1304" width="1408" height="96"/>
  </objectgroup>
  <objectgroup name="utils">
-  <object id="13" name="spawn" x="320" y="1232"/>
+  <object id="13" name="spawn" x="488" y="1080"/>
  </objectgroup>
  <imagelayer name="background" visible="0">
   <image source="BG.png" width="1925" height="1450"/>

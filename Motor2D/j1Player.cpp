@@ -62,13 +62,18 @@ bool j1Player::Awake(pugi::xml_node &conf)
 	threshold = conf.child("threshold").attribute("value").as_float();
 	gravity = conf.child("gravity").attribute("value").as_float();
 
+	collider = new Collider();
+	collider->rect = { 0, 0, conf.child("collider").attribute("width").as_int(), conf.child("collider").attribute("height").as_int() };
+	collider_offset = conf.child("collider").attribute("offset").as_int();
 	return true;
 }
 
 bool j1Player::Start()
 {
 	sprite = App->tex->Load(sprite_route.GetString());
-	collider = App->collision->AddCollider(idle.GetCurrentFrame(), COLLIDER_PLAYER, this);
+	collider = App->collision->AddCollider(collider->rect, COLLIDER_PLAYER, this);
+	collider->rect.x = position.x;
+	collider->rect.y = position.y + collider_offset;
 	return true;
 }
 
@@ -284,7 +289,7 @@ void j1Player::StepY()
 
 
 	position.y += velocity.y;
-	collider->rect.y = position.y;
+	collider->rect.y = position.y + collider_offset;
 }
 
 void j1Player::ResetPlayer()

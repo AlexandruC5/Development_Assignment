@@ -39,10 +39,10 @@ void j1Map::Draw()
 	p2List_item<TileSet*>* tileset;
 	tileset = data.tilesets.start;
 
-	App->render->Blit(data.background_img, 0, 0, &data.background_rect, 0.5f);
-	App->render->Blit(data.background_img, data.background_rect.w, 0, &data.background_rect, 0.5f);
+	App->render->Blit(data.background_img, 0, 0, &data.background_rect, 0.5F);
+	App->render->Blit(data.background_img, data.background_rect.w, 0, &data.background_rect, 0.5F);
 	//provisional
-	App->render->Blit(data.background_img, 2*(data.background_rect.w), 0, &data.background_rect, 0.5f);
+	App->render->Blit(data.background_img, 2*(data.background_rect.w), 0, &data.background_rect, 0.5F);
 
 	while (layer != NULL)
 	{
