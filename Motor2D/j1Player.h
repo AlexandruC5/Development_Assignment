@@ -33,7 +33,7 @@ private:
 	Animation move;
 	Animation jump;
 	Animation die;
-	Animation current_animation;
+	SDL_Rect animation_frame;
 
 	void StepX();
 	void StepY();
@@ -47,7 +47,6 @@ public:
 	~j1Player();
 	bool Awake(pugi::xml_node&);
 	bool Start();
-	bool PostUpdate();
 	bool Update(float dt);
 	bool PreUpdate();
 	bool CleanUp();
@@ -59,6 +58,7 @@ public:
 	void JumpingUpdate();
 
 	void CheckDeath();
+	void ResetPlayer();
 };
 
 #endif

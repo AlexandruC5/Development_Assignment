@@ -24,7 +24,7 @@ bool j1Collision::Awake(pugi::xml_node& config)
 }
 bool j1Collision::PreUpdate()
 {
-	// Remove collider
+	// Remove colliders
 	for (uint i = 0; i < max_colliders; ++i)
 	{
 		if (colliders[i] != nullptr && colliders[i]->to_delete == true)
@@ -65,6 +65,9 @@ void j1Collision::DebugDraw()
 			break;
 		case COLLIDER_PLATFORM: // blue
 			App->render->DrawQuad(colliders[i]->rect, 0, 0, 255, alpha, true);
+			break;
+		case COLLIDER_FLOOR: // red
+			App->render->DrawQuad(colliders[i]->rect, 255, 0, 0, alpha, true);
 			break;
 		case COLLIDER_PLAYER: // green
 			App->render->DrawQuad(colliders[i]->rect, 0, 255, 0, alpha, true);

@@ -4,17 +4,21 @@
 	<window />
 	<textures />
 	<audio />
-	<map />
 	<scene_forest />
 	<scene2 />
+	<map />
 	<swap_scene>
 		<scene value="scene_forest" />
 	</swap_scene>
 	<player>
-		<position x="2797.53589" y="-45.4566498" />
+		<position x="286.919556" y="1076.09229" />
+		<state value="3" />
+		<is_grounded value="false" />
+		<velocity x="8.14697838" y="-22.5660782" />
+		<target_speed x="10" y="-31" />
 	</player>
 	<collision />
 	<renderer>
-		<camera x="-2292" y="0" />
+		<camera x="0" y="-640" />
 	</renderer>
 </game_state>

@@ -121,6 +121,10 @@ bool j1Map::CleanUp()
 	}
 	data.colliders.clear();
 
+	//Remove background image
+	App->tex->UnLoad(data.background_img);
+	data.background_img = nullptr;
+
 	// Clean up the pugui tree
 	map_file.reset();
 
