@@ -8,6 +8,7 @@
 #include "j1Window.h"
 #include "j1SwapScene.h"
 #include "j1Map.h"
+#include "j1Player.h"
 #include "j1Scene2.h"
 #include "j1SceneForest.h"
 #include "j1Collision.h"
@@ -36,9 +37,9 @@ bool j1SceneForest::Awake(pugi::xml_node& conf)
 // Called before the first frame
 bool j1SceneForest::Start()
 {
-	j1Scene::Start();
 	App->swap_scene->current_scene = this;
 	App->map->Load(map_file.GetString());
+	App->player->ResetPlayer();
 
 	return true;
 }
@@ -52,11 +53,6 @@ bool j1SceneForest::Update(float dt)
 	{
 		App->swap_scene->FadeToBlack(this, App->scene2);
 	}
-	return true;
-}
-
-bool j1SceneForest::CleanUp()
-{
 	return true;
 }
 

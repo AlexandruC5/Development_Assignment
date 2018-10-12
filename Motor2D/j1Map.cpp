@@ -122,6 +122,10 @@ bool j1Map::CleanUp()
 	}
 	data.colliders.clear();
 
+	//Remove background image
+	App->tex->UnLoad(data.background_img);
+	data.background_img = nullptr;
+
 	// Clean up the pugui tree
 	map_file.reset();
 
@@ -193,7 +197,8 @@ bool j1Map::Load(const char* file_name)
 	pugi::xml_node utils = map_file.child("map").find_child_by_attribute("name", "utils");
 	LoadUtilsLayer(utils);
 
-	App->render->camera.y = (-App->map->data.height*App->map->data.tile_height) + App->render->camera.h;
+	App->render->camera.y = -(App->map->data.height*App->map->data.tile_height) + App->render->camera.h;
+	App->render->camera.x = 0;
 	App->player->position = data.spawn;
 
 	if(ret == true)

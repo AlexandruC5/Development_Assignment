@@ -4,6 +4,7 @@
 #include "j1Input.h"
 #include "j1Render.h"
 #include "j1Map.h"
+#include "j1Player.h"
 #include "j1SwapScene.h"
 #include "j1SceneForest.h"
 #include "j1Scene2.h"
@@ -35,7 +36,7 @@ bool j1Scene2::Start()
 {
 	App->swap_scene->current_scene = this;
 	App->map->Load(map_file.GetString());
-
+	App->player->ResetPlayer();
 	return true;
 }
 
@@ -67,11 +68,6 @@ bool j1Scene2::Update(float dt)
 		App->swap_scene->FadeToBlack(this, App->scene_forest);
 	}
 
-	return true;
-}
-
-bool j1Scene2::CleanUp()
-{
 	return true;
 }
 

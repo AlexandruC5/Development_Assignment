@@ -44,9 +44,9 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(scene_forest, true);
 	AddModule(scene2, false);
 	AddModule(map, true);
+	AddModule(swap_scene, true);
 	AddModule(player, true);
 	AddModule(collision, true);	
-	AddModule(swap_scene, true);
 
 
 	// render last to swap buffer

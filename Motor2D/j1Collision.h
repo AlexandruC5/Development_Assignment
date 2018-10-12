@@ -54,10 +54,9 @@ public:
 	j1Collision();
 	~j1Collision();
 
-	bool PreUpdate() override;
 	bool Update(float dt) override;
 	bool CleanUp() override;
-	bool CheckIfGrounded(Collider* c1) const;
+	bool PreUpdate();
 	bool Awake(pugi::xml_node&);
 
 
@@ -66,14 +65,14 @@ public:
 	Collider* ClosestBottomSideCollider(Collider* coll) const;
 	Collider* ClosestTopSideCollider(Collider* coll) const;
 	Collider* AddCollider(SDL_Rect rect, COLLIDER_TYPE type, j1Module* callback = nullptr);
+
 	void DebugDraw();
 
 private:
 
 	Collider** colliders = nullptr;
-	bool matrix[COLLIDER_MAX][COLLIDER_MAX];
 	bool debug = false;
-	int max_colliders;
+	int max_colliders = 0;
 };
 
 #endif

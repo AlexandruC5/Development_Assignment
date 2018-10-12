@@ -7,18 +7,6 @@
 j1Collision::j1Collision()
 {
 	name.create("collision");
-	matrix[COLLIDER_PLATFORM][COLLIDER_PLATFORM] = false;
-	matrix[COLLIDER_PLATFORM][COLLIDER_PLAYER] = true;
-
-	matrix[COLLIDER_PLAYER][COLLIDER_PLATFORM] = true;
-	matrix[COLLIDER_PLAYER][COLLIDER_PLAYER] = false;
-	matrix[COLLIDER_PLAYER][COLLIDER_TRIGGER] = true;
-	
-	matrix[COLLIDER_FLOOR][COLLIDER_PLAYER] = true;
-	matrix[COLLIDER_FLOOR][COLLIDER_FLOOR] = false;
-	
-	matrix[COLLIDER_TRIGGER][COLLIDER_PLAYER] = true;
-	matrix[COLLIDER_TRIGGER][COLLIDER_TRIGGER] = false;
 }
 
 // Destructor
@@ -36,7 +24,7 @@ bool j1Collision::Awake(pugi::xml_node& config)
 }
 bool j1Collision::PreUpdate()
 {
-	// Remove all colliders scheduled for deletion
+	// Remove colliders
 	for (uint i = 0; i < max_colliders; ++i)
 	{
 		if (colliders[i] != nullptr && colliders[i]->to_delete == true)
@@ -55,25 +43,29 @@ bool j1Collision::PreUpdate()
 		// skip empty colliders
 		if (colliders[i] == nullptr)
 			continue;
-
-		c1 = colliders[i];
-
-		// avoid checking collisions already checked
-		for (uint k = i + 1; k < max_colliders; ++k)
+		if (colliders[i]->type == COLLIDER_PLAYER)
 		{
-			// skip empty colliders
-			if (colliders[k] == nullptr)
-				continue;
+			c1 = colliders[i];
 
-			c2 = colliders[k];
-
-			if (c1->CheckCollision(c2->rect) && c1->enabled)
+			// avoid checking collisions already checked
+			for (uint k = 0; k < max_colliders; ++k)
 			{
-				if (matrix[c1->type][c2->type] && c1->callback)
-					c1->callback->OnCollision(c1, c2);
+				// skip empty colliders
+				if (colliders[k] == nullptr)
+					continue;
+				if (colliders[k]->type == COLLIDER_TRIGGER)
+				{
+					c2 = colliders[k];
 
-				if (matrix[c2->type][c1->type] && c2->callback)
-					c2->callback->OnCollision(c2, c1);
+					if (c1->CheckCollision(c2->rect) && c1->enabled)
+					{
+						if (c1->callback)
+							c1->callback->OnCollision(c1, c2);
+
+						if (c2->callback)
+							c2->callback->OnCollision(c2, c1);
+					}
+				}
 			}
 		}
 	}
@@ -111,6 +103,9 @@ void j1Collision::DebugDraw()
 		case COLLIDER_PLATFORM: // blue
 			App->render->DrawQuad(colliders[i]->rect, 0, 0, 255, alpha, true);
 			break;
+		case COLLIDER_FLOOR: // red
+			App->render->DrawQuad(colliders[i]->rect, 255, 0, 0, alpha, true);
+			break;
 		case COLLIDER_PLAYER: // green
 			App->render->DrawQuad(colliders[i]->rect, 0, 255, 0, alpha, true);
 			break;
@@ -136,16 +131,6 @@ bool j1Collision::CleanUp()
 	delete[] colliders;
 
 	return true;
-}
-
-bool j1Collision::CheckIfGrounded(Collider * c1) const
-{
-	SDL_Rect bottom_collider = c1->rect;
-	bottom_collider.h += 1;
-
-	for (uint i = 0; i < max_colliders; ++i)
-		if (colliders[i] != c1 && colliders[i] != nullptr && colliders[i]->CheckCollision(bottom_collider)) return true;
-	return false;
 }
 
 Collider* j1Collision::AddCollider(SDL_Rect rect, COLLIDER_TYPE type, j1Module* callback)
@@ -184,7 +169,7 @@ Collider* j1Collision::ClosestRightSideCollider(Collider* coll) const
 	{
 		if (colliders[i] != nullptr && colliders[i] != coll && colliders[i]->type != COLLIDER_TRIGGER)
 		{
-			if (colliders[i]->rect.x > coll->rect.x && App->render->InCamera(colliders[i]->rect))
+			if (colliders[i]->rect.x > coll->rect.x)
 			{
 				if ((coll->rect.y > colliders[i]->rect.y && coll->rect.y < colliders[i]->rect.y + colliders[i]->rect.h) ||
 					(coll->rect.y + coll->rect.h > colliders[i]->rect.y && coll->rect.y + coll->rect.h < colliders[i]->rect.y + colliders[i]->rect.h))
@@ -214,7 +199,7 @@ Collider* j1Collision::ClosestLeftSideCollider(Collider* coll) const
 	{
 		if (colliders[i] != nullptr && colliders[i] != coll && colliders[i]->type != COLLIDER_TRIGGER)
 		{
-			if (colliders[i]->rect.x < coll->rect.x && App->render->InCamera(colliders[i]->rect))
+			if (colliders[i]->rect.x < coll->rect.x)
 			{
 				if ((coll->rect.y > colliders[i]->rect.y && coll->rect.y < colliders[i]->rect.y + colliders[i]->rect.h) ||
 					(coll->rect.y + coll->rect.h > colliders[i]->rect.y && coll->rect.y + coll->rect.h < colliders[i]->rect.y + colliders[i]->rect.h))
@@ -241,7 +226,7 @@ Collider* j1Collision::ClosestBottomSideCollider(Collider* coll) const
 	{
 		if (colliders[i] != nullptr && colliders[i] != coll && colliders[i]->type != COLLIDER_TRIGGER)
 		{
-			if (colliders[i]->rect.y > coll->rect.y && App->render->InCamera(colliders[i]->rect))
+			if (colliders[i]->rect.y > coll->rect.y)
 			{
 				if ((coll->rect.x > colliders[i]->rect.x && coll->rect.x < colliders[i]->rect.x + colliders[i]->rect.w) ||
 					(coll->rect.x + coll->rect.w > colliders[i]->rect.x && coll->rect.x + coll->rect.w < colliders[i]->rect.x + colliders[i]->rect.w))
@@ -268,7 +253,7 @@ Collider* j1Collision::ClosestTopSideCollider(Collider* coll) const
 	{
 		if (colliders[i] != nullptr && colliders[i] != coll && colliders[i]->type != COLLIDER_TRIGGER)
 		{
-			if (colliders[i]->rect.y <= coll->rect.y && App->render->InCamera(colliders[i]->rect))
+			if (colliders[i]->rect.y <= coll->rect.y)
 			{
 				if ((coll->rect.x > colliders[i]->rect.x && coll->rect.x < colliders[i]->rect.x + colliders[i]->rect.w) ||
 					(coll->rect.x + coll->rect.w > colliders[i]->rect.x && coll->rect.x + coll->rect.w < colliders[i]->rect.x + colliders[i]->rect.w))

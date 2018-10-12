@@ -33,7 +33,10 @@ private:
 	Animation move;
 	Animation jump;
 	Animation die;
-	Animation current_animation;
+	SDL_Rect animation_frame;
+
+	void StepX();
+	void StepY();
 public:
 	fPoint new_position = { 0.0F, 0.0F };
 	fPoint position = { 0.0F, 0.0F };
@@ -44,11 +47,9 @@ public:
 	~j1Player();
 	bool Awake(pugi::xml_node&);
 	bool Start();
-	bool PostUpdate();
 	bool Update(float dt);
 	bool PreUpdate();
 	bool CleanUp();
-	bool OnCollision(Collider* c1, Collider* c2);
 	bool Load(pugi::xml_node&);
 	bool Save(pugi::xml_node&) const;
 
@@ -57,7 +58,7 @@ public:
 	void JumpingUpdate();
 
 	void CheckDeath();
-	void FixVelocity();
+	void ResetPlayer();
 };
 
 #endif

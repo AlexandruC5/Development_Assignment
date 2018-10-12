@@ -20,7 +20,6 @@ public:
 	bool Update(float dt) override;
 
 	// Called before quitting
-	bool CleanUp();
 	bool OnCollision(Collider * c1, Collider * c2) override;
 };
 

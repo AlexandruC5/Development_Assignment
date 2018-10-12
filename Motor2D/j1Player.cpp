@@ -62,10 +62,6 @@ bool j1Player::Awake(pugi::xml_node &conf)
 	threshold = conf.child("threshold").attribute("value").as_float();
 	gravity = conf.child("gravity").attribute("value").as_float();
 
-	//player setup
-	current_animation = idle;
-
-
 	return true;
 }
 
@@ -76,16 +72,8 @@ bool j1Player::Start()
 	return true;
 }
 
-bool j1Player::PostUpdate()
-{
-	return true;
-}
-
 bool j1Player::PreUpdate() 
 {
-	isGrounded = App->collision->CheckIfGrounded(collider);
-	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN) isGrounded = true;
-
 	switch (state) {
 	case IDLE: IdleUpdate();
 		break;
@@ -93,57 +81,30 @@ bool j1Player::PreUpdate()
 		break;
 	case JUMPING: JumpingUpdate();
 		break;
-	case DEAD:
+	case DEAD: animation_frame = die.GetCurrentFrame();
 		break;
 	default:
 		break;
 	}
 
 	velocity = target_speed * acceleration + velocity * (1 - acceleration);
-	//FixVelocity();
-
-
 
 	return true;
 }
 
 bool j1Player::Update(float dt)
 {
-	Collider* closest_collider = nullptr;
-	if (velocity.x > 0)
-	{
-		closest_collider = App->collision->ClosestRightSideCollider(collider);
-		if (closest_collider) velocity.x = MIN(velocity.x, closest_collider->rect.x - (collider->rect.x + collider->rect.w));
-	}
-	else
-	{
-		closest_collider = App->collision->ClosestLeftSideCollider(collider);
-		if (closest_collider) velocity.x = MAX(velocity.x, (closest_collider->rect.x + closest_collider->rect.w) - collider->rect.x);
-	}
-	if (fabs(velocity.x) < threshold) velocity.x = 0.0F;
-
-	position.x += velocity.x;
-	if (velocity.y < 0)
-	{
-		closest_collider = App->collision->ClosestTopSideCollider(collider);
-		if (closest_collider) velocity.y = MAX(velocity.y, (closest_collider->rect.y + closest_collider->rect.h) - collider->rect.y);
-	}
-	else
-	{
-		closest_collider = App->collision->ClosestBottomSideCollider(collider);
-		if (closest_collider) velocity.y = MIN(velocity.y, closest_collider->rect.y - (collider->rect.y + collider->rect.h));
-
-	}
-	if (fabs(velocity.y) < threshold) velocity.y = 0.0F;
-	position.y += velocity.y;
+	StepX();
+	StepY();
 
 	collider->SetPos(position.x, position.y);
 
 	CheckDeath();
 
-	App->render->Blit(sprite, position.x, position.y, &current_animation.GetCurrentFrame(), 1.0F, flipX);	
+	App->render->Blit(sprite, position.x, position.y, &animation_frame, 1.0F, flipX);	
 	return true;
 }
+
 
 bool j1Player::CleanUp()
 {
@@ -166,29 +127,27 @@ bool j1Player::CleanUp()
 void j1Player::IdleUpdate() 
 {
 	target_speed.x = 0.0F;
-	if (App->input->GetKey(SDL_SCANCODE_D) != App->input->GetKey(SDL_SCANCODE_A))
-	{
-		state = MOVING;
-		current_animation = move;
-	}
+	animation_frame = idle.GetCurrentFrame();
+	if (App->input->GetKey(SDL_SCANCODE_D) != App->input->GetKey(SDL_SCANCODE_A)) state = MOVING;
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
 		target_speed.y = -jump_speed;
-		state = JUMPING;
-		current_animation = jump;
 		isGrounded = false;
+		state = JUMPING;
 	}
 	else if (!isGrounded) state = JUMPING;
+
+
 }
 
 void j1Player::MovingUpdate() 
 {
+	animation_frame = move.GetCurrentFrame();
 	if (App->input->GetKey(SDL_SCANCODE_D) == App->input->GetKey(SDL_SCANCODE_A))
 	{
 		state = IDLE;
 		target_speed.x = 0.0F;
-		current_animation = idle;
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)	
 	{
@@ -204,9 +163,8 @@ void j1Player::MovingUpdate()
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
 		target_speed.y = -jump_speed;
-		state = JUMPING;
-		current_animation = jump;
 		isGrounded = false;
+		state = JUMPING;
 	}
 	else if (!isGrounded) state = JUMPING;
 }
@@ -214,7 +172,7 @@ void j1Player::MovingUpdate()
 void j1Player::JumpingUpdate() 
 {
 	target_speed.y += gravity;
-
+	animation_frame = jump.GetCurrentFrame();
 	if (App->input->GetKey(SDL_SCANCODE_D) == App->input->GetKey(SDL_SCANCODE_A))
 	{
 		target_speed.x = 0.0F;
@@ -232,49 +190,26 @@ void j1Player::JumpingUpdate()
 
 	if (isGrounded) 
 	{
-		if (App->input->GetKey(SDL_SCANCODE_D) == App->input->GetKey(SDL_SCANCODE_A))
-		{
-			state = IDLE;
-			current_animation = idle;
-		}
-		else 
-		{
-			state = MOVING;
-			current_animation = move;
-		}
+		if (App->input->GetKey(SDL_SCANCODE_D) == App->input->GetKey(SDL_SCANCODE_A)) state = IDLE;
+		else state = MOVING;
+
 		target_speed.y = 0.0F;
 		velocity.y = 0.0F;
 	}
-}
-
-bool j1Player::OnCollision(Collider* c1, Collider* c2) 
-{
-	if (c2->type == COLLIDER_PLATFORM) 
-	{
-		/*if (velocity.x > 0 && (position.x + c1->rect.w) <= c2->rect.x) //RIGHT COLLISION
-		{ 
-			velocity.x = 0.0F;
-			new_position.x = c2->rect.x - c1->rect.w;
-		}
-		else if (velocity.x < 0 && position.x >= (c2->rect.x + c2->rect.w)) //LEFT COLLISION
-		{
-			velocity.x = 0.0F;
-			new_position.x = c2->rect.x+c2->rect.w;
-		}*/
-		if (position.y+c1->rect.h < c2->rect.y)  //BOTTOM COLLISION
-		{
-			velocity.y = 0.0F;
-			new_position.y = c2->rect.y - c1->rect.h;
-			isGrounded = true;
-		}
-	}
-	return true;
 }
 
 bool j1Player::Load(pugi::xml_node &player) 
 {
 	position.x = player.child("position").attribute("x").as_float();
 	position.y = player.child("position").attribute("y").as_float();
+	state = (Player_State)player.child("state").attribute("value").as_int();
+	isGrounded = player.child("is_grounded").attribute("value").as_bool();
+	velocity.x = player.child("velocity").attribute("x").as_float();
+	velocity.y = player.child("velocity").attribute("y").as_float();
+	target_speed.x = player.child("target_speed").attribute("x").as_float();
+	target_speed.y = player.child("target_speed").attribute("y").as_float();
+
+	collider->SetPos(position.x, position.y);
 
 	return true;
 }
@@ -282,9 +217,17 @@ bool j1Player::Load(pugi::xml_node &player)
 
 bool j1Player::Save(pugi::xml_node &player) const
 {
-	pugi::xml_node pos = player.append_child("position");
-	pos.append_attribute("x") = position.x;
-	pos.append_attribute("y") = position.y;
+	pugi::xml_node position_node = player.append_child("position");
+	position_node.append_attribute("x") = position.x;
+	position_node.append_attribute("y") = position.y;
+	player.append_child("state").append_attribute("value") = (int)state;
+	player.append_child("is_grounded").append_attribute("value") = isGrounded;
+	pugi::xml_node velocity_node = player.append_child("velocity");
+	velocity_node.append_attribute("x") = velocity.x;
+	velocity_node.append_attribute("y") = velocity.y;
+	pugi::xml_node target_speed_node = player.append_child("target_speed");
+	target_speed_node.append_attribute("x") = target_speed.x;
+	target_speed_node.append_attribute("y") = target_speed.y;
 
 	return true;
 }
@@ -294,17 +237,59 @@ void j1Player::CheckDeath()
 	if(position.y > App->map->data.height * App->map->data.tile_height && state != DEAD)
 	{
 		state = DEAD;
-		current_animation = die;
 		App->swap_scene->Reload();
 		position = App->map->data.spawn;
 	}
 }
 
-void j1Player::FixVelocity()
+void j1Player::StepX()
 {
 	Collider* closest_collider = nullptr;
-	//horizontal fix
+	if (velocity.x > 0)
+	{
+		closest_collider = App->collision->ClosestRightSideCollider(collider);
+		if (closest_collider) velocity.x = MIN(velocity.x, closest_collider->rect.x - (collider->rect.x + collider->rect.w));
+	}
+	else
+	{
+		closest_collider = App->collision->ClosestLeftSideCollider(collider);
+		if (closest_collider) velocity.x = MAX(velocity.x, (closest_collider->rect.x + closest_collider->rect.w) - collider->rect.x);
+	}
+	if (fabs(velocity.x) < threshold) velocity.x = 0.0F;
 
-	//vertical fix
+	position.x += velocity.x;
 
+}
+
+void j1Player::StepY()
+{
+	Collider* closest_collider;
+	if (velocity.y < 0)
+	{
+		closest_collider = App->collision->ClosestTopSideCollider(collider);
+		if (closest_collider) velocity.y = MAX(velocity.y, (closest_collider->rect.y + closest_collider->rect.h) - collider->rect.y);
+	}
+	else
+	{
+		closest_collider = App->collision->ClosestBottomSideCollider(collider);
+		if (closest_collider)
+		{
+			int distance = closest_collider->rect.y - (collider->rect.y + collider->rect.h);
+			velocity.y = MIN(velocity.y, distance);
+			isGrounded = (distance == 0) ? true : false;
+		}
+		else isGrounded = false;
+
+	}
+	if (fabs(velocity.y) < threshold) velocity.y = 0.0F;
+
+
+	position.y += velocity.y;
+}
+
+void j1Player::ResetPlayer()
+{
+	state = IDLE;
+	velocity = { 0.0F, 0.0F };
+	target_speed = { 0.0F, 0.0F };
 }
