@@ -72,7 +72,7 @@ bool j1SwapScene::PostUpdate()
 }
 
 // Fade to black. At mid point deactivate one module, then activate the other
-bool j1SwapScene::FadeToBlack(j1Scene* module_off, j1Scene* module_on, float time)
+bool j1SwapScene::FadeToBlack(j1Scene* scene_off, j1Scene* scene_on, float time)
 {
 	bool ret = false;
 
@@ -81,8 +81,8 @@ bool j1SwapScene::FadeToBlack(j1Scene* module_off, j1Scene* module_on, float tim
 		current_step = fade_step::fade_to_black;
 		start_time = SDL_GetTicks();
 		total_time = (Uint32)(time * 0.5F * 1000.0F);
-		scene_disable = module_off;
-		scene_enable = module_on;
+		scene_disable = scene_off;
+		scene_enable = scene_on;
 		ret = true;
 	}
 

@@ -109,8 +109,6 @@ bool j1Map::CleanUp()
 		layer_item = layer_item->next;
 	}
 	data.layers.clear();
-	App->tex->UnLoad(data.background_img);
-	data.background_img = nullptr;
 
 	//Remove all colliders
 	p2List_item<Collider*>* collider;

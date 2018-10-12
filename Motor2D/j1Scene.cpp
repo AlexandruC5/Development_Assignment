@@ -15,7 +15,7 @@
 #define RIGHT_CAMERA_LIMIT  (-(App->render->camera.x - App->render->camera.w / 2))
 #define LEFT_CAMERA_LIMIT  (-(App->render->camera.x - App->render->camera.w / 6))
 #define TOP_CAMERA_LIMIT  (-(App->render->camera.y - App->render->camera.h / 6))
-#define BOTTOM_CAMERA_LIMIT (-(App->render->camera.y - App->render->camera.h/2))
+#define BOTTOM_CAMERA_LIMIT (-(App->render->camera.y - (App->render->camera.h - App->render->camera.h/6)))
 
 j1Scene::j1Scene() : j1Module()
 {}
@@ -81,6 +81,31 @@ bool j1Scene::Update(float dt)
 bool j1Scene::PostUpdate()
 {
 	bool ret = true;
+
+	if (App->player->position.x + App->player->collider->rect.w > RIGHT_CAMERA_LIMIT && App->player->velocity.x > 0.0F)
+	{
+		App->render->camera.x -= App->player->velocity.x;
+		if (-App->render->camera.x > App->map->data.width*App->map->data.tile_width)
+			App->render->camera.x = (-App->map->data.width*App->map->data.tile_width) - App->render->camera.w;
+	}
+	if (App->player->position.x < LEFT_CAMERA_LIMIT && App->player->velocity.x < 0.0F)
+	{
+		App->render->camera.x += -App->player->velocity.x;
+		if (-App->render->camera.x < 0)
+			App->render->camera.x = 0;
+	}
+	if (App->player->position.y < TOP_CAMERA_LIMIT && App->player->velocity.y < 0.0F)
+	{
+		App->render->camera.y -= App->player->velocity.y;
+		if (-App->render->camera.y < 0)
+			App->render->camera.y = 0;
+	}
+	if (App->player->position.y + App->player->collider->rect.h > BOTTOM_CAMERA_LIMIT && App->player->velocity.y > 0.0F)
+	{
+		App->render->camera.y -= App->player->velocity.y;
+		if (-(App->render->camera.y - App->render->camera.h) > App->map->data.height * App->map->data.tile_height)
+			App->render->camera.y = -(App->map->data.height * App->map->data.tile_height - App->render->camera.h);
+	}
 
 	if(App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
