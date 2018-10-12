@@ -26,6 +26,10 @@ struct Collider
 		type(type),
 		callback(callback)
 	{}
+	~Collider()
+	{
+		callback = nullptr;
+	}
 
 	void SetPos(int x, int y)
 	{

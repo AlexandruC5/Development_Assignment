@@ -241,6 +241,7 @@ void j1Player::ChargingUpdate()
 	{
 		Jump(timer);
 	}
+	else if (!isGrounded) state = JUMPING;
 }
 
 void j1Player::Jump(float boost)
@@ -299,6 +300,7 @@ void j1Player::CheckDeath()
 	{
 		state = DEAD;
 		velocity.x = 0.0F;
+		target_speed.x = 0.0F;
 		App->swap_scene->Reload();
 	}
 }

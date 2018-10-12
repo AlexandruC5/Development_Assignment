@@ -11,15 +11,15 @@
 		<scene value="scene_forest" />
 	</swap_scene>
 	<player>
-		<position x="605.18988" y="1187.57617" />
-		<velocity x="-2.06239414" y="0" />
-		<target_speed x="0" y="0" />
-		<state value="1" />
+		<position x="1982.9873" y="951.345764" />
+		<velocity x="9.99925232" y="0" />
+		<target_speed x="10" y="0" />
+		<state value="2" />
 		<is_grounded value="true" />
-		<flipX value="false" />
+		<flipX value="true" />
 	</player>
 	<collision />
 	<renderer>
-		<camera x="-378" y="-640" />
+		<camera x="-1440" y="-360" />
 	</renderer>
 </game_state>
