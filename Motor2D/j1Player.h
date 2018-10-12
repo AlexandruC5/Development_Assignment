@@ -24,7 +24,7 @@ private:
 	float jump_speed = 0.0F;
 	float gravity = 0.0F;
 	float acceleration = 0.0F;
-	float threshold = 0.0F;
+	
 	int collider_offset = 0;
 	bool flipX = true;
 	bool isGrounded = true;
@@ -47,6 +47,7 @@ public:
 	fPoint position = { 0.0F, 0.0F };
 	fPoint velocity = { 0.0F, 0.0F };
 	Player_State state = IDLE;
+	float threshold = 0.0F;
 
 	j1Player();
 	~j1Player();

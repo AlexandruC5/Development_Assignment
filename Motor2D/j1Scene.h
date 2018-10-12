@@ -36,6 +36,8 @@ protected:
 
 	p2SString map_file = "";
 	p2SString background_file = "";
+	fPoint velocity = { 0.0F, 0.0F };
+	fPoint target_speed = { 0.0F, 0.0F };
 };
 
 #endif // __j1SCENE_H__
