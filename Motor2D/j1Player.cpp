@@ -139,15 +139,20 @@ void j1Player::IdleUpdate()
 	target_speed.x = 0.0F;
 	animation_frame = idle.GetCurrentFrame();
 	if (App->input->GetKey(SDL_SCANCODE_D) != App->input->GetKey(SDL_SCANCODE_A)) state = MOVING;
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
+	{
+		timer++;
+		if (timer >= 15)
+		{
+			state = CHARGE;
+		}
+	}
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
 	{
 		target_speed.y = -jump_speed;
 		isGrounded = false;
 		state = JUMPING;
-	}
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
-	{
-      	state = CHARGE;
+		
 	}
 		
 	if (!isGrounded) state = JUMPING;
@@ -174,17 +179,24 @@ void j1Player::MovingUpdate()
 		flipX = false;
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
+	{
+		timer++;
+		if (timer >= 15)
+		{
+			state = CHARGE;
+		}
+	}
+
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
 	{
 		target_speed.y = -jump_speed;
 		isGrounded = false;
 		state = JUMPING;
+		timer = 0;
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
-	{
-		state = CHARGE;
-	}
+	
 
 	if (!isGrounded) state = JUMPING;
 }
@@ -220,12 +232,14 @@ void j1Player::JumpingUpdate()
 
 void j1Player::ChargingUpdate()
 {
+	target_speed.x = 0.0F;
 	animation_frame = charge.GetCurrentFrame();
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
 	{
 		target_speed.y = -jump_speed;
 		isGrounded = false;
 		state = JUMPING;
+		timer = 0;
 	}
 }
 
