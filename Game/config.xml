@@ -38,9 +38,9 @@
     <sprite>player_spritesheet.png</sprite>
     <movement_speed value="10.0F"/>
     <jump_speed value="40.0F"/>
-    <threshold value="1.0F"/>
+    <threshold value="0.9F"/>
     <acceleration value="0.1F"/>
-    <gravity value="1.0F"/>
+    <gravity value="2.0F"/>
     <animations>
       <idle speed="0.1F">
         <frame x="17" y="75" width="94" height="53"/>

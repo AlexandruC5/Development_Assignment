@@ -793,7 +793,7 @@
   <image source="BG.png" width="1925" height="1450"/>
  </imagelayer>
  <objectgroup color="#ffff00" name="utils">
-  <object id="97" name="spawn" x="320" y="1268"/>
+  <object id="97" name="spawn" x="326.061" y="1161.94"/>
   <object id="98" name="end" x="8574" y="10" width="132" height="628"/>
  </objectgroup>
 </map>

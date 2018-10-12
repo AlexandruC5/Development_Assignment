@@ -167,7 +167,7 @@ Collider* j1Collision::ClosestRightSideCollider(Collider* coll) const
 
 	for (uint i = 0; i < max_colliders; i++) 
 	{
-		if (colliders[i] != nullptr && colliders[i] != coll && colliders[i]->type != COLLIDER_TRIGGER)
+		if (colliders[i] != nullptr && colliders[i] != coll && colliders[i]->type != COLLIDER_TRIGGER && colliders[i]->type != COLLIDER_PLATFORM)
 		{
 			if (colliders[i]->rect.x > coll->rect.x)
 			{
@@ -197,7 +197,7 @@ Collider* j1Collision::ClosestLeftSideCollider(Collider* coll) const
 
 	for (uint i = 0; i < max_colliders; i++)
 	{
-		if (colliders[i] != nullptr && colliders[i] != coll && colliders[i]->type != COLLIDER_TRIGGER)
+		if (colliders[i] != nullptr && colliders[i] != coll && colliders[i]->type != COLLIDER_TRIGGER && colliders[i]->type != COLLIDER_PLATFORM)
 		{
 			if (colliders[i]->rect.x < coll->rect.x)
 			{
@@ -226,12 +226,12 @@ Collider* j1Collision::ClosestBottomSideCollider(Collider* coll) const
 	{
 		if (colliders[i] != nullptr && colliders[i] != coll && colliders[i]->type != COLLIDER_TRIGGER)
 		{
-			if (colliders[i]->rect.y > coll->rect.y)
+			if (colliders[i]->rect.y >= coll->rect.y + coll->rect.h)
 			{
 				if ((coll->rect.x > colliders[i]->rect.x && coll->rect.x < colliders[i]->rect.x + colliders[i]->rect.w) ||
 					(coll->rect.x + coll->rect.w > colliders[i]->rect.x && coll->rect.x + coll->rect.w < colliders[i]->rect.x + colliders[i]->rect.w))
 				{
-					int new_distance = colliders[i]->rect.y - coll->rect.y;
+					int new_distance = colliders[i]->rect.y - (coll->rect.y + coll->rect.h);
 					if (new_distance < distance)
 					{
 						distance = new_distance;
@@ -251,7 +251,7 @@ Collider* j1Collision::ClosestTopSideCollider(Collider* coll) const
 
 	for (uint i = 0; i < max_colliders; i++)
 	{
-		if (colliders[i] != nullptr && colliders[i] != coll && colliders[i]->type != COLLIDER_TRIGGER)
+		if (colliders[i] != nullptr && colliders[i] != coll && colliders[i]->type != COLLIDER_TRIGGER && colliders[i]->type != COLLIDER_PLATFORM)
 		{
 			if (colliders[i]->rect.y <= coll->rect.y)
 			{

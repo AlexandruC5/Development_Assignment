@@ -94,10 +94,8 @@ bool j1Player::PreUpdate()
 
 bool j1Player::Update(float dt)
 {
-	StepX();
 	StepY();
-
-	collider->SetPos(position.x, position.y);
+	StepX();
 
 	CheckDeath();
 
@@ -258,7 +256,7 @@ void j1Player::StepX()
 	if (fabs(velocity.x) < threshold) velocity.x = 0.0F;
 
 	position.x += velocity.x;
-
+	collider->rect.x = position.x;
 }
 
 void j1Player::StepY()
@@ -278,13 +276,15 @@ void j1Player::StepY()
 			velocity.y = MIN(velocity.y, distance);
 			isGrounded = (distance == 0) ? true : false;
 		}
-		else isGrounded = false;
+		else
+			isGrounded = false;
 
 	}
 	if (fabs(velocity.y) < threshold) velocity.y = 0.0F;
 
 
 	position.y += velocity.y;
+	collider->rect.y = position.y;
 }
 
 void j1Player::ResetPlayer()

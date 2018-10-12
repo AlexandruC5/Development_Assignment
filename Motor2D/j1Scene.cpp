@@ -11,9 +11,9 @@
 #include "j1Scene.h"
 #include "j1Player.h"
 
-#define HALF_CAMERA_WIDTH  (App->render->camera.w / 2)
+#define HALF_CAMERA_WIDTH  (App->render->camera.w / 2.5f)
 #define QUARTER_CAMERA_WIDTH  (App->render->camera.w / 4)
-#define QUARTER_CAMERA_HEIGHT  (App->render->camera.h / 4)
+#define THIRD_CAMERA_HEIGHT  (App->render->camera.h / 3.3f)
 
 j1Scene::j1Scene() : j1Module()
 {}
@@ -56,7 +56,7 @@ bool j1Scene::Update(float dt)
 			App->render->camera.x = 0;
 	}
 
-	if (App->player->position.y <= ((-App->render->camera.y + QUARTER_CAMERA_HEIGHT)) && App->player->velocity.y < 0 && -App->render->camera.y > 0)
+	if (App->player->position.y <= ((-App->render->camera.y + THIRD_CAMERA_HEIGHT)) && App->player->velocity.y < 0 && -App->render->camera.y > 0)
 	{
 		App->render->camera.y -= App->player->velocity.y;
 		if (-App->render->camera.y < 0)
