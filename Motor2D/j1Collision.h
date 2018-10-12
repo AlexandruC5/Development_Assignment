@@ -63,13 +63,14 @@ public:
 	float DistanceToLeftCollider(Collider* coll) const;
 	float DistanceToTopCollider(Collider* coll) const;
 	float DistanceToBottomCollider(Collider* coll) const;
-	Collider* AddCollider(SDL_Rect rect, COLLIDER_TYPE type, j1Module* callback = nullptr);
+	Collider* AddCollider(SDL_Rect rect, COLLIDER_TYPE type, j1Module* callback = nullptr, bool player = false);
 
 	void DebugDraw();
 
 private:
 
 	Collider** colliders = nullptr;
+	Collider* player_collider = nullptr;
 	bool debug = false;
 	int max_colliders = 0;
 };

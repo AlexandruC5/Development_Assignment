@@ -76,7 +76,7 @@ bool j1Player::Awake(pugi::xml_node &conf)
 bool j1Player::Start()
 {
 	sprite = App->tex->Load(sprite_route.GetString());
-	collider = App->collision->AddCollider(animation_frame, COLLIDER_PLAYER, this);
+	collider = App->collision->AddCollider(animation_frame, COLLIDER_PLAYER, this, true);
 	collider->rect.x = position.x;
 	collider->rect.y = position.y + collider_offset;
 	return true;
@@ -195,8 +195,6 @@ void j1Player::MovingUpdate()
 		state = JUMPING;
 		timer = 0;
 	}
-
-	
 
 	if (!isGrounded) state = JUMPING;
 }

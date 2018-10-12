@@ -35,32 +35,21 @@ bool j1Collision::PreUpdate()
 	}
 
 	// Calculate collisions
-	Collider* c1;
-	Collider* c2;
-
-	for (uint i = 0; i < max_colliders; ++i)
+	if (player_collider)
 	{
-		if (colliders[i] != nullptr && colliders[i]->type == COLLIDER_PLAYER)
+		for (uint i = 0; i < max_colliders; ++i)
 		{
-			c1 = colliders[i];
-
-			// avoid checking collisions already checked
-			for (uint k = 0; k < max_colliders; ++k)
+			// skip empty colliders
+			if (colliders[i] != nullptr && colliders[i]->type == COLLIDER_TRIGGER)
 			{
-				// skip empty colliders
-				if (colliders[k] != nullptr && colliders[k]->type == COLLIDER_TRIGGER)
+				if (player_collider->CheckCollision(colliders[i]->rect))
 				{
-					c2 = colliders[k];
+					if (player_collider->callback)
+						player_collider->callback->OnCollision(player_collider, colliders[i]);
 
-					if (c1->CheckCollision(c2->rect))
-					{
-						if (c1->callback)
-							c1->callback->OnCollision(c1, c2);
-
-						if (c2->callback)
-							c2->callback->OnCollision(c2, c1);
-					}
-				}			
+					if (colliders[i]->callback)
+						colliders[i]->callback->OnCollision(colliders[i], player_collider);
+				}
 			}
 		}
 	}
@@ -128,7 +117,7 @@ bool j1Collision::CleanUp()
 	return true;
 }
 
-Collider* j1Collision::AddCollider(SDL_Rect rect, COLLIDER_TYPE type, j1Module* callback)
+Collider* j1Collision::AddCollider(SDL_Rect rect, COLLIDER_TYPE type, j1Module* callback, bool player)
 {
 	Collider* ret = nullptr;
 
@@ -137,6 +126,7 @@ Collider* j1Collision::AddCollider(SDL_Rect rect, COLLIDER_TYPE type, j1Module* 
 		if (colliders[i] == nullptr)
 		{
 			ret = colliders[i] = new Collider(rect, type, callback);
+			if (player) player_collider = colliders[i];
 			break;
 		}
 	}
