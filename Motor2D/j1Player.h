@@ -25,6 +25,7 @@ private:
 	float gravity = 0.0F;
 	float acceleration = 0.0F;
 	float threshold = 0.0F;
+	int collider_offset = 0;
 	bool flipX = false;
 	bool isGrounded = false;
 	float timer = 0.0f;
@@ -40,11 +41,11 @@ private:
 	void StepX();
 	void StepY();
 public:
+	Collider* collider;
 	fPoint new_position = { 0.0F, 0.0F };
 	fPoint position = { 0.0F, 0.0F };
 	fPoint velocity = { 0.0F, 0.0F };
 	Player_State state = IDLE;
-	Collider* collider;
 
 	j1Player();
 	~j1Player();

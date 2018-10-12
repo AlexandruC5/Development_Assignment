@@ -39,10 +39,10 @@ void j1Map::Draw()
 	p2List_item<TileSet*>* tileset;
 	tileset = data.tilesets.start;
 
-	App->render->Blit(data.background_img, 0, 0, &data.background_rect, 0.5f);
-	App->render->Blit(data.background_img, data.background_rect.w, 0, &data.background_rect, 0.5f);
+	App->render->Blit(data.background_img, 0, 0, &data.background_rect, 0.5F);
+	App->render->Blit(data.background_img, data.background_rect.w, 0, &data.background_rect, 0.5F);
 	//provisional
-	App->render->Blit(data.background_img, 2*(data.background_rect.w), 0, &data.background_rect, 0.5f);
+	App->render->Blit(data.background_img, 2*(data.background_rect.w), 0, &data.background_rect, 0.5F);
 
 	while (layer != NULL)
 	{
@@ -197,7 +197,7 @@ bool j1Map::Load(const char* file_name)
 	pugi::xml_node utils = map_file.child("map").find_child_by_attribute("name", "utils");
 	LoadUtilsLayer(utils);
 
-	App->render->camera.y = -(App->map->data.height*App->map->data.tile_height) + App->render->camera.h;
+	App->render->camera.y = -(App->map->data.height * App->map->data.tile_height - App->render->camera.h);
 	App->render->camera.x = 0;
 	App->player->position = data.spawn;
 

@@ -68,13 +68,17 @@ bool j1Player::Awake(pugi::xml_node &conf)
 	threshold = conf.child("threshold").attribute("value").as_float();
 	gravity = conf.child("gravity").attribute("value").as_float();
 
+	animation_frame = { 0, 0, conf.child("collider").attribute("width").as_int(), conf.child("collider").attribute("height").as_int() };
+	collider_offset = conf.child("collider").attribute("offset").as_int();
 	return true;
 }
 
 bool j1Player::Start()
 {
 	sprite = App->tex->Load(sprite_route.GetString());
-	collider = App->collision->AddCollider(idle.GetCurrentFrame(), COLLIDER_PLAYER, this);
+	collider = App->collision->AddCollider(animation_frame, COLLIDER_PLAYER, this);
+	collider->rect.x = position.x;
+	collider->rect.y = position.y + collider_offset;
 	return true;
 }
 
@@ -252,7 +256,7 @@ bool j1Player::Load(pugi::xml_node &player)
 	target_speed.x = player.child("target_speed").attribute("x").as_float();
 	target_speed.y = player.child("target_speed").attribute("y").as_float();
 
-	collider->SetPos(position.x, position.y);
+	collider->SetPos(position.x, position.y + collider_offset);
 
 	return true;
 }
@@ -280,24 +284,15 @@ void j1Player::CheckDeath()
 	if(position.y > App->map->data.height * App->map->data.tile_height && state != DEAD)
 	{
 		state = DEAD;
+		velocity.x = 0.0F;
 		App->swap_scene->Reload();
-		position = App->map->data.spawn;
 	}
 }
 
 void j1Player::StepX()
 {
-	Collider* closest_collider = nullptr;
-	if (velocity.x > 0)
-	{
-		closest_collider = App->collision->ClosestRightSideCollider(collider);
-		if (closest_collider) velocity.x = MIN(velocity.x, closest_collider->rect.x - (collider->rect.x + collider->rect.w));
-	}
-	else
-	{
-		closest_collider = App->collision->ClosestLeftSideCollider(collider);
-		if (closest_collider) velocity.x = MAX(velocity.x, (closest_collider->rect.x + closest_collider->rect.w) - collider->rect.x);
-	}
+	if (velocity.x > 0) velocity.x = MIN(velocity.x, App->collision->DistanceToRightCollider(collider));
+	else velocity.x = MAX(velocity.x, App->collision->DistanceToLeftCollider(collider));
 	if (fabs(velocity.x) < threshold) velocity.x = 0.0F;
 
 	position.x += velocity.x;
@@ -306,35 +301,22 @@ void j1Player::StepX()
 
 void j1Player::StepY()
 {
-	Collider* closest_collider;
-	if (velocity.y < 0)
-	{
-		closest_collider = App->collision->ClosestTopSideCollider(collider);
-		if (closest_collider) velocity.y = MAX(velocity.y, (closest_collider->rect.y + closest_collider->rect.h) - collider->rect.y);
-	}
+	if (velocity.y < 0) velocity.y = MAX(velocity.y, App->collision->DistanceToTopCollider(collider));
 	else
 	{
-		closest_collider = App->collision->ClosestBottomSideCollider(collider);
-		if (closest_collider)
-		{
-			int distance = closest_collider->rect.y - (collider->rect.y + collider->rect.h);
-			velocity.y = MIN(velocity.y, distance);
-			isGrounded = (distance == 0) ? true : false;
-		}
-		else
-			isGrounded = false;
-
+		float distance = App->collision->DistanceToBottomCollider(collider);
+		velocity.y = MIN(velocity.y, distance);
+		isGrounded = (distance == 0) ? true : false;
 	}
 	if (fabs(velocity.y) < threshold) velocity.y = 0.0F;
 
-
 	position.y += velocity.y;
-	collider->rect.y = position.y;
+	collider->rect.y = position.y + collider_offset;
 }
 
 void j1Player::ResetPlayer()
 {
 	state = IDLE;
-	velocity = { 0.0F, 0.0F };
-	target_speed = { 0.0F, 0.0F };
+	velocity = { 0.0F,0.0F };
+	target_speed = { 0.0F,0.0F };
 }

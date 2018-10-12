@@ -1,5 +1,5 @@
-#ifndef __ModuleCollision_H__
-#define __ModuleCollision_H__
+#ifndef __J1COLLISION_H__
+#define __J1COLLISION_H__
 
 #include "j1Module.h"
 
@@ -19,7 +19,6 @@ struct Collider
 	bool to_delete = false;
 	COLLIDER_TYPE type;
 	j1Module* callback = nullptr;
-	bool enabled = true;
 
 	Collider(){}
 	Collider(SDL_Rect rectangle, COLLIDER_TYPE type, j1Module* callback = nullptr) :
@@ -60,10 +59,10 @@ public:
 	bool Awake(pugi::xml_node&);
 
 
-	Collider* ClosestRightSideCollider(Collider* coll) const;
-	Collider* ClosestLeftSideCollider(Collider* coll) const;
-	Collider* ClosestBottomSideCollider(Collider* coll) const;
-	Collider* ClosestTopSideCollider(Collider* coll) const;
+	float DistanceToRightCollider(Collider* coll) const;
+	float DistanceToLeftCollider(Collider* coll) const;
+	float DistanceToTopCollider(Collider* coll) const;
+	float DistanceToBottomCollider(Collider* coll) const;
 	Collider* AddCollider(SDL_Rect rect, COLLIDER_TYPE type, j1Module* callback = nullptr);
 
 	void DebugDraw();

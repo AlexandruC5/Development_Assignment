@@ -66,7 +66,7 @@ bool j1Scene::Update(float dt)
 	if (App->player->position.y + App->player->collider->rect.h > BOTTOM_CAMERA_LIMIT && App->player->velocity.y > 0.0F)
 	{
 		App->render->camera.y -= App->player->velocity.y;
-		if (-(App->render->camera.y - App->render->camera.h) >= App->map->data.height * App->map->data.tile_height)
+		if (-(App->render->camera.y - App->render->camera.h) > App->map->data.height * App->map->data.tile_height)
 			App->render->camera.y = -(App->map->data.height * App->map->data.tile_height - App->render->camera.h);
 	}
 
@@ -77,16 +77,16 @@ bool j1Scene::Update(float dt)
 		App->SaveGame();
 
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		App->render->camera.y -= 1;
+		App->render->camera.y -= 10;
 
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		App->render->camera.y += 1;
+		App->render->camera.y += 10;
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		App->render->camera.x -= 1;
+		App->render->camera.x -= 10;
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		App->render->camera.x += 1;
+		App->render->camera.x += 10;
 
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) App->swap_scene->FadeToBlack(App->swap_scene->current_scene, App->scene_forest);
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) App->swap_scene->Reload();
