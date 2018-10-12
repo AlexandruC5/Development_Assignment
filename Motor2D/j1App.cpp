@@ -41,9 +41,9 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(win, true);
 	AddModule(tex, true);
 	AddModule(audio, true);
-	AddModule(map, true);
 	AddModule(scene_forest, true);
 	AddModule(scene2, false);
+	AddModule(map, true);
 	AddModule(player, true);
 	AddModule(collision, true);	
 	AddModule(swap_scene, true);

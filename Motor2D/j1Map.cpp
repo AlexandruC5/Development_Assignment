@@ -7,6 +7,7 @@
 #include <math.h>
 #include "j1Map.h"
 #include "j1Player.h"
+#include "j1SwapScene.h"
 
 j1Map::j1Map() : j1Module(), map_loaded(false)
 {
@@ -402,6 +403,7 @@ bool j1Map::LoadUtilsLayer(pugi::xml_node & node)
 	data.lvl_end.y = node.find_child_by_attribute("name", "end").attribute("y").as_float();
 	data.lvl_end.w = node.find_child_by_attribute("name", "end").attribute("width").as_float();
 	data.lvl_end.h = node.find_child_by_attribute("name", "end").attribute("height").as_float();
+	data.colliders.add(App->collision->AddCollider(data.lvl_end, COLLIDER_TRIGGER, (j1Module*)App->swap_scene->current_scene));
 
 	return true;
 }

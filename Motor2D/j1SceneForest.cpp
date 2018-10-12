@@ -10,6 +10,7 @@
 #include "j1Map.h"
 #include "j1Scene2.h"
 #include "j1SceneForest.h"
+#include "j1Collision.h"
 
 
 j1SceneForest::j1SceneForest() : j1Scene()
@@ -56,5 +57,12 @@ bool j1SceneForest::Update(float dt)
 
 bool j1SceneForest::CleanUp()
 {
+	return true;
+}
+
+bool j1SceneForest::OnCollision(Collider* c1, Collider* c2)
+{
+	if (c2->type == COLLIDER_PLAYER)
+	App->swap_scene->FadeToBlack(this, App->scene2);
 	return true;
 }

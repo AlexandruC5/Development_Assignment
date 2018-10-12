@@ -7,6 +7,7 @@
 #include "j1SwapScene.h"
 #include "j1SceneForest.h"
 #include "j1Scene2.h"
+#include "j1Collision.h"
 
 
 j1Scene2::j1Scene2()
@@ -71,5 +72,12 @@ bool j1Scene2::Update(float dt)
 
 bool j1Scene2::CleanUp()
 {
+	return true;
+}
+
+bool j1Scene2::OnCollision(Collider* c1, Collider* c2)
+{
+	if (c2->type == COLLIDER_PLAYER)
+	App->swap_scene->FadeToBlack(this, App->scene_forest);
 	return true;
 }

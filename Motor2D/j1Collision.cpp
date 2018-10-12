@@ -12,6 +12,13 @@ j1Collision::j1Collision()
 
 	matrix[COLLIDER_PLAYER][COLLIDER_PLATFORM] = true;
 	matrix[COLLIDER_PLAYER][COLLIDER_PLAYER] = false;
+	matrix[COLLIDER_PLAYER][COLLIDER_TRIGGER] = true;
+	
+	matrix[COLLIDER_FLOOR][COLLIDER_PLAYER] = true;
+	matrix[COLLIDER_FLOOR][COLLIDER_FLOOR] = false;
+	
+	matrix[COLLIDER_TRIGGER][COLLIDER_PLAYER] = true;
+	matrix[COLLIDER_TRIGGER][COLLIDER_TRIGGER] = false;
 }
 
 // Destructor
@@ -175,7 +182,7 @@ Collider* j1Collision::ClosestRightSideCollider(Collider* coll) const
 
 	for (uint i = 0; i < max_colliders; i++) 
 	{
-		if (colliders[i] != nullptr && colliders[i] != coll)
+		if (colliders[i] != nullptr && colliders[i] != coll && colliders[i]->type != COLLIDER_TRIGGER)
 		{
 			if (colliders[i]->rect.x > coll->rect.x && App->render->InCamera(colliders[i]->rect))
 			{
@@ -205,7 +212,7 @@ Collider* j1Collision::ClosestLeftSideCollider(Collider* coll) const
 
 	for (uint i = 0; i < max_colliders; i++)
 	{
-		if (colliders[i] != nullptr && colliders[i] != coll)
+		if (colliders[i] != nullptr && colliders[i] != coll && colliders[i]->type != COLLIDER_TRIGGER)
 		{
 			if (colliders[i]->rect.x < coll->rect.x && App->render->InCamera(colliders[i]->rect))
 			{
@@ -232,7 +239,7 @@ Collider* j1Collision::ClosestBottomSideCollider(Collider* coll) const
 
 	for (uint i = 0; i < max_colliders; i++)
 	{
-		if (colliders[i] != nullptr && colliders[i] != coll)
+		if (colliders[i] != nullptr && colliders[i] != coll && colliders[i]->type != COLLIDER_TRIGGER)
 		{
 			if (colliders[i]->rect.y > coll->rect.y && App->render->InCamera(colliders[i]->rect))
 			{
@@ -259,7 +266,7 @@ Collider* j1Collision::ClosestTopSideCollider(Collider* coll) const
 
 	for (uint i = 0; i < max_colliders; i++)
 	{
-		if (colliders[i] != nullptr && colliders[i] != coll)
+		if (colliders[i] != nullptr && colliders[i] != coll && colliders[i]->type != COLLIDER_TRIGGER)
 		{
 			if (colliders[i]->rect.y <= coll->rect.y && App->render->InCamera(colliders[i]->rect))
 			{
