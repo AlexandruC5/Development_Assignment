@@ -45,7 +45,6 @@ public:
 	fPoint position = { 0.0F, 0.0F };
 	fPoint velocity = { 0.0F, 0.0F };
 	Player_State state = IDLE;
-	Collider* collider;
 
 	j1Player();
 	~j1Player();
