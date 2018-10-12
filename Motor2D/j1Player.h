@@ -18,6 +18,7 @@ class j1Player : public j1Module
 private:
 	p2SString sprite_route;
 	SDL_Texture* sprite;
+	Collider* collider;
 
 	float movement_speed = 0.0F;
 	float jump_speed = 0.0F;
@@ -41,7 +42,6 @@ public:
 	fPoint position = { 0.0F, 0.0F };
 	fPoint velocity = { 0.0F, 0.0F };
 	Player_State state = IDLE;
-	Collider* collider;
 
 	j1Player();
 	~j1Player();
