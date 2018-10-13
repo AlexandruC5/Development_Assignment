@@ -7,6 +7,7 @@
 #include "j1Player.h"
 #include "j1SwapScene.h"
 #include "j1SceneForest.h"
+#include "j1Audio.h"
 #include "j1Scene2.h"
 #include "j1Collision.h"
 
@@ -26,6 +27,7 @@ bool j1Scene2::Awake(pugi::xml_node& conf)
 	LOG("Loading Scene");
 	map_file = conf.child("map_file").child_value();
 	background_file = conf.child("background").child_value();
+	music_file = conf.child("music").child_value();
 	bool ret = true;
 
 	return ret;
@@ -37,6 +39,7 @@ bool j1Scene2::Start()
 	App->swap_scene->current_scene = this;
 	App->map->Load(map_file.GetString());
 	App->player->ResetPlayer();
+	App->audio->PlayMusic(music_file.GetString());
 	return true;
 }
 

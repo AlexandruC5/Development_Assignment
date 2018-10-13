@@ -35,7 +35,8 @@ public:
 	bool PlayFx(unsigned int fx, int repeat = 0);
 
 private:
-
+	p2SString			fx_folder;
+	p2SString			music_folder;
 	_Mix_Music*			music;
 	p2List<Mix_Chunk*>	fx;
 };

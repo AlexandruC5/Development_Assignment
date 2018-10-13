@@ -29,6 +29,7 @@ bool j1SceneForest::Awake(pugi::xml_node& conf)
 	LOG("Loading Scene");
 	map_file = conf.child("map_file").child_value();
 	background_file = conf.child("background").child_value();
+	music_file = conf.child("music").child_value();
 	bool ret = true;
 
 	return ret;
@@ -40,6 +41,7 @@ bool j1SceneForest::Start()
 	App->swap_scene->current_scene = this;
 	App->map->Load(map_file.GetString());
 	App->player->ResetPlayer();
+	App->audio->PlayMusic(music_file.GetString());
 
 	return true;
 }

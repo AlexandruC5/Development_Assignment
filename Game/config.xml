@@ -25,25 +25,27 @@
 
   <scene_forest>
     <map_file>lvl_1.tmx</map_file>
-	  <background>BG.png</background>
+    <music>music_forest.ogg</music>
   </scene_forest>
   
   <scene2>
     <map_file>lvl_2.tmx</map_file>
-	  <background>BG2.png</background>
   </scene2>
 
   <player>
-    <folder>textures/</folder>
     <sprite>player_spritesheet.png</sprite>
+    <folder>textures</folder>
     <movement_speed value="10.0F"/>
     <jump_speed value="40.0F"/>
     <fall_speed value="40.0F"/>
     <threshold value="0.1F"/>
     <acceleration value="0.1F"/>
     <gravity value="2.0F"/>
-    <charged_jump time="2.5F" max_charge="20.0F" charge_increment="0.5F"/>
+    <charged_jump time="4.0F" max_charge="20.0F" charge_increment="0.5F"/>
     <collider width="94" height="53" offset="40"/>
+    <audio>
+      <jump_fx>fx_jump.wav</jump_fx>
+    </audio>
     <animations>
       <idle speed="0.1F">
         <frame x="17" y="36" width="94" height="92"/>
@@ -66,7 +68,7 @@
         <frame x="899" y="552" width="118" height="92"/>
         <frame x="1026" y="553" width="121" height="92"/>
       </die>
-	  <charge speed="0.3F">
+	    <charge speed="0.3F">
         <frame x="17" y="292" width="94" height="92"/>
         <frame x="143" y="292" width="96" height="92"/>
         <frame x="270" y="292" width="98" height="92"/>
@@ -79,7 +81,12 @@
   </collision>
 
   <map>
-    <folder>maps/</folder>
+    <folder>maps</folder>
   </map>
+
+  <audio>
+    <fx_folder>audio/fx</fx_folder>
+    <music_folder>audio/music</music_folder>
+  </audio>
 
 </config>

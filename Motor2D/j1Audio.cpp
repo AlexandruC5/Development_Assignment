@@ -4,7 +4,7 @@
 #include "p2List.h"
 
 #include "SDL/include/SDL.h"
-#include "SDL_mixer\include\SDL_mixer.h"
+#include "SDL_mixer/include/SDL_mixer.h"
 #pragma comment( lib, "SDL_mixer/libx86/SDL2_mixer.lib" )
 
 j1Audio::j1Audio() : j1Module()
@@ -50,6 +50,9 @@ bool j1Audio::Awake(pugi::xml_node& config)
 		ret = true;
 	}
 
+	fx_folder = config.child("fx_folder").child_value();
+	music_folder = config.child("music_folder").child_value();
+
 	return ret;
 }
 
@@ -80,7 +83,7 @@ bool j1Audio::CleanUp()
 }
 
 // Play a music file
-bool j1Audio::PlayMusic(const char* path, float fade_time)
+bool j1Audio::PlayMusic(const char* file, float fade_time)
 {
 	bool ret = true;
 
@@ -89,9 +92,9 @@ bool j1Audio::PlayMusic(const char* path, float fade_time)
 
 	if(music != NULL)
 	{
-		if(fade_time > 0.0f)
+		if(fade_time > 0.0F)
 		{
-			Mix_FadeOutMusic(int(fade_time * 1000.0f));
+			Mix_FadeOutMusic(int(fade_time * 1000.0F));
 		}
 		else
 		{
@@ -102,18 +105,19 @@ bool j1Audio::PlayMusic(const char* path, float fade_time)
 		Mix_FreeMusic(music);
 	}
 
-	music = Mix_LoadMUS(path);
+	p2SString path = PATH(music_folder.GetString(), file);
+	music = Mix_LoadMUS(path.GetString());
 
 	if(music == NULL)
 	{
-		LOG("Cannot load music %s. Mix_GetError(): %s\n", path, Mix_GetError());
+		LOG("Cannot load music %s. Mix_GetError(): %s\n", path.GetString(), Mix_GetError());
 		ret = false;
 	}
 	else
 	{
-		if(fade_time > 0.0f)
+		if(fade_time > 0.0F)
 		{
-			if(Mix_FadeInMusic(music, -1, (int) (fade_time * 1000.0f)) < 0)
+			if(Mix_FadeInMusic(music, -1, (int) (fade_time * 1000.0F)) < 0)
 			{
 				LOG("Cannot fade in music %s. Mix_GetError(): %s", path, Mix_GetError());
 				ret = false;
@@ -134,14 +138,16 @@ bool j1Audio::PlayMusic(const char* path, float fade_time)
 }
 
 // Load WAV
-unsigned int j1Audio::LoadFx(const char* path)
+unsigned int j1Audio::LoadFx(const char* file)
 {
 	unsigned int ret = 0;
 
 	if(!active)
 		return 0;
 
-	Mix_Chunk* chunk = Mix_LoadWAV(path);
+	p2SString path = PATH(fx_folder.GetString(), file);
+
+	Mix_Chunk* chunk = Mix_LoadWAV(path.GetString());
 
 	if(chunk == NULL)
 	{
@@ -149,6 +155,7 @@ unsigned int j1Audio::LoadFx(const char* path)
 	}
 	else
 	{
+		LOG("LUL");
 		fx.add(chunk);
 		ret = fx.count();
 	}

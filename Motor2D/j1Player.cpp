@@ -6,6 +6,7 @@
 #include "j1SwapScene.h"
 #include "j1Scene.h"
 #include "p2Defs.h"
+#include "j1Audio.h"
 #include "p2Log.h"
 #include "j1Input.h"
 #include "j1Player.h"
@@ -24,8 +25,7 @@ j1Player::~j1Player()
 bool j1Player::Awake(pugi::xml_node &conf)
 {
 	//load spritesheet
-	sprite_route = conf.child("folder").child_value();
-	sprite_route += conf.child("sprite").child_value();
+	sprite_route = PATH(conf.child("folder").child_value(), conf.child("sprite").child_value());
 
 	//load animations
 	pugi::xml_node frame;
@@ -74,6 +74,7 @@ bool j1Player::Awake(pugi::xml_node &conf)
 
 	animation_frame = { 0, 0, conf.child("collider").attribute("width").as_int(), conf.child("collider").attribute("height").as_int() };
 	collider_offset = conf.child("collider").attribute("offset").as_int();
+	jump_fx = App->audio->LoadFx(conf.child("audio").child("jump_fx").child_value());
 	return true;
 }
 
@@ -254,6 +255,7 @@ void j1Player::Jump(float boost)
 	isGrounded = false;
 	state = JUMPING;
 	charge_value = 0;
+	App->audio->PlayFx(jump_fx);
 }
 
 bool j1Player::Load(pugi::xml_node &player) 

@@ -45,6 +45,8 @@ private:
 	Animation charge;
 	SDL_Rect animation_frame;
 
+	unsigned int jump_fx;
+
 	void StepX();
 	void StepY();
 public:

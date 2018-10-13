@@ -33,7 +33,7 @@ public:
 	bool CleanUp();
 
 protected:
-
+	p2SString music_file = "";
 	p2SString map_file = "";
 	p2SString background_file = "";
 };
