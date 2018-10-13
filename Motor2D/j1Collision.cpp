@@ -120,7 +120,7 @@ bool j1Collision::CleanUp()
 	return true;
 }
 
-Collider* j1Collision::AddCollider(SDL_Rect rect, COLLIDER_TYPE type, j1Module* callback, bool player)
+Collider* j1Collision::AddCollider(const SDL_Rect &rect, const COLLIDER_TYPE &type, j1Module* callback, const bool &player)
 {
 	Collider* ret = nullptr;
 

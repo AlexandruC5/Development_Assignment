@@ -21,7 +21,7 @@ struct Collider
 	j1Module* callback = nullptr;
 
 	Collider(){}
-	Collider(SDL_Rect rectangle, COLLIDER_TYPE type, j1Module* callback = nullptr) :
+	Collider(const SDL_Rect& rectangle, const COLLIDER_TYPE &type, j1Module* callback = nullptr) :
 		rect(rectangle),
 		type(type),
 		callback(callback)
@@ -67,7 +67,7 @@ public:
 	float DistanceToLeftCollider(Collider* coll) const;
 	float DistanceToTopCollider(Collider* coll) const;
 	float DistanceToBottomCollider(Collider* coll) const;
-	Collider* AddCollider(SDL_Rect rect, COLLIDER_TYPE type, j1Module* callback = nullptr, bool player = false);
+	Collider* AddCollider(const SDL_Rect &rect, const COLLIDER_TYPE &type, j1Module* callback = nullptr, const bool &player = false);
 
 	void DebugDraw();
 

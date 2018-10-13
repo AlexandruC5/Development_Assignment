@@ -39,10 +39,9 @@ void j1Map::Draw()
 	p2List_item<TileSet*>* tileset;
 	tileset = data.tilesets.start;
 
-	App->render->Blit(data.background_img, 0, 0, &data.background_rect, data.background_speed);
-	App->render->Blit(data.background_img, data.background_rect.w, 0, &data.background_rect, data.background_speed);
-	//provisional
-	App->render->Blit(data.background_img, 2*(data.background_rect.w), 0, &data.background_rect, data.background_speed);
+	App->render->Blit(data.background_img, 0, data.background_offset, NULL, data.background_speed);
+	App->render->Blit(data.background_img, data.background_rect.w, data.background_offset, NULL, data.background_speed);
+	App->render->Blit(data.background_img, 2*(data.background_rect.w), data.background_offset, NULL, data.background_speed);
 
 	while (layer != NULL)
 	{
@@ -190,6 +189,7 @@ bool j1Map::Load(const char* file_name)
 	pugi::xml_node background = map_file.child("map").child("imagelayer");
 	data.background_img = App->tex->Load(PATH(folder.GetString(), background.child("image").attribute("source").as_string()));
 	data.background_rect = { 0,0,background.child("image").attribute("width").as_int(), background.child("image").attribute("height").as_int() };
+	data.background_offset = background.attribute("offsety").as_float();
 	data.background_speed = map_file.child("map").child("imagelayer").child("properties").find_child_by_attribute("name","speed").attribute("value").as_float();
 
 	//Load Utils

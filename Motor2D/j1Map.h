@@ -67,6 +67,7 @@ struct MapData
 
 	SDL_Texture*		background_img;
 	SDL_Rect			background_rect;
+	float				background_offset;
 	float				background_speed;
 };
 
