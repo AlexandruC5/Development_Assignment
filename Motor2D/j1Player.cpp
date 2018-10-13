@@ -67,7 +67,10 @@ bool j1Player::Awake(pugi::xml_node &conf)
 	acceleration = conf.child("acceleration").attribute("value").as_float();
 	threshold = conf.child("threshold").attribute("value").as_float();
 	gravity = conf.child("gravity").attribute("value").as_float();
-	charged_time = conf.child("charged_jump_time").attribute("value").as_float();
+	fall_speed = conf.child("fall_speed").attribute("value").as_float();
+	charged_time = conf.child("charged_jump").attribute("time").as_float();
+	charge_increment = conf.child("charged_jump").attribute("charge_increment").as_float();
+	max_charge = conf.child("charged_jump").attribute("max_charge").as_float();
 
 	animation_frame = { 0, 0, conf.child("collider").attribute("width").as_int(), conf.child("collider").attribute("height").as_int() };
 	collider_offset = conf.child("collider").attribute("offset").as_int();
@@ -142,8 +145,8 @@ void j1Player::IdleUpdate()
 	if (App->input->GetKey(SDL_SCANCODE_D) != App->input->GetKey(SDL_SCANCODE_A)) state = MOVING;
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
 	{
-		timer+=0.5F;
-		if (timer >= charged_time)
+		charge_value += charge_increment;
+		if (charge_value >= charged_time)
 		{
 			state = CHARGE;
 		}
@@ -153,7 +156,7 @@ void j1Player::IdleUpdate()
 		target_speed.y = -jump_speed;
 		isGrounded = false;
 		state = JUMPING;
-		timer = 0.0F;
+		charge_value = 0.0F;
 		Jump(0);
 	}
 		
@@ -183,8 +186,8 @@ void j1Player::MovingUpdate()
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
 	{
-		timer += 0.5F;
-		if (timer >= charged_time)
+		charge_value += charge_increment;
+		if (charge_value >= charged_time)
 		{
 			state = CHARGE;
 		}
@@ -195,7 +198,7 @@ void j1Player::MovingUpdate()
 		target_speed.y = -jump_speed;
 		isGrounded = false;
 		state = JUMPING;
-		timer = 0.0F;
+		charge_value = 0.0F;
 		Jump(0);
 	}
 
@@ -205,6 +208,7 @@ void j1Player::MovingUpdate()
 void j1Player::JumpingUpdate() 
 {
 	target_speed.y += gravity;
+	if (target_speed.y > fall_speed) target_speed.y = fall_speed;
 	animation_frame = jump.GetCurrentFrame();
 	if (App->input->GetKey(SDL_SCANCODE_D) == App->input->GetKey(SDL_SCANCODE_A))
 	{
@@ -235,11 +239,11 @@ void j1Player::ChargingUpdate()
 {
 	target_speed.x = 0.0F;
 	animation_frame = charge.GetCurrentFrame();
-	if (timer < 30)
-		timer+=0.5;
+	if (charge_value < max_charge)
+		charge_value += charge_increment;
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
 	{
-		Jump(timer);
+		Jump(charge_value);
 	}
 	else if (!isGrounded) state = JUMPING;
 }
@@ -249,7 +253,7 @@ void j1Player::Jump(float boost)
 	target_speed.y = -jump_speed - boost;
 	isGrounded = false;
 	state = JUMPING;
-	timer = 0;
+	charge_value = 0;
 }
 
 bool j1Player::Load(pugi::xml_node &player) 
@@ -333,7 +337,7 @@ void j1Player::StepY()
 void j1Player::ResetPlayer()
 {
 	state = IDLE;
-	velocity = { 0.0F,0.0F };
-	target_speed = { 0.0F,0.0F };
+	velocity = { 0.0F, 0.0F };
+	target_speed = { 0.0F, 0.0F };
 	flipX = true;
 }

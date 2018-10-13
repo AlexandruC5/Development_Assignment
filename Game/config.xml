@@ -36,12 +36,13 @@
   <player>
     <folder>textures/</folder>
     <sprite>player_spritesheet.png</sprite>
-	<charged_jump_time value="5.0f"/>
     <movement_speed value="10.0F"/>
     <jump_speed value="40.0F"/>
+    <fall_speed value="40.0F"/>
     <threshold value="0.1F"/>
     <acceleration value="0.1F"/>
     <gravity value="2.0F"/>
+    <charged_jump time="2.5F" max_charge="20.0F" charge_increment="0.5F"/>
     <collider width="94" height="53" offset="40"/>
     <animations>
       <idle speed="0.1F">

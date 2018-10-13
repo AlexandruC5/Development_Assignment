@@ -41,10 +41,7 @@ bool j1Render::Awake(pugi::xml_node& config)
 	}
 	else
 	{
-		camera.w = App->win->screen_surface->w;
-		camera.h = App->win->screen_surface->h;
-		camera.x = 0;
-		camera.y = 0;
+		camera.body = { 0, 0, App->win->screen_surface->w, App->win->screen_surface->h };
 	}
 
 	return ret;
@@ -89,8 +86,8 @@ bool j1Render::CleanUp()
 // Load Game State
 bool j1Render::Load(pugi::xml_node& data)
 {
-	camera.x = data.child("camera").attribute("x").as_int();
-	camera.y = data.child("camera").attribute("y").as_int();
+	camera.body.x = data.child("camera").attribute("x").as_int();
+	camera.body.y = data.child("camera").attribute("y").as_int();
 
 	return true;
 }
@@ -100,8 +97,8 @@ bool j1Render::Save(pugi::xml_node& data) const
 {
 	pugi::xml_node cam = data.append_child("camera");
 
-	cam.append_attribute("x") = camera.x;
-	cam.append_attribute("y") = camera.y;
+	cam.append_attribute("x") = camera.body.x;
+	cam.append_attribute("y") = camera.body.y;
 
 	return true;
 }
@@ -128,8 +125,8 @@ bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section,
 	uint scale = App->win->GetScale();
 
 	SDL_Rect rect;
-	rect.x = (int)(camera.x * speed) + x * scale;
-	rect.y = (int)(camera.y * speed) + y * scale;
+	rect.x = (int)(camera.body.x * speed) + x * scale;
+	rect.y = (int)(camera.body.y * speed) + y * scale;
 
 	if(section != NULL)
 	{
@@ -184,8 +181,8 @@ bool j1Render::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a
 	SDL_Rect rec(rect);
 	if(use_camera)
 	{
-		rec.x = (int)(camera.x + rect.x * scale);
-		rec.y = (int)(camera.y + rect.y * scale);
+		rec.x = (int)(camera.body.x + rect.x * scale);
+		rec.y = (int)(camera.body.y + rect.y * scale);
 		rec.w *= scale;
 		rec.h *= scale;
 	}
@@ -212,7 +209,7 @@ bool j1Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 
 	int result = -1;
 
 	if(use_camera)
-		result = SDL_RenderDrawLine(renderer, camera.x + x1 * scale, camera.y + y1 * scale, camera.x + x2 * scale, camera.y + y2 * scale);
+		result = SDL_RenderDrawLine(renderer, camera.body.x + x1 * scale, camera.body.y + y1 * scale, camera.body.x + x2 * scale, camera.body.y + y2 * scale);
 	else
 		result = SDL_RenderDrawLine(renderer, x1 * scale, y1 * scale, x2 * scale, y2 * scale);
 
@@ -256,6 +253,6 @@ bool j1Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, U
 
 bool j1Render::InCamera(SDL_Rect rect) const
 {
-	return ((-camera.x < rect.x + rect.w) && (rect.x < -camera.x + camera.w)
-		&& (-camera.y < rect.y + rect.h) && (rect.y < -camera.y + camera.h));
+	return ((-camera.body.x < rect.x + rect.w) && (rect.x < -camera.body.x + camera.body.w)
+		&& (-camera.body.y < rect.y + rect.h) && (rect.y < -camera.body.y + camera.body.h));
 }

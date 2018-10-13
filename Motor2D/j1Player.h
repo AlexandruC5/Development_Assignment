@@ -20,17 +20,23 @@ private:
 	p2SString sprite_route;
 	SDL_Texture* sprite;
 
+	//movement variables
 	float movement_speed = 0.0F;
 	float jump_speed = 0.0F;
 	float gravity = 0.0F;
 	float acceleration = 0.0F;
+	float fall_speed = 0.0F;
+	fPoint target_speed = { 0.0F, 0.0F };
 	
 	int collider_offset = 0;
 	bool flipX = true;
 	bool isGrounded = true;
-	float timer = 0.0f;
-	float charged_time = 0.0f;
-	fPoint target_speed = { 0.0F, 0.0F };
+
+	//charged jump variables
+	float charge_value = 0.0F;
+	float charged_time = 0.0F;
+	float max_charge = 0.0F;
+	float charge_increment = 0.0F;
 
 	Animation idle;
 	Animation move;
@@ -43,7 +49,6 @@ private:
 	void StepY();
 public:
 	Collider* collider;
-	fPoint new_position = { 0.0F, 0.0F };
 	fPoint position = { 0.0F, 0.0F };
 	fPoint velocity = { 0.0F, 0.0F };
 	Player_State state = IDLE;

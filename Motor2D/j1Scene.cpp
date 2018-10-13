@@ -12,10 +12,10 @@
 #include "j1Player.h"
 #include "j1Collision.h"
 
-#define RIGHT_CAMERA_LIMIT  (-(App->render->camera.x - App->render->camera.w / 2))
-#define LEFT_CAMERA_LIMIT  (-(App->render->camera.x - App->render->camera.w / 6))
-#define TOP_CAMERA_LIMIT  (-(App->render->camera.y - App->render->camera.h / 6))
-#define BOTTOM_CAMERA_LIMIT (-(App->render->camera.y - (App->render->camera.h - App->render->camera.h/6)))
+#define RIGHT_CAMERA_LIMIT  (-(App->render->camera.body.x - App->render->camera.body.w / 2))
+#define LEFT_CAMERA_LIMIT  (-(App->render->camera.body.x - App->render->camera.body.w / 6))
+#define TOP_CAMERA_LIMIT  (-(App->render->camera.body.y - App->render->camera.body.h / 8))
+#define BOTTOM_CAMERA_LIMIT (-(App->render->camera.body.y - App->render->camera.body.h / 2))
 
 j1Scene::j1Scene() : j1Module()
 {}
@@ -52,16 +52,16 @@ bool j1Scene::Update(float dt)
 		App->SaveGame();
 
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		App->render->camera.y -= 10;
+		App->render->camera.body.y -= 10;
 
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		App->render->camera.y += 10;
+		App->render->camera.body.y += 10;
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		App->render->camera.x -= 10;
+		App->render->camera.body.x -= 10;
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		App->render->camera.x += 10;
+		App->render->camera.body.x += 10;
 
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) App->swap_scene->FadeToBlack(App->swap_scene->current_scene, App->scene_forest);
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) App->swap_scene->Reload();
@@ -84,80 +84,54 @@ bool j1Scene::PostUpdate()
 
 	if (App->player->position.x + App->player->collider->rect.w > RIGHT_CAMERA_LIMIT && App->player->velocity.x > 0.0F)
 	{
-		App->render->camera.x -= App->player->velocity.x;
-		if (-App->render->camera.x > App->map->data.width*App->map->data.tile_width)
-			App->render->camera.x = (-App->map->data.width*App->map->data.tile_width) - App->render->camera.w;
-	}
-	if (App->player->position.x < LEFT_CAMERA_LIMIT && App->player->velocity.x < 0.0F)
-	{
-		App->render->camera.x += -App->player->velocity.x;
-		if (-App->render->camera.x < 0)
-			App->render->camera.x = 0;
-	}
-	if (App->player->position.y < TOP_CAMERA_LIMIT && App->player->velocity.y < 0.0F)
-	{
-		App->render->camera.y -= App->player->velocity.y;
-		if (-App->render->camera.y < 0)
-			App->render->camera.y = 0;
-	}
-	if (App->player->position.y + App->player->collider->rect.h > BOTTOM_CAMERA_LIMIT && App->player->velocity.y > 0.0F)
-	{
-		App->render->camera.y -= App->player->velocity.y;
-		if (-(App->render->camera.y - App->render->camera.h) > App->map->data.height * App->map->data.tile_height)
-			App->render->camera.y = -(App->map->data.height * App->map->data.tile_height - App->render->camera.h);
-	}
-
-	if(App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-		ret = false;
-
-	int control_area = 0;
-	if (App->player->position.x + App->player->collider->rect.w >= RIGHT_CAMERA_LIMIT && App->player->velocity.x > 0.0F)
-	{
-		velocity.x = (App->player->velocity.x*-1);
+		App->render->camera.target_speed.x = -(App->player->velocity.x);
 	}
 	else
 	{
-		if (App->player->position.x <= LEFT_CAMERA_LIMIT && App->player->velocity.x < 0.0F)
+		if (App->player->position.x < LEFT_CAMERA_LIMIT && App->player->velocity.x < 0.0F)
 		{
-			velocity.x = (App->player->velocity.x*-1);
+			App->render->camera.target_speed.x = -(App->player->velocity.x);
 		}
 		else
 		{
-			velocity.x = 0.0F;
+			App->render->camera.target_speed.x = 0.0F;
 		}
 	}
 
-	if (App->player->position.y <= TOP_CAMERA_LIMIT && App->player->velocity.y < 0.0F)
+	if (App->player->position.y < TOP_CAMERA_LIMIT && App->player->velocity.y < 0.0F)
 	{
-		target_speed.y = 20;
+		App->render->camera.target_speed.y = -(App->player->velocity.y);
 	}
 	else
 	{
 		if (App->player->position.y + App->player->collider->rect.h > BOTTOM_CAMERA_LIMIT && App->player->velocity.y > 0.0F)
 		{
-			target_speed.y = -20;
+			App->render->camera.target_speed.y = -(App->player->velocity.y);
 		}
 		else
 		{
-			target_speed.y = 0.0F;
+			App->render->camera.target_speed.y = 0.0F;
 		}
 
 	}
 
-	velocity.y = target_speed.y * 0.3f + (App->player->velocity.y*-1);
-	if (fabs(velocity.y) < App->player->threshold) velocity.y = 0.0F;
-	if (fabs(velocity.x) < App->player->threshold) velocity.x = 0.0F;
-	App->render->camera.y += velocity.y;
-	App->render->camera.x += velocity.x;
+	App->render->camera.velocity = App->render->camera.target_speed * 0.3F + App->render->camera.velocity * (1 - 0.3F);
+	if (fabs(App->render->camera.velocity.y) < App->player->threshold) App->render->camera.velocity.y = 0.0F;
+	if (fabs(App->render->camera.velocity.x) < App->player->threshold) App->render->camera.velocity.x = 0.0F;
+	App->render->camera.body.y += App->render->camera.velocity.y;
+	App->render->camera.body.x += App->render->camera.velocity.x;
 
-	if (-(App->render->camera.y - App->render->camera.h) > App->map->data.height * App->map->data.tile_height)
-		App->render->camera.y = -(App->map->data.height * App->map->data.tile_height - App->render->camera.h);
-	if (-App->render->camera.y < 0)
-		App->render->camera.y = 0;
-	if (-App->render->camera.x < 0)
-		App->render->camera.x = 0;
-	if (-App->render->camera.x > App->map->data.width*App->map->data.tile_width)
-		App->render->camera.x = (-App->map->data.width*App->map->data.tile_width) - App->render->camera.w;
+	if (-(App->render->camera.body.y - App->render->camera.body.h) > App->map->data.height * App->map->data.tile_height)
+		App->render->camera.body.y = -(App->map->data.height * App->map->data.tile_height - App->render->camera.body.h);
+	else if (-App->render->camera.body.y < 0)
+		App->render->camera.body.y = 0;
+	if (-App->render->camera.body.x < 0)
+		App->render->camera.body.x = 0;
+	else if (-App->render->camera.body.x > App->map->data.width*App->map->data.tile_width)
+		App->render->camera.body.x = (-App->map->data.width*App->map->data.tile_width) - App->render->camera.body.w;
+
+	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+		ret = false;
 
 	return ret;
 }

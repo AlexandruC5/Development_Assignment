@@ -5,6 +5,13 @@
 #include "p2Point.h"
 #include "j1Module.h"
 
+struct Camera
+{
+	SDL_Rect body;
+	fPoint target_speed = { 0.0F, 0.0F };
+	fPoint velocity = { 0.0F, 0.0F };
+};
+
 class j1Render : public j1Module
 {
 public:
@@ -49,7 +56,7 @@ public:
 public:
 
 	SDL_Renderer*	renderer;
-	SDL_Rect		camera;
+	Camera			camera;
 	SDL_Rect		viewport;
 	SDL_Color		background;
 };

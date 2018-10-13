@@ -195,8 +195,8 @@ bool j1Map::Load(const char* file_name)
 	pugi::xml_node utils = map_file.child("map").find_child_by_attribute("name", "utils");
 	LoadUtilsLayer(utils);
 
-	App->render->camera.y = -(App->map->data.height * App->map->data.tile_height - App->render->camera.h);
-	App->render->camera.x = 0;
+	App->render->camera.body.y = -(App->map->data.height * App->map->data.tile_height - App->render->camera.body.h);
+	App->render->camera.body.x = 0;
 	App->player->position = data.spawn;
 
 	if(ret == true)
