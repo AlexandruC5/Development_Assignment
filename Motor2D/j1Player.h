@@ -7,12 +7,14 @@
 
 
 enum Player_State {
-	NO_STATE,
+	NO_STATE = -1,
 	IDLE,
 	MOVING,
 	JUMPING,
 	DEAD,
 	CHARGE,
+	WIN,
+	TOTAL_ANIMATIONS
 };
 class j1Player : public j1Module
 {
@@ -38,11 +40,7 @@ private:
 	float max_charge = 0.0F;
 	float charge_increment = 0.0F;
 
-	Animation idle;
-	Animation move;
-	Animation jump;
-	Animation die;
-	Animation charge;
+	Animation animations[TOTAL_ANIMATIONS];
 	SDL_Rect animation_frame;
 
 	unsigned int jump_fx;
@@ -70,10 +68,11 @@ public:
 	void MovingUpdate();
 	void JumpingUpdate();
 	void ChargingUpdate();
-	void Jump(float boost);
+	void Jump(const float &boost);
 
 	void CheckDeath();
 	void ResetPlayer();
+	void SetPosition(const float &x, const float &y);
 };
 
 #endif

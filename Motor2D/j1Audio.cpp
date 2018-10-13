@@ -50,8 +50,13 @@ bool j1Audio::Awake(pugi::xml_node& config)
 		ret = true;
 	}
 
-	fx_folder = config.child("fx_folder").child_value();
 	music_folder = config.child("music_folder").child_value();
+	music_volume = config.child("music").attribute("volume").as_int(MIX_MAX_VOLUME);
+	Mix_VolumeMusic(music_volume);
+
+	fx_folder = config.child("fx_folder").child_value();
+	fx_volume = config.child("fx").attribute("volume").as_int(MIX_MAX_VOLUME);
+	Mix_Volume(-1, fx_volume);
 
 	return ret;
 }
@@ -177,4 +182,36 @@ bool j1Audio::PlayFx(unsigned int id, int repeat)
 	}
 
 	return ret;
+}
+
+void j1Audio::DecreaseMusicVolume()
+{
+	if (music_volume > 0) {
+		music_volume -= 1;
+	}
+	Mix_VolumeMusic(music_volume);
+}
+
+void j1Audio::IncreaseMusicVolume()
+{
+	if (music_volume < MIX_MAX_VOLUME) {
+		music_volume += 1;
+	}
+	Mix_VolumeMusic(music_volume);
+}
+
+void j1Audio::DecreaseFXVolume()
+{
+	if (fx_volume > 0) {
+		fx_volume -= 1;
+	}
+	Mix_Volume(-1, fx_volume);
+}
+
+void j1Audio::IncreaseFXVolume()
+{
+	if (fx_volume < MIX_MAX_VOLUME) {
+		fx_volume += 1;
+	}
+	Mix_Volume(-1, fx_volume);
 }

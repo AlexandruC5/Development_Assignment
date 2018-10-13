@@ -28,38 +28,19 @@ bool j1Player::Awake(pugi::xml_node &conf)
 	sprite_route = PATH(conf.child("folder").child_value(), conf.child("sprite").child_value());
 
 	//load animations
-	pugi::xml_node frame;
-	for (frame = conf.child("animations").child("idle").child("frame"); frame; frame = frame.next_sibling("frame"))
+	int index = 0;
+	pugi::xml_node animation;
+	for (animation = conf.child("animations").first_child(); animation; animation = animation.next_sibling())
 	{
-		idle.PushBack({ frame.attribute("x").as_int(), frame.attribute("y").as_int(), frame.attribute("width").as_int(), frame.attribute("height").as_int() });
+		pugi::xml_node frame;
+		for (frame = animation.child("frame"); frame; frame = frame.next_sibling("frame"))
+		{
+			animations[index].PushBack({ frame.attribute("x").as_int(), frame.attribute("y").as_int(), frame.attribute("width").as_int(), frame.attribute("height").as_int() });
+		}
+		animations[index].speed = animation.attribute("speed").as_float();
+		animations[index].loop = animation.attribute("loops").as_bool(true);
+		index++;
 	}
-	idle.speed = conf.child("animations").child("idle").attribute("speed").as_float();
-
-	for (frame = conf.child("animations").child("move").child("frame"); frame; frame = frame.next_sibling("frame"))
-	{
-		move.PushBack({ frame.attribute("x").as_int(), frame.attribute("y").as_int(), frame.attribute("width").as_int(), frame.attribute("height").as_int() });
-	}
-	move.speed = conf.child("animations").child("move").attribute("speed").as_float();
-
-	for (frame = conf.child("animations").child("jump").child("frame"); frame; frame = frame.next_sibling("frame"))
-	{
-		jump.PushBack({ frame.attribute("x").as_int(), frame.attribute("y").as_int(), frame.attribute("width").as_int(), frame.attribute("height").as_int() });
-	}
-	jump.speed = conf.child("animations").child("jump").attribute("speed").as_float();
-	jump.loop = false;
-
-	for (frame = conf.child("animations").child("die").child("frame"); frame; frame = frame.next_sibling("frame"))
-	{
-		die.PushBack({ frame.attribute("x").as_int(), frame.attribute("y").as_int(), frame.attribute("width").as_int(), frame.attribute("height").as_int() });
-	}
-	die.speed = conf.child("animations").child("die").attribute("speed").as_float();
-
-	for (frame = conf.child("animations").child("charge").child("frame"); frame; frame = frame.next_sibling("frame"))
-	{
-		charge.PushBack({ frame.attribute("x").as_int(), frame.attribute("y").as_int(), frame.attribute("width").as_int(), frame.attribute("height").as_int() });
-	}
-	charge.speed = conf.child("animations").child("charge").attribute("speed").as_float();
-
 
 	//load player stats
 	movement_speed = conf.child("movement_speed").attribute("value").as_float();
@@ -89,6 +70,7 @@ bool j1Player::Start()
 
 bool j1Player::PreUpdate() 
 {
+	
 	switch (state) {
 	case IDLE: IdleUpdate();
 		break;
@@ -96,9 +78,16 @@ bool j1Player::PreUpdate()
 		break;
 	case JUMPING: JumpingUpdate();
 		break;
-	case DEAD: animation_frame = die.GetCurrentFrame();
+	case DEAD:
+		animation_frame = animations[DEAD].GetCurrentFrame();
 		break;
 	case CHARGE: ChargingUpdate();
+		break;
+	case WIN: 
+	{
+		target_speed.x = 0.0F;
+		animation_frame = animations[WIN].GetCurrentFrame();
+	}
 		break;
 	default:
 		break;
@@ -142,7 +131,7 @@ bool j1Player::CleanUp()
 void j1Player::IdleUpdate() 
 {
 	target_speed.x = 0.0F;
-	animation_frame = idle.GetCurrentFrame();
+	animation_frame = animations[IDLE].GetCurrentFrame();
 	if (App->input->GetKey(SDL_SCANCODE_D) != App->input->GetKey(SDL_SCANCODE_A)) state = MOVING;
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
 	{
@@ -168,7 +157,7 @@ void j1Player::IdleUpdate()
 
 void j1Player::MovingUpdate() 
 {
-	animation_frame = move.GetCurrentFrame();
+	animation_frame = animations[MOVING].GetCurrentFrame();
 	if (App->input->GetKey(SDL_SCANCODE_D) == App->input->GetKey(SDL_SCANCODE_A))
 	{
 		state = IDLE;
@@ -210,7 +199,7 @@ void j1Player::JumpingUpdate()
 {
 	target_speed.y += gravity;
 	if (target_speed.y > fall_speed) target_speed.y = fall_speed;
-	animation_frame = jump.GetCurrentFrame();
+	animation_frame = animations[JUMPING].GetCurrentFrame();
 	if (App->input->GetKey(SDL_SCANCODE_D) == App->input->GetKey(SDL_SCANCODE_A))
 	{
 		target_speed.x = 0.0F;
@@ -239,7 +228,7 @@ void j1Player::JumpingUpdate()
 void j1Player::ChargingUpdate()
 {
 	target_speed.x = 0.0F;
-	animation_frame = charge.GetCurrentFrame();
+	animation_frame = animations[CHARGE].GetCurrentFrame();
 	if (charge_value < max_charge)
 		charge_value += charge_increment;
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
@@ -249,7 +238,7 @@ void j1Player::ChargingUpdate()
 	else if (!isGrounded) state = JUMPING;
 }
 
-void j1Player::Jump(float boost)
+void j1Player::Jump(const float &boost)
 {
 	target_speed.y = -jump_speed - boost;
 	isGrounded = false;
@@ -342,4 +331,10 @@ void j1Player::ResetPlayer()
 	velocity = { 0.0F, 0.0F };
 	target_speed = { 0.0F, 0.0F };
 	flipX = true;
+}
+
+void j1Player::SetPosition(const float &x, const float &y)
+{
+	position = { x,y };
+	if(collider) collider->SetPos(position.x, position.y);
 }

@@ -8,6 +8,7 @@
 #include "j1SceneForest.h"
 #include "j1SwapScene.h"
 #include "j1Map.h"
+#include "j1Audio.h"
 #include "j1Scene.h"
 #include "j1Player.h"
 #include "j1Collision.h"
@@ -33,6 +34,10 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 // Called before the first frame
 bool j1Scene::Start()
 {
+	App->swap_scene->current_scene = this;
+	App->player->ResetPlayer();
+	App->map->Load(map_file.GetString());
+	App->audio->PlayMusic(music_file.GetString());
 	return true;
 }
 
@@ -45,26 +50,25 @@ bool j1Scene::PreUpdate()
 // Called each loop iteration
 bool j1Scene::Update(float dt)
 {
-	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
+	//Debug Functionalities
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+		App->swap_scene->FadeToBlack(App->swap_scene->current_scene, App->scene_forest);
+	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+		App->swap_scene->Reload();
+	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
 		App->LoadGame();
-
-	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
 		App->SaveGame();
-
-	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		App->render->camera.body.y -= 10;
-
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		App->render->camera.body.y += 10;
-
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		App->render->camera.body.x -= 10;
-
-	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		App->render->camera.body.x += 10;
-
-	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) App->swap_scene->FadeToBlack(App->swap_scene->current_scene, App->scene_forest);
-	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) App->swap_scene->Reload();
+	if (App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_REPEAT)
+	{
+		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) App->audio->IncreaseFXVolume();
+		else App->audio->IncreaseMusicVolume();
+	}
+	if (App->input->GetKey(SDL_SCANCODE_KP_MINUS) == KEY_REPEAT)
+	{
+		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) App->audio->DecreaseFXVolume();
+		else App->audio->DecreaseMusicVolume();
+	}			
 
 	App->map->Draw();
 
@@ -81,7 +85,7 @@ bool j1Scene::Update(float dt)
 bool j1Scene::PostUpdate()
 {
 	bool ret = true;
-
+	//Camera movement
 	if (App->player->position.x + App->player->collider->rect.w > RIGHT_CAMERA_LIMIT && App->player->velocity.x > 0.0F)
 	{
 		App->render->camera.target_speed.x = -(App->player->velocity.x);
@@ -97,7 +101,6 @@ bool j1Scene::PostUpdate()
 			App->render->camera.target_speed.x = 0.0F;
 		}
 	}
-
 	if (App->player->position.y < TOP_CAMERA_LIMIT && App->player->velocity.y < 0.0F)
 	{
 		App->render->camera.target_speed.y = -(App->player->velocity.y);
@@ -121,6 +124,7 @@ bool j1Scene::PostUpdate()
 	App->render->camera.body.y += App->render->camera.velocity.y;
 	App->render->camera.body.x += App->render->camera.velocity.x;
 
+	//Check if camera out of bounds and place it on right spot
 	if (-(App->render->camera.body.y - App->render->camera.body.h) > App->map->data.height * App->map->data.tile_height)
 		App->render->camera.body.y = -(App->map->data.height * App->map->data.tile_height - App->render->camera.body.h);
 	else if (-App->render->camera.body.y < 0)

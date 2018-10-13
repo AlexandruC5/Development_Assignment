@@ -64,10 +64,10 @@ struct MapData
 	p2List<TileSet*>	tilesets;
 	p2List<MapLayer*>	layers;
 	p2List<Collider*>	colliders;
+
 	SDL_Texture*		background_img;
 	SDL_Rect			background_rect;
-	p2Point<float>		spawn;
-	SDL_Rect			lvl_end;
+	float				background_speed;
 };
 
 class j1Map : public j1Module

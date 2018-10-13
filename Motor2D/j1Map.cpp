@@ -39,10 +39,10 @@ void j1Map::Draw()
 	p2List_item<TileSet*>* tileset;
 	tileset = data.tilesets.start;
 
-	App->render->Blit(data.background_img, 0, 0, &data.background_rect, 0.5F);
-	App->render->Blit(data.background_img, data.background_rect.w, 0, &data.background_rect, 0.5F);
+	App->render->Blit(data.background_img, 0, 0, &data.background_rect, data.background_speed);
+	App->render->Blit(data.background_img, data.background_rect.w, 0, &data.background_rect, data.background_speed);
 	//provisional
-	App->render->Blit(data.background_img, 2*(data.background_rect.w), 0, &data.background_rect, 0.5F);
+	App->render->Blit(data.background_img, 2*(data.background_rect.w), 0, &data.background_rect, data.background_speed);
 
 	while (layer != NULL)
 	{
@@ -190,14 +190,11 @@ bool j1Map::Load(const char* file_name)
 	pugi::xml_node background = map_file.child("map").child("imagelayer");
 	data.background_img = App->tex->Load(PATH(folder.GetString(), background.child("image").attribute("source").as_string()));
 	data.background_rect = { 0,0,background.child("image").attribute("width").as_int(), background.child("image").attribute("height").as_int() };
+	data.background_speed = map_file.child("map").child("imagelayer").child("properties").find_child_by_attribute("name","speed").attribute("value").as_float();
 
 	//Load Utils
 	pugi::xml_node utils = map_file.child("map").find_child_by_attribute("name", "utils");
 	LoadUtilsLayer(utils);
-
-	App->render->camera.body.y = -(App->map->data.height * App->map->data.tile_height - App->render->camera.body.h);
-	App->render->camera.body.x = 0;
-	App->player->position = data.spawn;
 
 	if(ret == true)
 	{
@@ -399,14 +396,18 @@ bool j1Map::LoadCollisionLayer(pugi::xml_node & node)
 
 bool j1Map::LoadUtilsLayer(pugi::xml_node & node)
 {
-	data.spawn.x = node.find_child_by_attribute("name", "spawn").attribute("x").as_float();
-	data.spawn.y = node.find_child_by_attribute("name", "spawn").attribute("y").as_float();
+	pugi::xml_node end_trigger = node.find_child_by_attribute("name", "end");
+	SDL_Rect temp_trigger;
+	temp_trigger.x = end_trigger.attribute("x").as_float();
+	temp_trigger.y = end_trigger.attribute("y").as_float();
+	temp_trigger.w = end_trigger.attribute("width").as_float();
+	temp_trigger.h = end_trigger.attribute("height").as_float();
+	data.colliders.add(App->collision->AddCollider(temp_trigger, COLLIDER_TRIGGER, (j1Module*)App->swap_scene->current_scene));
 
-	data.lvl_end.x = node.find_child_by_attribute("name", "end").attribute("x").as_float();
-	data.lvl_end.y = node.find_child_by_attribute("name", "end").attribute("y").as_float();
-	data.lvl_end.w = node.find_child_by_attribute("name", "end").attribute("width").as_float();
-	data.lvl_end.h = node.find_child_by_attribute("name", "end").attribute("height").as_float();
-	data.colliders.add(App->collision->AddCollider(data.lvl_end, COLLIDER_TRIGGER, (j1Module*)App->swap_scene->current_scene));
+	App->render->camera.body.y = -(App->map->data.height * App->map->data.tile_height - App->render->camera.body.h);
+	App->render->camera.body.x = 0;
+	pugi::xml_node spawn = node.find_child_by_attribute("name", "spawn");
+	App->player->SetPosition(spawn.attribute("x").as_float(), spawn.attribute("y").as_float());
 
 	return true;
 }

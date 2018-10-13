@@ -93,6 +93,9 @@ void j1Collision::DebugDraw()
 		case COLLIDER_PLAYER: // green
 			App->render->DrawQuad(colliders[i]->rect, 0, 255, 0, alpha, true);
 			break;
+		case COLLIDER_TRIGGER: //yellow
+			App->render->DrawQuad(colliders[i]->rect, 255, 255, 0, alpha, true);
+			break;
 		default:
 			break;
 		}
@@ -142,17 +145,18 @@ bool Collider::CheckCollision(const SDL_Rect& r) const
 		&& (r.y < rect.y + rect.h) && (rect.y < r.y + r.h));
 }
 
+// Looks for closest collider on right side and returns distance to it.
 float j1Collision::DistanceToRightCollider(Collider* coll) const
 {
 	int distance = 999;
 
 	for (uint i = 0; i < max_colliders; i++) 
 	{
-		if (colliders[i] != nullptr && colliders[i] != coll && colliders[i]->type != COLLIDER_TRIGGER && colliders[i]->type != COLLIDER_PLATFORM)
+		if (colliders[i] != nullptr && colliders[i] != coll && colliders[i]->type != COLLIDER_TRIGGER && colliders[i]->type != COLLIDER_PLATFORM) //check for valid collider
 		{
-			if (colliders[i]->rect.x > coll->rect.x)
+			if (colliders[i]->rect.x > coll->rect.x) //check for right side of received collider
 			{
-				if (coll->rect.y < colliders[i]->rect.y + colliders[i]->rect.h  && coll->rect.y + coll->rect.h > colliders[i]->rect.y)
+				if (coll->rect.y < colliders[i]->rect.y + colliders[i]->rect.h  && coll->rect.y + coll->rect.h > colliders[i]->rect.y) //possible collision
 				{
 					int new_distance = colliders[i]->rect.x - (coll->rect.x + coll->rect.w);
 					if (new_distance < distance)
