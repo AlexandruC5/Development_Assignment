@@ -3,6 +3,10 @@
 ### Version of the game
 Salty the Slime v.0.0.1
 
+### Description
+Platformer game made for Development subject. 
+Be a salty slime jumping around the levels.
+
 ### Controls
 	Game Controls:
 	
@@ -71,30 +75,34 @@ We do not own any of the sprites, tilesets, music or fx used in this game. Autho
 
 Sprites: 
 	
-Slime by Yanfly http://yanfly.moe/
-Downloaded from http://yanfly.moe/wp-content/uploads/2015/12/Slime1_1.png
+Slime by [Yanfly]http://yanfly.moe/
+Downloaded from [here]http://yanfly.moe/wp-content/uploads/2015/12/Slime1_1.png
 
 Tilesets: 
 
-FREE PLATFORMER GAME TILESET by Zuhria Alfitra https://www.gameart2d.com/
+FREE PLATFORMER GAME TILESET by [Zuhria Alfitra]https://www.gameart2d.com/
 
-Downloaded from https://www.gameart2d.com/free-platformer-game-tileset.html
+Downloaded from [here]https://www.gameart2d.com/free-platformer-game-tileset.html
 	
-FREE DESERT PLATFORMER TILESET by Zuhria Alfitra https://www.gameart2d.com/
+FREE DESERT PLATFORMER TILESET by [Zuhria Alfitra]https://www.gameart2d.com/
 
-Downloaded from https://www.gameart2d.com/free-desert-platformer-tileset.html
+Downloaded from [here]https://www.gameart2d.com/free-desert-platformer-tileset.html
 
 Music: 
 
-Forest Song by FoolBoyMedia https://freesound.org/people/FoolBoyMedia/
+Forest Song by [FoolBoyMedia]https://freesound.org/people/FoolBoyMedia/
 
-Downloaded from https://freesound.org/people/FoolBoyMedia/sounds/219017/
+Downloaded from [here]https://freesound.org/people/FoolBoyMedia/sounds/219017/
+
+Desert Song by [Bird_man]https://freesound.org/people/Bird_man/
+
+Downloaded from [here]https://freesound.org/people/Bird_man/sounds/401795/
 
 SFX: 
 
-Jump (Retro video game SFX) by cabled_mess https://freesound.org/people/cabled_mess/
+Jump (Retro video game SFX) by [cabled_mess]https://freesound.org/people/cabled_mess/
 
-Downloaded from: https://freesound.org/people/cabled_mess/sounds/350900/
+Downloaded from [here]https://freesound.org/people/cabled_mess/sounds/350900/
 
 
 ### License
