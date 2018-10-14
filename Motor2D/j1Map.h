@@ -53,6 +53,14 @@ enum MapTypes
 	MAPTYPE_STAGGERED
 };
 
+struct BackgroundData
+{
+	SDL_Texture*		background_img;
+	SDL_Rect			background_rect;
+	float				background_offset;
+	float				background_speed;
+};
+
 struct MapData
 {
 	int					width;
@@ -64,11 +72,9 @@ struct MapData
 	p2List<TileSet*>	tilesets;
 	p2List<MapLayer*>	layers;
 	p2List<Collider*>	colliders;
+	BackgroundData      background_1;
+	BackgroundData      background_2;
 
-	SDL_Texture*		background_img;
-	SDL_Rect			background_rect;
-	float				background_offset;
-	float				background_speed;
 };
 
 class j1Map : public j1Module
@@ -103,6 +109,7 @@ private:
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
 	bool LoadCollisionLayer(pugi::xml_node & node);
 	bool LoadUtilsLayer(pugi::xml_node & node);
+	void InfiniteBackground();
 	TileSet* GetTileset(uint id) const;
 
 public:

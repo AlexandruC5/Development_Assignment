@@ -8,6 +8,7 @@
 #include "j1Map.h"
 #include "j1Player.h"
 #include "j1SwapScene.h"
+#include "j1Window.h"
 
 j1Map::j1Map() : j1Module(), map_loaded(false)
 {
@@ -33,15 +34,16 @@ void j1Map::Draw()
 {
 	if(map_loaded == false)
 		return;
+	
+	InfiniteBackground();
+
+	App->render->Blit(data.background_1.background_img, data.background_1.background_rect.x, data.background_1.background_offset, NULL, data.background_1.background_speed);
+	App->render->Blit(data.background_2.background_img, data.background_2.background_rect.x, data.background_2.background_offset, NULL, data.background_2.background_speed);
 
 	p2List_item<MapLayer*>* layer;
 	layer = data.layers.start;
 	p2List_item<TileSet*>* tileset;
 	tileset = data.tilesets.start;
-
-	App->render->Blit(data.background_img, 0, data.background_offset, NULL, data.background_speed);
-	App->render->Blit(data.background_img, data.background_rect.w, data.background_offset, NULL, data.background_speed);
-	App->render->Blit(data.background_img, 2*(data.background_rect.w), data.background_offset, NULL, data.background_speed);
 
 	while (layer != NULL)
 	{
@@ -120,8 +122,11 @@ bool j1Map::CleanUp()
 	data.colliders.clear();
 
 	//Remove background image
-	App->tex->UnLoad(data.background_img);
-	data.background_img = nullptr;
+	App->tex->UnLoad(data.background_1.background_img);
+	data.background_1.background_img = nullptr;
+
+	App->tex->UnLoad(data.background_2.background_img);
+	data.background_2.background_img = nullptr;
 
 	// Clean up the pugui tree
 	map_file.reset();
@@ -187,11 +192,11 @@ bool j1Map::Load(const char* file_name)
 
 	//Load image layer
 	pugi::xml_node background = map_file.child("map").child("imagelayer");
-	data.background_img = App->tex->Load(PATH(folder.GetString(), background.child("image").attribute("source").as_string()));
-	data.background_rect = { 0,0,background.child("image").attribute("width").as_int(), background.child("image").attribute("height").as_int() };
-	data.background_offset = background.attribute("offsety").as_float();
-	data.background_speed = map_file.child("map").child("imagelayer").child("properties").find_child_by_attribute("name","speed").attribute("value").as_float();
-
+	data.background_1.background_img = data.background_2.background_img = App->tex->Load(PATH(folder.GetString(), background.child("image").attribute("source").as_string()));
+	data.background_1.background_rect = data.background_2.background_rect = { 0,0,background.child("image").attribute("width").as_int(), background.child("image").attribute("height").as_int() };
+	data.background_1.background_offset = data.background_2.background_offset = background.attribute("offsety").as_float();
+	data.background_1.background_speed = data.background_2.background_speed = map_file.child("map").child("imagelayer").child("properties").find_child_by_attribute("name","speed").attribute("value").as_float();
+	data.background_2.background_rect.x = data.background_2.background_rect.w;
 	//Load Utils
 	pugi::xml_node utils = map_file.child("map").find_child_by_attribute("name", "utils");
 	LoadUtilsLayer(utils);
@@ -410,6 +415,32 @@ bool j1Map::LoadUtilsLayer(pugi::xml_node & node)
 	App->player->SetPosition(spawn.attribute("x").as_float(), spawn.attribute("y").as_float());
 
 	return true;
+}
+
+void j1Map::InfiniteBackground()
+{
+	if (data.background_2.background_rect.x + data.background_2.background_rect.w < -App->render->camera.body.x * data.background_2.background_speed && App->render->camera.velocity.x < 0)
+	{
+		data.background_2.background_rect.x = data.background_1.background_rect.x + data.background_2.background_rect.w;
+	}
+	else
+	{
+		if (data.background_2.background_rect.x >(-App->render->camera.body.x * data.background_2.background_speed) + App->render->camera.body.w  && App->render->camera.velocity.x > 0)
+		{
+			data.background_2.background_rect.x = data.background_1.background_rect.x - data.background_2.background_rect.w;
+		}
+	}
+	if (data.background_1.background_rect.x + data.background_1.background_rect.w < -App->render->camera.body.x * data.background_1.background_speed && App->render->camera.velocity.x < 0)
+	{
+		data.background_1.background_rect.x = data.background_2.background_rect.x + data.background_1.background_rect.w;
+	}
+	else
+	{
+		if (data.background_1.background_rect.x >(-App->render->camera.body.x * data.background_1.background_speed) + App->render->camera.body.w  && App->render->camera.velocity.x > 0)
+		{
+			data.background_1.background_rect.x = data.background_2.background_rect.x - data.background_1.background_rect.w;
+		}
+	}
 }
 
 TileSet* j1Map::GetTileset(uint id) const
