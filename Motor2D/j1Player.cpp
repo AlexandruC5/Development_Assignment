@@ -84,10 +84,8 @@ bool j1Player::PreUpdate()
 	case CHARGE: ChargingUpdate();
 		break;
 	case WIN: 
-	{
 		target_speed.x = 0.0F;
 		animation_frame = animations[WIN].GetCurrentFrame();
-	}
 		break;
 	case GOD: GodUpdate();
 		break;
@@ -159,8 +157,6 @@ void j1Player::IdleUpdate()
 	}
 		
 	if (!is_grounded) state = JUMPING;
-
-
 }
 
 void j1Player::MovingUpdate() 
@@ -215,12 +211,12 @@ void j1Player::JumpingUpdate()
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
-		target_speed.x = movement_speed;
+		target_speed.x = movement_speed + boost_x;
 		flipX = true;
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
-		target_speed.x = -movement_speed;
+		target_speed.x = -movement_speed - boost_x;
 		flipX = false;
 	}
 
@@ -231,6 +227,7 @@ void j1Player::JumpingUpdate()
 
 		target_speed.y = 0.0F;
 		velocity.y = 0.0F;
+		boost_x = 0.0F;
 	}
 }
 
@@ -242,14 +239,20 @@ void j1Player::ChargingUpdate()
 		charge_value += charge_increment;
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
 	{
-		Jump(charge_value);
+		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) 
+		{
+			boost_x = charge_value;
+			Jump(charge_value/2);
+		}
+		else Jump(charge_value);
 	}
 	else if (!is_grounded) state = JUMPING;
 }
 
-void j1Player::Jump(const float &boost)
+void j1Player::Jump(const float &boost_y, const float &boost_x)
 {
-	target_speed.y = -jump_speed - boost;
+	target_speed.y = -jump_speed - boost_y;
+	velocity.x = boost_x;
 	is_grounded = false;
 	state = JUMPING;
 	charge_value = 0;

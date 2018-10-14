@@ -38,6 +38,7 @@ private:
 	//charged jump variables
 	float charge_value = 0.0F;
 	float charged_time = 0.0F;
+	float boost_x = 0.0F;
 	float max_charge = 0.0F;
 	float charge_increment = 0.0F;
 
@@ -53,7 +54,7 @@ private:
 	void JumpingUpdate();
 	void ChargingUpdate();
 	void GodUpdate();
-	void Jump(const float &boost);
+	void Jump(const float &boost_y, const float &boost_x = 0.0F);
 
 public:
 	Collider* collider;

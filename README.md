@@ -58,7 +58,8 @@ Alejandro París Gómez
 ### Repository link
 https://github.com/AxelAlavedra/Development_Assignment
 
-### Innovation 
+### Innovations
+
 Implemented a method to only render the tiles inside the camera.
 Implemented infinite background scrolling, two backgrounds move one right before the other, 
 when one exits the camera it's repositioned behind the other, creating the effect of infinite parallax.
@@ -76,19 +77,23 @@ Downloaded from http://yanfly.moe/wp-content/uploads/2015/12/Slime1_1.png
 Tilesets: 
 
 FREE PLATFORMER GAME TILESET by Zuhria Alfitra https://www.gameart2d.com/
+
 Downloaded from https://www.gameart2d.com/free-platformer-game-tileset.html
 	
 FREE DESERT PLATFORMER TILESET by Zuhria Alfitra https://www.gameart2d.com/
+
 Downloaded from https://www.gameart2d.com/free-desert-platformer-tileset.html
 
 Music: 
 
 Forest Song by FoolBoyMedia https://freesound.org/people/FoolBoyMedia/
+
 Downloaded from https://freesound.org/people/FoolBoyMedia/sounds/219017/
 
 SFX: 
 
 Jump (Retro video game SFX) by cabled_mess https://freesound.org/people/cabled_mess/
+
 Downloaded from: https://freesound.org/people/cabled_mess/sounds/350900/
 
 
