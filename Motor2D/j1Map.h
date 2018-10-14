@@ -97,6 +97,10 @@ public:
 
 	// Load new map
 	bool Load(const char* path);
+
+	bool Save(pugi::xml_node&) const;
+
+	bool Load(pugi::xml_node&);
 	
 	//Translates x,y coordinates from map positions to world positions
 	iPoint MapToWorld(int x, int y) const;

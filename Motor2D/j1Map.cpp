@@ -231,6 +231,20 @@ bool j1Map::Load(const char* file_name)
 	return ret;
 }
 
+bool j1Map::Save(pugi::xml_node &node) const
+{
+	node.append_child("background_1").append_attribute("x") = data.background_1.background_rect.x;
+	node.append_child("background_2").append_attribute("x") = data.background_2.background_rect.x;
+	return true;
+}
+
+bool j1Map::Load(pugi::xml_node &node)
+{
+	data.background_1.background_rect.x = node.child("background_1").attribute("x").as_int();
+	data.background_2.background_rect.x = node.child("background_2").attribute("x").as_int();
+	return true;
+}
+
 // Load map general properties
 bool j1Map::LoadMap()
 {
