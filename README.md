@@ -1,18 +1,36 @@
-# Development_Assignment
+# Salty the Slime
 
 ### Controls
--A/D: Horizontal movement.
+	-A/D: Horizontal movement.
 
--Space bar: Jump
+	-Space bar: Jump
 
--Hold Spacebar: Charged jump.
+	-Hold Spacebar: Charged jump.
+	
+	Debug Keys:
+	
+	-F1: Load first scene.
+
+	-F2: Reload current scene.
+
+	-F3: Load next scene.
+
+	-F5: Save.
+
+	-F6: Load.
+
+	-F9: Colliders Draw.
+
+	-F10: God Mode.
+
 
 When in God Mode:
--Space bar: Fly up.
+	
+	-Space bar: Fly up.
 
--S: Fly down.
+	-S: Fly down.
 
--A/D: Horizontal movement.
+	-A/D: Horizontal movement.
 
 ### Authors
 -Axel Alavedra Cabello
@@ -26,47 +44,37 @@ When in God Mode:
 ### Repository link
 https://github.com/AxelAlavedra/Development_Assignment
 
-### Debug Keys
--F1: Load first scene.
+### Authors
+Implemented a method to only render the tiles inside the camera.
+Implemented infinite background scrolling, two backgrounds move one right before the other, 
+when one exits the camera from the left, it gets placed behind the other background.
 
--F2: Reload current scene.
-
--F3: Load next scene.
-
--F5: Save.
-
--F6: Load.
-
--F9: Colliders Draw.
-
--F10: God Mode.
-
-### Disclosure
+### Credits
 
 We do not own any of the sprites, tilesets, music or fx used in this game. Authors credited below
 
 -Sprites: 
 	
-	-Slime by Yanfly http://yanfly.moe/
-	Downloaded from http://yanfly.moe/wp-content/uploads/2015/12/Slime1_1.png
+-Slime by Yanfly http://yanfly.moe/
+Downloaded from http://yanfly.moe/wp-content/uploads/2015/12/Slime1_1.png
 
 -Tilesets: 
 
-	-FREE PLATFORMER GAME TILESET by Zuhria Alfitra https://www.gameart2d.com/
-	Downloaded from https://www.gameart2d.com/free-platformer-game-tileset.html
+-FREE PLATFORMER GAME TILESET by Zuhria Alfitra https://www.gameart2d.com/
+Downloaded from https://www.gameart2d.com/free-platformer-game-tileset.html
 	
-	-FREE DESERT PLATFORMER TILESET by Zuhria Alfitra https://www.gameart2d.com/
-	Downloaded from https://www.gameart2d.com/free-desert-platformer-tileset.html
+-FREE DESERT PLATFORMER TILESET by Zuhria Alfitra https://www.gameart2d.com/
+Downloaded from https://www.gameart2d.com/free-desert-platformer-tileset.html
 
 -Music: 
 
-	-Forest Song by FoolBoyMedia https://freesound.org/people/FoolBoyMedia/
-	Downloaded from https://freesound.org/people/FoolBoyMedia/sounds/219017/
+-Forest Song by FoolBoyMedia https://freesound.org/people/FoolBoyMedia/
+Downloaded from https://freesound.org/people/FoolBoyMedia/sounds/219017/
 
 -SFX: 
 
-	-Jump (Retro video game SFX) by cabled_mess https://freesound.org/people/cabled_mess/
-	Downloaded from: https://freesound.org/people/cabled_mess/sounds/350900/
+-Jump (Retro video game SFX) by cabled_mess https://freesound.org/people/cabled_mess/
+Downloaded from: https://freesound.org/people/cabled_mess/sounds/350900/
 
 
 ### License
