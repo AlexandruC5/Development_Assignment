@@ -27,10 +27,11 @@
     <music>music_forest.ogg</music>
   </scene_forest>
   
-  <scene_mountain>
+  <scene_desert>
     <map_file>lvl_2.tmx</map_file>
     <music>music_desert.ogg</music>
-  </scene_mountain>
+  </scene_desert>
+
 
   <player>
     <sprite>player_spritesheet.png</sprite>

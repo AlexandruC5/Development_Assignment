@@ -10,7 +10,7 @@
 #include "j1Audio.h"
 #include "j1Scene.h"
 #include "j1SceneForest.h"
-#include "j1SceneMountain.h"
+#include "j1SceneDesert.h"
 #include "j1Player.h"
 #include "j1Collision.h"
 #include "j1Map.h"
@@ -29,7 +29,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	tex = new j1Textures();
 	audio = new j1Audio();
 	scene_forest = new j1SceneForest();
-	scene_mountain = new j1SceneMountain();
+	scene_desert = new j1SceneDesert();
 	map = new j1Map();
 	player = new j1Player();
 	swap_scene = new j1SwapScene();
@@ -42,7 +42,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(tex, true);
 	AddModule(audio, true);
 	AddModule(scene_forest, true);
-	AddModule(scene_mountain, false);
+	AddModule(scene_desert, false);
 	AddModule(map, true);
 	AddModule(swap_scene, true);
 	AddModule(player, true);

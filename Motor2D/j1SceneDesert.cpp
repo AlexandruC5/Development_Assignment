@@ -8,21 +8,21 @@
 #include "j1SwapScene.h"
 #include "j1SceneForest.h"
 #include "j1Audio.h"
-#include "j1SceneMountain.h"
+#include "j1SceneDesert.h"
 #include "j1Collision.h"
 
 
-j1SceneMountain::j1SceneMountain()
+j1SceneDesert::j1SceneDesert()
 {
-	name.create("scene_mountain");
+	name.create("scene_desert");
 }
 
 // Destructor
-j1SceneMountain::~j1SceneMountain()
+j1SceneDesert::~j1SceneDesert()
 {}
 
 // Called before render is available
-bool j1SceneMountain::Awake(pugi::xml_node& conf)
+bool j1SceneDesert::Awake(pugi::xml_node& conf)
 {
 	LOG("Loading Scene");
 	map_file = conf.child("map_file").child_value();
@@ -34,7 +34,7 @@ bool j1SceneMountain::Awake(pugi::xml_node& conf)
 }
 
 // Called each loop iteration
-bool j1SceneMountain::Update(float dt)
+bool j1SceneDesert::Update(float dt)
 {
 	j1Scene::Update(dt);
 
@@ -46,7 +46,7 @@ bool j1SceneMountain::Update(float dt)
 	return true;
 }
 
-bool j1SceneMountain::OnCollision(Collider* c1, Collider* c2)
+bool j1SceneDesert::OnCollision(Collider* c1, Collider* c2)
 {
 	if (c2->type == COLLIDER_PLAYER && App->player->state != WIN)
 	{

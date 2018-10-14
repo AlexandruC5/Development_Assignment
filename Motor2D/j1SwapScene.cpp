@@ -4,7 +4,7 @@
 #include "j1Render.h"
 #include "j1Scene.h"
 #include "j1SceneForest.h"
-#include "j1SceneMountain.h"
+#include "j1SceneDesert.h"
 #include "j1Map.h"
 #include "j1SwapScene.h"
 
@@ -105,7 +105,7 @@ bool j1SwapScene::Load(pugi::xml_node &node)
 	{
 		current_scene->Deactivate();
 		if (scene_name == "scene_forest") App->scene_forest->Activate();
-		else App->scene_mountain->Activate();
+		else App->scene_desert->Activate();
 	}
 	return true;
 }

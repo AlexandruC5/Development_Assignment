@@ -186,8 +186,7 @@ void j1Player::MovingUpdate()
 			state = CHARGE;
 		}
 	}
-
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
+	else if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
 	{
 		target_speed.y = -jump_speed;
 		is_grounded = false;
@@ -208,14 +207,17 @@ void j1Player::JumpingUpdate()
 	if (App->input->GetKey(SDL_SCANCODE_D) == App->input->GetKey(SDL_SCANCODE_A))
 	{
 		target_speed.x = 0.0F;
+		boost_x = 0.0F;
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
+		if (target_speed.x < 0.0F) boost_x = 0.0F;
 		target_speed.x = movement_speed + boost_x;
 		flipX = true;
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
+		if (target_speed.x > 0.0F) boost_x = 0.0F;
 		target_speed.x = -movement_speed - boost_x;
 		flipX = false;
 	}
@@ -242,17 +244,16 @@ void j1Player::ChargingUpdate()
 		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) 
 		{
 			boost_x = charge_value;
-			Jump(charge_value/2);
+			Jump(charge_value/2.0F);
 		}
 		else Jump(charge_value);
 	}
 	else if (!is_grounded) state = JUMPING;
 }
 
-void j1Player::Jump(const float &boost_y, const float &boost_x)
+void j1Player::Jump(const float &boost_y)
 {
 	target_speed.y = -jump_speed - boost_y;
-	velocity.x = boost_x;
 	is_grounded = false;
 	state = JUMPING;
 	charge_value = 0;
@@ -328,7 +329,11 @@ void j1Player::StepY()
 {
 	if (state != GOD) 
 	{
-		if (velocity.y < 0) velocity.y = MAX(velocity.y, App->collision->DistanceToTopCollider(collider));
+		if (velocity.y < 0) 
+		{
+			velocity.y = MAX(velocity.y, App->collision->DistanceToTopCollider(collider));
+			if (velocity.y == 0) target_speed.y = 0.0F;
+		}
 		else
 		{
 			float distance = App->collision->DistanceToBottomCollider(collider);
