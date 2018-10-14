@@ -1,43 +1,50 @@
 # Salty the Slime
 
 ### Controls
-	-A/D: Horizontal movement.
+	Game Controls:
+	
+	A/D: Horizontal movement.
 
-	-Space bar: Jump
+	Space bar: Jump
 
-	-Hold Spacebar: Charged jump.
+	Hold Spacebar: Charged jump.
+	
+	When in God Mode:
+	
+	Space bar: Fly up.
+
+	S: Fly down.
 	
 	Debug Keys:
 	
-	-F1: Load first scene.
+	F1: Load first scene.
 
-	-F2: Reload current scene.
+	F2: Reload current scene.
 
-	-F3: Load next scene.
+	F3: Load next scene.
 
-	-F5: Save.
+	F5: Save.
 
-	-F6: Load.
+	F6: Load.
 
-	-F9: Colliders Draw.
+	F9: Colliders Draw.
 
-	-F10: God Mode.
+	F10: God Mode.
 
-
-When in God Mode:
+	+/-: Increase/Decrease music volume.
 	
-	-Space bar: Fly up.
+	SHIFT+(+/-): Increase/Decrease fx volume.
 
-	-S: Fly down.
+
 
 	-A/D: Horizontal movement.
 
 ### Authors
--Axel Alavedra Cabello
+Axel Alavedra Cabello
 
 [Github account](https://github.com/AxelAlavedra)
 
--Alejandro París Gómez
+Alejandro París Gómez
 
 [Github account](https://github.com/AlejandroParis)
 
@@ -53,27 +60,27 @@ when one exits the camera from the left, it gets placed behind the other backgro
 
 We do not own any of the sprites, tilesets, music or fx used in this game. Authors credited below
 
--Sprites: 
+Sprites: 
 	
--Slime by Yanfly http://yanfly.moe/
+Slime by Yanfly http://yanfly.moe/
 Downloaded from http://yanfly.moe/wp-content/uploads/2015/12/Slime1_1.png
 
--Tilesets: 
+Tilesets: 
 
--FREE PLATFORMER GAME TILESET by Zuhria Alfitra https://www.gameart2d.com/
+FREE PLATFORMER GAME TILESET by Zuhria Alfitra https://www.gameart2d.com/
 Downloaded from https://www.gameart2d.com/free-platformer-game-tileset.html
 	
--FREE DESERT PLATFORMER TILESET by Zuhria Alfitra https://www.gameart2d.com/
+FREE DESERT PLATFORMER TILESET by Zuhria Alfitra https://www.gameart2d.com/
 Downloaded from https://www.gameart2d.com/free-desert-platformer-tileset.html
 
--Music: 
+Music: 
 
--Forest Song by FoolBoyMedia https://freesound.org/people/FoolBoyMedia/
+Forest Song by FoolBoyMedia https://freesound.org/people/FoolBoyMedia/
 Downloaded from https://freesound.org/people/FoolBoyMedia/sounds/219017/
 
--SFX: 
+SFX: 
 
--Jump (Retro video game SFX) by cabled_mess https://freesound.org/people/cabled_mess/
+Jump (Retro video game SFX) by cabled_mess https://freesound.org/people/cabled_mess/
 Downloaded from: https://freesound.org/people/cabled_mess/sounds/350900/
 
 
