@@ -5,13 +5,20 @@
 -Spacebar: Jump
 -Hold Spacebar: Charged jump.
 
-### Autors
--Axel Alavedra Cabello
+When in God Mode:
+-Spacebar: Fly up.
+-S: Fly down.
+-A/D: Horizontal movement.
+
+### Authors
+Axel Alavedra Cabello
+[Github account](https://github.com/AxelAlavedra)
 
 -Alejandro París Gómez
+[Github account](https://github.com/AlejandroParis)
 
 ### Repository link
--https://github.com/AWDaM/Assignment-1_Game-dev
+https://github.com/AxelAlavedra/Development_Assignment
 
 ### Debug Keys
 -F1: Load first scene.
@@ -19,7 +26,8 @@
 -F3: Load next scene.
 -F5: Save.
 -F6: Load.
--F9: Colliders draw.
+-F9: Colliders Draw.
+-F10: God Mode.
 
 ### License
 

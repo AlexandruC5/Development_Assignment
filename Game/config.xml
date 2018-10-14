@@ -38,7 +38,7 @@
     <movement_speed value="10.0F"/>
     <jump_speed value="40.0F"/>
     <fall_speed value="40.0F"/>
-    <threshold value="0.1F"/>
+    <threshold value="0.5F"/>
     <acceleration value="0.1F"/>
     <gravity value="2.0F"/>
     <charged_jump time="4.0F" max_charge="20.0F" charge_increment="0.5F"/>
