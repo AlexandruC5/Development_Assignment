@@ -29,7 +29,7 @@
   
   <scene_mountain>
     <map_file>lvl_2.tmx</map_file>
-    <music>music_forest.ogg</music>
+    <music>music_desert.ogg</music>
   </scene_mountain>
 
   <player>
