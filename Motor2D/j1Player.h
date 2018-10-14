@@ -54,7 +54,7 @@ private:
 	void JumpingUpdate();
 	void ChargingUpdate();
 	void GodUpdate();
-	void Jump(const float &boost_y, const float &boost_x = 0.0F);
+	void Jump(const float &boost_y);
 
 public:
 	Collider* collider;
