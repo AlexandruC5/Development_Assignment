@@ -48,6 +48,13 @@ private:
 
 	void StepX();
 	void StepY();
+	void IdleUpdate();
+	void MovingUpdate();
+	void JumpingUpdate();
+	void ChargingUpdate();
+	void GodUpdate();
+	void Jump(const float &boost);
+
 public:
 	Collider* collider;
 	fPoint position = { 0.0F, 0.0F };
@@ -64,12 +71,6 @@ public:
 	bool CleanUp();
 	bool Load(pugi::xml_node&);
 	bool Save(pugi::xml_node&) const;
-
-	void IdleUpdate();
-	void MovingUpdate();
-	void JumpingUpdate();
-	void ChargingUpdate();
-	void Jump(const float &boost);
 
 	void CheckDeath();
 	void ResetPlayer();

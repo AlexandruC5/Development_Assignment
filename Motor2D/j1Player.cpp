@@ -89,24 +89,8 @@ bool j1Player::PreUpdate()
 		animation_frame = animations[WIN].GetCurrentFrame();
 	}
 		break;
-	case GOD:
-	{
-		animation_frame = animations[JUMPING].GetCurrentFrame();
-		if (App->input->GetKey(SDL_SCANCODE_D) == App->input->GetKey(SDL_SCANCODE_A)) target_speed.x = 0.0F;
-		else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
-		{
-			target_speed.x = movement_speed;
-			flipX = true;
-		}
-		else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
-		{
-			target_speed.x = -movement_speed;
-			flipX = false;
-		}
-		if (App->input->GetKey(SDL_SCANCODE_SPACE) == App->input->GetKey(SDL_SCANCODE_S)) target_speed.y = 0.0F;
-		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) target_speed.y = -movement_speed;
-		else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) target_speed.y = movement_speed;
-	}
+	case GOD: GodUpdate();
+		break;
 	default:
 		break;
 	}
@@ -120,7 +104,8 @@ bool j1Player::Update(float dt)
 {
 	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
 	{
-		state = GOD;
+		if(state != GOD) state = GOD;
+		else state = IDLE;
 	}
 
 	StepY();
@@ -221,7 +206,8 @@ void j1Player::MovingUpdate()
 void j1Player::JumpingUpdate() 
 {
 	target_speed.y += gravity;
-	if (target_speed.y > fall_speed) target_speed.y = fall_speed;
+	if (target_speed.y > fall_speed) target_speed.y = fall_speed; //limit falling speed
+
 	animation_frame = animations[JUMPING].GetCurrentFrame();
 	if (App->input->GetKey(SDL_SCANCODE_D) == App->input->GetKey(SDL_SCANCODE_A))
 	{
@@ -364,4 +350,23 @@ void j1Player::SetPosition(const float &x, const float &y)
 {
 	position = { x,y };
 	if(collider) collider->SetPos(position.x, position.y);
+}
+
+void j1Player::GodUpdate()
+{
+	animation_frame = animations[JUMPING].GetCurrentFrame();
+	if (App->input->GetKey(SDL_SCANCODE_D) == App->input->GetKey(SDL_SCANCODE_A)) target_speed.x = 0.0F;
+	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	{
+		target_speed.x = movement_speed;
+		flipX = true;
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	{
+		target_speed.x = -movement_speed;
+		flipX = false;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_W) == App->input->GetKey(SDL_SCANCODE_S)) target_speed.y = 0.0F;
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) target_speed.y = -movement_speed;
+	else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) target_speed.y = movement_speed;
 }

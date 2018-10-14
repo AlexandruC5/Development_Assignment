@@ -11,9 +11,9 @@
 	
 	When in God Mode:
 	
-	Space bar: Fly up.
-
-	S: Fly down.
+	W/S: Vertical movement.
+	
+	A/D: Horizontal movement.
 	
 	Debug Keys:
 	
@@ -35,10 +35,6 @@
 	
 	SHIFT+(+/-): Increase/Decrease fx volume.
 
-
-
-	-A/D: Horizontal movement.
-
 ### Authors
 Axel Alavedra Cabello
 
@@ -54,7 +50,7 @@ https://github.com/AxelAlavedra/Development_Assignment
 ### Authors
 Implemented a method to only render the tiles inside the camera.
 Implemented infinite background scrolling, two backgrounds move one right before the other, 
-when one exits the camera from the left, it gets placed behind the other background.
+when one exits the camera it's repositioned behind the other, creating the effect of infinite parallax.
 
 ### Credits
 
