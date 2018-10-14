@@ -14,7 +14,8 @@ enum Player_State {
 	DEAD,
 	CHARGE,
 	WIN,
-	TOTAL_ANIMATIONS
+	TOTAL_ANIMATIONS,
+	GOD,
 };
 class j1Player : public j1Module
 {
@@ -32,7 +33,7 @@ private:
 	
 	int collider_offset = 0;
 	bool flipX = true;
-	bool isGrounded = true;
+	bool is_grounded = true;
 
 	//charged jump variables
 	float charge_value = 0.0F;
