@@ -329,7 +329,11 @@ void j1Player::StepY()
 {
 	if (state != GOD) 
 	{
-		if (velocity.y < 0) velocity.y = MAX(velocity.y, App->collision->DistanceToTopCollider(collider));
+		if (velocity.y < 0) 
+		{
+			velocity.y = MAX(velocity.y, App->collision->DistanceToTopCollider(collider));
+			if (velocity.y == 0) target_speed.y = 0.0F;
+		}
 		else
 		{
 			float distance = App->collision->DistanceToBottomCollider(collider);

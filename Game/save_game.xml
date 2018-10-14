@@ -5,13 +5,13 @@
 	<textures />
 	<audio />
 	<scene_forest />
-	<scene_mountain />
+	<scene_desert />
 	<map />
 	<swap_scene>
-		<scene value="scene_forest" />
+		<scene value="scene_desert" />
 	</swap_scene>
 	<player>
-		<position x="16" y="1201.51575" />
+		<position x="16" y="2096.14624" />
 		<velocity x="0" y="0" />
 		<target_speed x="0" y="0" />
 		<state value="0" />
@@ -20,6 +20,6 @@
 	</player>
 	<collision />
 	<renderer>
-		<camera x="0" y="-527" />
+		<camera x="0" y="-1584" />
 	</renderer>
 </game_state>
