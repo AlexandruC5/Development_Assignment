@@ -1,4 +1,7 @@
-# Salty the Slime
+﻿# Salty the Slime
+
+### Version of the game
+Salty the Slime v.0.0.1
 
 ### Controls
 	Game Controls:
@@ -35,6 +38,14 @@
 	
 	SHIFT+(+/-): Increase/Decrease fx volume.
 
+### Instructions to execute
+
+1.- Download the last release on
+
+2.- Unzip the file
+
+3.- Execute SaltytheSlime.exe
+
 ### Authors
 Axel Alavedra Cabello
 
@@ -48,9 +59,11 @@ Alejandro París Gómez
 https://github.com/AxelAlavedra/Development_Assignment
 
 ### Innovations
+
 Implemented a method to only render the tiles inside the camera.
 Implemented infinite background scrolling, two backgrounds move one right before the other, 
 when one exits the camera it's repositioned behind the other, creating the effect of infinite parallax.
+Charged jump with vertical or diagional force.
 
 ### Credits
 

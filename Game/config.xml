@@ -1,7 +1,7 @@
 <!-- Config file for the game -->
 <config>
   <app>
-    <title>Game Development Testbed</title>
+    <title>Salty the Slime</title>
     <organization>UPC</organization>
     <save_file>save_game.xml</save_file>
   </app>

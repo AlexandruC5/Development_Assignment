@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="70" height="18" tilewidth="128" tileheight="128" nextobjectid="23">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="70" height="18" tilewidth="128" tileheight="128" nextobjectid="30">
  <tileset firstgid="1" name="map2_tileset" tilewidth="128" tileheight="128" tilecount="16" columns="4">
   <image source="map2_tileset.png" width="512" height="512"/>
  </tileset>
@@ -1287,6 +1287,13 @@
   <object id="20" type="1" x="4992" y="907.333" width="893.333" height="36"/>
   <object id="21" type="1" x="5249.33" y="1419.33" width="381.333" height="36"/>
   <object id="22" type="1" x="5248" y="1931.33" width="385.333" height="36"/>
+  <object id="23" type="0" x="2070" y="1832" width="84" height="102"/>
+  <object id="24" type="0" x="2324" y="1828" width="86" height="110"/>
+  <object id="25" type="0" x="2956.67" y="2073.33" width="98" height="116.667"/>
+  <object id="26" type="0" x="3470" y="1436" width="99" height="117"/>
+  <object id="27" type="0" x="5260" y="1306" width="102" height="114"/>
+  <object id="28" type="0" x="7568" y="1823" width="96" height="117"/>
+  <object id="29" type="0" x="8846.67" y="1308" width="96" height="116"/>
  </objectgroup>
  <objectgroup color="#ffff00" name="utils">
   <object id="12" name="spawn" x="232.121" y="2048.48"/>
@@ -3029,7 +3036,7 @@
    <tile gid="0"/>
    <tile gid="19"/>
    <tile gid="0"/>
-   <tile gid="22"/>
+   <tile gid="28"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
