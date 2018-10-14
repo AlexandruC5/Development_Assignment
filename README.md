@@ -75,7 +75,7 @@ We do not own any of the sprites, tilesets, music or fx used in this game. Autho
 
 Sprites: 
 	
-Slime by [Yanfly]http://yanfly.moe/
+Slime by [Yanfly](http://yanfly.moe/)
 Downloaded from [here](http://yanfly.moe/wp-content/uploads/2015/12/Slime1_1.png)
 
 Tilesets: 
