@@ -8,13 +8,13 @@
 	<scene_desert />
 	<map>
 		<background_1 x="0" />
-		<background_2 x="1925" />
+		<background_2 x="1800" />
 	</map>
 	<swap_scene>
-		<scene value="scene_forest" />
+		<scene value="scene_desert" />
 	</swap_scene>
 	<player>
-		<position x="1760.57739" y="1583.35522" />
+		<position x="3634.94141" y="1453.9751" />
 		<velocity x="0" y="0" />
 		<target_speed x="0" y="0" />
 		<state value="0" />
@@ -23,6 +23,6 @@
 	</player>
 	<collision />
 	<renderer>
-		<camera x="-1149" y="-1338" />
+		<camera x="-3309" y="-1150" />
 	</renderer>
 </game_state>

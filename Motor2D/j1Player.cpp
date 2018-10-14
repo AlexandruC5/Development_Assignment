@@ -302,7 +302,7 @@ bool j1Player::Save(pugi::xml_node &player) const
 	target_speed_node.append_attribute("y") = target_speed.y;
 
 	//save state of player
-	player.append_child("state").append_attribute("value") = (int)state;
+	player.append_child("state").append_attribute("value") = state != DEAD ? (int)state : (int)IDLE;
 	player.append_child("is_grounded").append_attribute("value") = is_grounded;
 	player.append_child("flipX").append_attribute("value") = flipX;
 
