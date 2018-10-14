@@ -246,6 +246,9 @@ bool j1Map::Load(pugi::xml_node &node)
 {
 	data.background_1.default_x = node.child("background_1").attribute("x").as_int();
 	data.background_2.default_x = node.child("background_2").attribute("x").as_int();
+	data.background_1.background_rect.x = data.background_1.default_x;
+	data.background_2.background_rect.x = data.background_2.default_x;
+
 	return true;
 }
 

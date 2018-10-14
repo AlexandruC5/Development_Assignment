@@ -6,15 +6,15 @@
 	<audio />
 	<scene_forest />
 	<scene_desert />
+	<swap_scene>
+		<scene value="scene_forest" />
+	</swap_scene>
 	<map>
 		<background_1 x="3850" />
 		<background_2 x="1925" />
 	</map>
-	<swap_scene>
-		<scene value="scene_forest" />
-	</swap_scene>
 	<player>
-		<position x="7754.55713" y="1325.16028" />
+		<position x="7781.29297" y="1325.68921" />
 		<velocity x="0" y="0" />
 		<target_speed x="0" y="0" />
 		<state value="0" />
@@ -23,6 +23,6 @@
 	</player>
 	<collision />
 	<renderer>
-		<camera x="-6995" y="-1116" />
+		<camera x="-7129" y="-1020" />
 	</renderer>
 </game_state>
