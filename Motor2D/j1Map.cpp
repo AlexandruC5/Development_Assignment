@@ -34,23 +34,16 @@ void j1Map::Draw()
 {
 	if(map_loaded == false)
 		return;
+	
+	InfiniteBackground();
+
+	App->render->Blit(data.background_1.background_img, data.background_1.background_rect.x, data.background_1.background_offset, NULL, data.background_1.background_speed);
+	App->render->Blit(data.background_2.background_img, data.background_2.background_rect.x, data.background_2.background_offset, NULL, data.background_2.background_speed);
 
 	p2List_item<MapLayer*>* layer;
 	layer = data.layers.start;
 	p2List_item<TileSet*>* tileset;
 	tileset = data.tilesets.start;
-	
-	if (data.background_2.background_rect.x + data.background_2.background_rect.w < -App->render->camera.body.x * data.background_2.background_speed)
-	{
-		data.background_2.background_rect.x = data.background_1.background_rect.x + data.background_2.background_rect.w;
-	}
-	if (data.background_1.background_rect.x + data.background_1.background_rect.w < -App->render->camera.body.x * data.background_1.background_speed)
-	{
-		data.background_1.background_rect.x = data.background_2.background_rect.x + data.background_1.background_rect.w;
-	}
-	App->render->Blit(data.background_1.background_img, data.background_1.background_rect.x, data.background_1.background_offset, NULL, data.background_1.background_speed);
-	App->render->Blit(data.background_2.background_img, data.background_2.background_rect.x, data.background_2.background_offset, NULL, data.background_2.background_speed);
-	//App->render->Blit(data.background_img, 2*(data.background_rect.w), data.background_offset, NULL, data.background_speed);
 
 	while (layer != NULL)
 	{
@@ -422,6 +415,32 @@ bool j1Map::LoadUtilsLayer(pugi::xml_node & node)
 	App->player->SetPosition(spawn.attribute("x").as_float(), spawn.attribute("y").as_float());
 
 	return true;
+}
+
+void j1Map::InfiniteBackground()
+{
+	if (data.background_2.background_rect.x + data.background_2.background_rect.w < -App->render->camera.body.x * data.background_2.background_speed && App->render->camera.velocity.x < 0)
+	{
+		data.background_2.background_rect.x = data.background_1.background_rect.x + data.background_2.background_rect.w;
+	}
+	else
+	{
+		if (data.background_2.background_rect.x >(-App->render->camera.body.x * data.background_2.background_speed) + App->render->camera.body.w  && App->render->camera.velocity.x > 0)
+		{
+			data.background_2.background_rect.x = data.background_1.background_rect.x - data.background_2.background_rect.w;
+		}
+	}
+	if (data.background_1.background_rect.x + data.background_1.background_rect.w < -App->render->camera.body.x * data.background_1.background_speed && App->render->camera.velocity.x < 0)
+	{
+		data.background_1.background_rect.x = data.background_2.background_rect.x + data.background_1.background_rect.w;
+	}
+	else
+	{
+		if (data.background_1.background_rect.x >(-App->render->camera.body.x * data.background_1.background_speed) + App->render->camera.body.w  && App->render->camera.velocity.x > 0)
+		{
+			data.background_1.background_rect.x = data.background_2.background_rect.x - data.background_1.background_rect.w;
+		}
+	}
 }
 
 TileSet* j1Map::GetTileset(uint id) const

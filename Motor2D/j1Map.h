@@ -109,6 +109,7 @@ private:
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
 	bool LoadCollisionLayer(pugi::xml_node & node);
 	bool LoadUtilsLayer(pugi::xml_node & node);
+	void InfiniteBackground();
 	TileSet* GetTileset(uint id) const;
 
 public:

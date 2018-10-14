@@ -131,8 +131,8 @@ bool j1Scene::PostUpdate()
 		App->render->camera.body.y = 0;
 	if (-App->render->camera.body.x < 0)
 		App->render->camera.body.x = 0;
-	else if (-App->render->camera.body.x > App->map->data.width*App->map->data.tile_width)
-		App->render->camera.body.x = (-App->map->data.width*App->map->data.tile_width) - App->render->camera.body.w;
+	else if (-(App->render->camera.body.x - App->render->camera.body.w) > App->map->data.width*App->map->data.tile_width)
+		App->render->camera.body.x = -(App->map->data.width * App->map->data.tile_width - App->render->camera.body.w);
 
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
