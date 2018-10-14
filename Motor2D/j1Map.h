@@ -59,6 +59,7 @@ struct BackgroundData
 	SDL_Rect			background_rect;
 	float				background_offset;
 	float				background_speed;
+	int					default_x = 0;
 };
 
 struct MapData

@@ -190,10 +190,12 @@ bool j1Map::Load(const char* file_name)
 	//Load image layer
 	pugi::xml_node background = map_file.child("map").child("imagelayer");
 	data.background_1.background_img = data.background_2.background_img = App->tex->Load(PATH(folder.GetString(), background.child("image").attribute("source").as_string()));
-	data.background_1.background_rect = data.background_2.background_rect = { 0,0,background.child("image").attribute("width").as_int(), background.child("image").attribute("height").as_int() };
+	data.background_1.background_rect = data.background_2.background_rect = { data.background_1.default_x,0,background.child("image").attribute("width").as_int(), background.child("image").attribute("height").as_int() };
 	data.background_1.background_offset = data.background_2.background_offset = background.attribute("offsety").as_float();
 	data.background_1.background_speed = data.background_2.background_speed = map_file.child("map").child("imagelayer").child("properties").find_child_by_attribute("name","speed").attribute("value").as_float();
-	data.background_2.background_rect.x = data.background_2.background_rect.w;
+	data.background_2.background_rect.x = data.background_2.default_x == 0? data.background_1.background_rect.w:data.background_2.default_x;
+	data.background_1.default_x = 0;
+	data.background_2.default_x = 0;
 	//Load Utils
 	pugi::xml_node utils = map_file.child("map").find_child_by_attribute("name", "utils");
 	LoadUtilsLayer(utils);
@@ -240,8 +242,8 @@ bool j1Map::Save(pugi::xml_node &node) const
 
 bool j1Map::Load(pugi::xml_node &node)
 {
-	data.background_1.background_rect.x = node.child("background_1").attribute("x").as_int();
-	data.background_2.background_rect.x = node.child("background_2").attribute("x").as_int();
+	data.background_1.default_x = node.child("background_1").attribute("x").as_int();
+	data.background_2.default_x = node.child("background_2").attribute("x").as_int();
 	return true;
 }
 
