@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="70" height="18" tilewidth="128" tileheight="128" nextobjectid="30">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="70" height="18" tilewidth="128" tileheight="128" nextobjectid="31">
  <tileset firstgid="1" name="map2_tileset" tilewidth="128" tileheight="128" tilecount="16" columns="4">
   <image source="map2_tileset.png" width="512" height="512"/>
  </tileset>
@@ -3801,12 +3801,12 @@
  <objectgroup color="#ff0000" name="colliders">
   <object id="1" type="0" x="-254.061" y="-4" width="261.333" height="2288"/>
   <object id="2" type="0" x="-11.3939" y="2189.33" width="4362.67" height="104"/>
-  <object id="5" type="1" x="3201.94" y="1554" width="766" height="36"/>
+  <object id="5" type="1" x="3201.94" y="1546" width="766" height="44"/>
   <object id="7" type="1" x="1921.94" y="1932" width="640" height="36"/>
-  <object id="8" type="0" x="4740.6" y="2194" width="1400.67" height="108"/>
-  <object id="9" type="0" x="6533.33" y="1938.3" width="1658.67" height="358.545"/>
-  <object id="10" type="0" x="8449.76" y="1421.88" width="528.609" height="879.757"/>
-  <object id="11" type="1" x="6912.88" y="1551.18" width="1020.55" height="36"/>
+  <object id="8" type="0" x="4740.6" y="2187.33" width="1400.67" height="114.667"/>
+  <object id="9" type="0" x="6533.33" y="1930.3" width="1658.67" height="366.545"/>
+  <object id="10" type="0" x="8449.76" y="1416.55" width="528.609" height="885.09"/>
+  <object id="11" type="1" x="6912.88" y="1547.18" width="1020.55" height="40"/>
   <object id="14" x="8936" y="0" width="144" height="1424"/>
   <object id="16" type="1" x="766" y="1292" width="1534" height="36"/>
   <object id="17" type="1" x="128" y="526" width="892" height="36"/>
@@ -3817,15 +3817,15 @@
   <object id="22" type="1" x="5248" y="1931.33" width="385.333" height="36"/>
   <object id="23" type="0" x="2070" y="1832" width="84" height="100"/>
   <object id="24" type="0" x="2324" y="1828" width="86" height="104.667"/>
-  <object id="25" type="0" x="2956.67" y="2073.33" width="98" height="116.667"/>
-  <object id="26" type="0" x="3470" y="1436" width="99" height="117"/>
-  <object id="27" type="0" x="5260" y="1306" width="102" height="114"/>
+  <object id="25" type="0" x="2956.67" y="2085.33" width="98" height="104.667"/>
+  <object id="26" type="0" x="3470" y="1446.67" width="99" height="106.333"/>
+  <object id="27" type="0" x="5260" y="1316.67" width="102" height="103.333"/>
   <object id="28" type="0" x="7568" y="1823" width="96" height="117"/>
-  <object id="29" type="0" x="8846.67" y="1308" width="96" height="116"/>
+  <object id="29" type="0" x="8846.67" y="1318" width="96" height="106"/>
  </objectgroup>
  <objectgroup color="#ffff00" name="utils">
   <object id="12" name="spawn" x="16" y="2091"/>
-  <object id="13" name="end" x="8557.94" y="864.97" width="354.545" height="542.424"/>
+  <object id="13" name="end" x="8557.94" y="5.9397" width="354.545" height="1401.45"/>
  </objectgroup>
  <imagelayer name="Background" visible="0" offsetx="0" offsety="-700">
   <image source="bg_2.png" width="1800" height="2316"/>
