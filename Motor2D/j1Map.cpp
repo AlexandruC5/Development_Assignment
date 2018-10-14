@@ -121,9 +121,11 @@ bool j1Map::CleanUp()
 	//Remove background image
 	App->tex->UnLoad(data.background_1.background_img);
 	data.background_1.background_img = nullptr;
+	data.background_1.default_x = 0;
 
 	App->tex->UnLoad(data.background_2.background_img);
 	data.background_2.background_img = nullptr;
+	data.background_2.default_x = 0;
 
 	// Clean up the pugui tree
 	map_file.reset();
@@ -244,6 +246,8 @@ bool j1Map::Load(pugi::xml_node &node)
 {
 	data.background_1.default_x = node.child("background_1").attribute("x").as_int();
 	data.background_2.default_x = node.child("background_2").attribute("x").as_int();
+	data.background_1.background_rect.x = data.background_1.default_x;
+	data.background_2.background_rect.x = data.background_2.default_x;
 	return true;
 }
 
