@@ -14,7 +14,7 @@
 		<scene value="scene_forest" />
 	</swap_scene>
 	<player>
-		<position x="7898.45752" y="1325.28577" />
+		<position x="7754.55713" y="1325.16028" />
 		<velocity x="0" y="0" />
 		<target_speed x="0" y="0" />
 		<state value="0" />
@@ -23,6 +23,6 @@
 	</player>
 	<collision />
 	<renderer>
-		<camera x="-7414" y="-1023" />
+		<camera x="-6995" y="-1116" />
 	</renderer>
 </game_state>
