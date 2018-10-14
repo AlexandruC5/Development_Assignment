@@ -93,7 +93,7 @@ bool j1Player::PreUpdate()
 		break;
 	}
 
-	velocity = target_speed * acceleration + velocity * (1 - acceleration);
+	velocity = target_speed * acceleration + velocity * (1 - acceleration); //calculate velocity of this frame
 
 	return true;
 }
@@ -324,8 +324,8 @@ void j1Player::StepX()
 {
 	if (state != GOD)
 	{
-		if (velocity.x > 0) velocity.x = MIN(velocity.x, App->collision->DistanceToRightCollider(collider));
-		else if (velocity.x < 0) velocity.x = MAX(velocity.x, App->collision->DistanceToLeftCollider(collider));
+		if (velocity.x > 0) velocity.x = MIN(velocity.x, App->collision->DistanceToRightCollider(collider)); //movement of the player is min between distance to collider or his velocity
+		else if (velocity.x < 0) velocity.x = MAX(velocity.x, App->collision->DistanceToLeftCollider(collider)); //movement of the player is max between distance to collider or his velocity
 	}
 	if (fabs(velocity.x) < threshold) velocity.x = 0.0F;
 	position.x += velocity.x;
@@ -338,13 +338,13 @@ void j1Player::StepY()
 	{
 		if (velocity.y < 0) 
 		{
-			velocity.y = MAX(velocity.y, App->collision->DistanceToTopCollider(collider));
+			velocity.y = MAX(velocity.y, App->collision->DistanceToTopCollider(collider)); //movement of the player is max between distance to collider or his velocity
 			if (velocity.y == 0) target_speed.y = 0.0F;
 		}
 		else
 		{
 			float distance = App->collision->DistanceToBottomCollider(collider);
-			velocity.y = MIN(velocity.y, distance);
+			velocity.y = MIN(velocity.y, distance); //movement of the player is min between distance to collider or his velocity
 			is_grounded = (distance == 0) ? true : false;
 		}
 	}

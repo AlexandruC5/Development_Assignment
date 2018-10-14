@@ -37,9 +37,6 @@ void j1Map::Draw()
 	
 	InfiniteBackground();
 
-	App->render->Blit(data.background_1.background_img, data.background_1.background_rect.x, data.background_1.background_offset, NULL, data.background_1.background_speed);
-	App->render->Blit(data.background_2.background_img, data.background_2.background_rect.x, data.background_2.background_offset, NULL, data.background_2.background_speed);
-
 	p2List_item<MapLayer*>* layer;
 	layer = data.layers.start;
 	p2List_item<TileSet*>* tileset;
@@ -403,10 +400,10 @@ bool j1Map::LoadUtilsLayer(pugi::xml_node & node)
 {
 	pugi::xml_node end_trigger = node.find_child_by_attribute("name", "end");
 	SDL_Rect temp_trigger;
-	temp_trigger.x = end_trigger.attribute("x").as_float();
-	temp_trigger.y = end_trigger.attribute("y").as_float();
-	temp_trigger.w = end_trigger.attribute("width").as_float();
-	temp_trigger.h = end_trigger.attribute("height").as_float();
+	temp_trigger.x = end_trigger.attribute("x").as_int();
+	temp_trigger.y = end_trigger.attribute("y").as_int();
+	temp_trigger.w = end_trigger.attribute("width").as_int();
+	temp_trigger.h = end_trigger.attribute("height").as_int();
 	data.colliders.add(App->collision->AddCollider(temp_trigger, COLLIDER_TRIGGER, (j1Module*)App->swap_scene->current_scene));
 
 	App->render->camera.body.y = -(App->map->data.height * App->map->data.tile_height - App->render->camera.body.h);
@@ -441,6 +438,9 @@ void j1Map::InfiniteBackground()
 			data.background_1.background_rect.x = data.background_2.background_rect.x - data.background_1.background_rect.w;
 		}
 	}
+
+	App->render->Blit(data.background_1.background_img, data.background_1.background_rect.x, data.background_1.background_offset, NULL, data.background_1.background_speed);
+	App->render->Blit(data.background_2.background_img, data.background_2.background_rect.x, data.background_2.background_offset, NULL, data.background_2.background_speed);
 }
 
 TileSet* j1Map::GetTileset(uint id) const
