@@ -5,21 +5,21 @@
 	<textures />
 	<audio />
 	<scene_forest />
-	<scene2 />
+	<scene_mountain />
 	<map />
 	<swap_scene>
 		<scene value="scene_forest" />
 	</swap_scene>
 	<player>
-		<position x="2805.29541" y="714.350281" />
-		<velocity x="9.97676563" y="0" />
-		<target_speed x="10" y="0" />
-		<state value="2" />
+		<position x="16" y="1201.51575" />
+		<velocity x="0" y="0" />
+		<target_speed x="0" y="0" />
+		<state value="0" />
 		<is_grounded value="true" />
 		<flipX value="true" />
 	</player>
 	<collision />
 	<renderer>
-		<camera x="-1748" y="-259" />
+		<camera x="0" y="-527" />
 	</renderer>
 </game_state>
