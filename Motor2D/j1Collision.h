@@ -76,7 +76,7 @@ private:
 	Collider** colliders = nullptr;
 	Collider* player_collider = nullptr;
 	bool debug = false;
-	int max_colliders = 0;
+	uint max_colliders = 0;
 };
 
 #endif

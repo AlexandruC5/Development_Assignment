@@ -148,7 +148,7 @@ bool Collider::CheckCollision(const SDL_Rect& r) const
 // Looks for closest collider on right side and returns distance to it.
 float j1Collision::DistanceToRightCollider(Collider* coll) const
 {
-	int distance = 999;
+	float distance = 999;
 
 	for (uint i = 0; i < max_colliders; i++) 
 	{
@@ -158,7 +158,7 @@ float j1Collision::DistanceToRightCollider(Collider* coll) const
 			{
 				if (coll->rect.y < colliders[i]->rect.y + colliders[i]->rect.h  && coll->rect.y + coll->rect.h > colliders[i]->rect.y) //possible collision
 				{
-					int new_distance = colliders[i]->rect.x - (coll->rect.x + coll->rect.w);
+					float new_distance = colliders[i]->rect.x - (coll->rect.x + coll->rect.w);
 					if (new_distance < distance)
 					{
 						distance = new_distance;
@@ -172,7 +172,7 @@ float j1Collision::DistanceToRightCollider(Collider* coll) const
 
 float j1Collision::DistanceToLeftCollider(Collider* coll) const
 {
-	int distance = -999;
+	float distance = -999;
 
 	for (uint i = 0; i < max_colliders; i++)
 	{
@@ -182,7 +182,7 @@ float j1Collision::DistanceToLeftCollider(Collider* coll) const
 			{
 				if (coll->rect.y < colliders[i]->rect.y + colliders[i]->rect.h  && coll->rect.y + coll->rect.h > colliders[i]->rect.y)
 				{
-					int new_distance = (colliders[i]->rect.x + colliders[i]->rect.w) - coll->rect.x;
+					float new_distance = (colliders[i]->rect.x + colliders[i]->rect.w) - coll->rect.x;
 					if (new_distance > distance)
 					{
 						distance = new_distance;
@@ -196,7 +196,7 @@ float j1Collision::DistanceToLeftCollider(Collider* coll) const
 
 float j1Collision::DistanceToBottomCollider(Collider* coll) const
 {
-	int distance = 999;
+	float distance = 999;
 
 	for (uint i = 0; i < max_colliders; i++)
 	{
@@ -206,7 +206,7 @@ float j1Collision::DistanceToBottomCollider(Collider* coll) const
 			{
 				if (coll->rect.x < colliders[i]->rect.x + colliders[i]->rect.w  && coll->rect.x + coll->rect.w > colliders[i]->rect.x)
 				{
-					int new_distance = colliders[i]->rect.y - (coll->rect.y + coll->rect.h);
+					float new_distance = colliders[i]->rect.y - (coll->rect.y + coll->rect.h);
 					if (new_distance < distance)
 					{
 						distance = new_distance;
@@ -220,7 +220,7 @@ float j1Collision::DistanceToBottomCollider(Collider* coll) const
 
 float j1Collision::DistanceToTopCollider(Collider* coll) const
 {
-	int distance = -999;
+	float distance = -999;
 
 	for (uint i = 0; i < max_colliders; i++)
 	{
@@ -230,7 +230,7 @@ float j1Collision::DistanceToTopCollider(Collider* coll) const
 			{
 				if (coll->rect.x < colliders[i]->rect.x + colliders[i]->rect.w  && coll->rect.x + coll->rect.w > colliders[i]->rect.x)
 				{
-					int new_distance = (colliders[i]->rect.y + colliders[i]->rect.h) - coll->rect.y;
+					float new_distance = (colliders[i]->rect.y + colliders[i]->rect.h) - coll->rect.y;
 					if (new_distance > distance)
 					{
 						distance = new_distance;

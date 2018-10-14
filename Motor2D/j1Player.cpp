@@ -93,7 +93,7 @@ bool j1Player::PreUpdate()
 		break;
 	}
 
-	velocity = target_speed * acceleration + velocity * (1 - acceleration);
+	velocity = target_speed * acceleration + velocity * (1 - acceleration); //calculate velocity of this frame
 
 	return true;
 }
@@ -153,7 +153,7 @@ void j1Player::IdleUpdate()
 		is_grounded = false;
 		state = JUMPING;
 		charge_value = 0.0F;
-		Jump(0);
+		Jump(0.0F);
 	}
 		
 	if (!is_grounded) state = JUMPING;
@@ -192,7 +192,7 @@ void j1Player::MovingUpdate()
 		is_grounded = false;
 		state = JUMPING;
 		charge_value = 0.0F;
-		Jump(0);
+		Jump(0.0F);
 	}
 
 	if (!is_grounded) state = JUMPING;
@@ -244,11 +244,15 @@ void j1Player::ChargingUpdate()
 		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) 
 		{
 			boost_x = charge_value;
-			Jump(charge_value/2.0F);
+			Jump(charge_value/2.0F); //since we jump diagonal the y jump force is halved
 		}
 		else Jump(charge_value);
 	}
-	else if (!is_grounded) state = JUMPING;
+	else if (!is_grounded)
+	{
+		state = JUMPING;
+		charge_value = 0.0F;
+	}
 }
 
 void j1Player::Jump(const float &boost_y)
@@ -275,7 +279,7 @@ bool j1Player::Load(pugi::xml_node &player)
 	is_grounded = player.child("is_grounded").attribute("value").as_bool();
 	flipX = player.child("flipX").attribute("value").as_bool();
 
-	collider->SetPos(position.x, position.y + collider_offset);
+	collider->SetPos(position.x, position.y + collider_offset); //set collider to loaded position
 
 	return true;
 }
@@ -283,10 +287,12 @@ bool j1Player::Load(pugi::xml_node &player)
 
 bool j1Player::Save(pugi::xml_node &player) const
 {
+	//save position of player
 	pugi::xml_node position_node = player.append_child("position");
 	position_node.append_attribute("x") = position.x;
 	position_node.append_attribute("y") = position.y;
 
+	//save current speed of palyer
 	pugi::xml_node velocity_node = player.append_child("velocity");
 	velocity_node.append_attribute("x") = velocity.x;
 	velocity_node.append_attribute("y") = velocity.y;
@@ -295,6 +301,7 @@ bool j1Player::Save(pugi::xml_node &player) const
 	target_speed_node.append_attribute("x") = target_speed.x;
 	target_speed_node.append_attribute("y") = target_speed.y;
 
+	//save state of player
 	player.append_child("state").append_attribute("value") = (int)state;
 	player.append_child("is_grounded").append_attribute("value") = is_grounded;
 	player.append_child("flipX").append_attribute("value") = flipX;
@@ -317,8 +324,8 @@ void j1Player::StepX()
 {
 	if (state != GOD)
 	{
-		if (velocity.x > 0) velocity.x = MIN(velocity.x, App->collision->DistanceToRightCollider(collider));
-		else if (velocity.x < 0) velocity.x = MAX(velocity.x, App->collision->DistanceToLeftCollider(collider));
+		if (velocity.x > 0) velocity.x = MIN(velocity.x, App->collision->DistanceToRightCollider(collider)); //movement of the player is min between distance to collider or his velocity
+		else if (velocity.x < 0) velocity.x = MAX(velocity.x, App->collision->DistanceToLeftCollider(collider)); //movement of the player is max between distance to collider or his velocity
 	}
 	if (fabs(velocity.x) < threshold) velocity.x = 0.0F;
 	position.x += velocity.x;
@@ -331,13 +338,13 @@ void j1Player::StepY()
 	{
 		if (velocity.y < 0) 
 		{
-			velocity.y = MAX(velocity.y, App->collision->DistanceToTopCollider(collider));
+			velocity.y = MAX(velocity.y, App->collision->DistanceToTopCollider(collider)); //movement of the player is max between distance to collider or his velocity
 			if (velocity.y == 0) target_speed.y = 0.0F;
 		}
 		else
 		{
 			float distance = App->collision->DistanceToBottomCollider(collider);
-			velocity.y = MIN(velocity.y, distance);
+			velocity.y = MIN(velocity.y, distance); //movement of the player is min between distance to collider or his velocity
 			is_grounded = (distance == 0) ? true : false;
 		}
 	}
