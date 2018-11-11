@@ -1,13 +1,13 @@
 <!-- Config file for the game -->
 <config>
-  <app>
+  <app framerate_cap="16">
     <title>Salty the Slime</title>
     <organization>UPC</organization>
     <save_file>save_game.xml</save_file>
   </app>
 	
   <renderer>
-    <vsync value="true"/>
+    <vsync value="false"/>
   </renderer>
 
   <window>
@@ -36,13 +36,13 @@
   <player>
     <sprite>player_spritesheet.png</sprite>
     <folder>textures</folder>
-    <movement_speed value="10.0F"/>
-    <jump_speed value="40.0F"/>
-    <fall_speed value="40.0F"/>
-    <threshold value="0.5F"/>
-    <acceleration value="0.1F"/>
-    <gravity value="2.0F"/>
-    <charged_jump time="4.0F" max_charge="20.0F" charge_increment="0.5F"/>
+    <movement_speed value="510.0F"/>
+    <jump_speed value="940.0F"/>
+    <fall_speed value="940.0F"/>
+    <threshold value="220F"/>
+    <acceleration value="40F"/>
+    <gravity value="120.0F"/>
+    <charged_jump time="120.0F" max_charge="940.0F" charge_increment="60F"/>
     <collider width="94" height="53" offset="40"/>
     <audio>
       <jump_fx>fx_jump.wav</jump_fx>

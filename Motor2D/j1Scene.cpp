@@ -70,6 +70,7 @@ bool j1Scene::Update(float dt)
 		else App->audio->DecreaseMusicVolume();
 	}			
 
+	dt_ = dt;
 	App->map->Draw();
 
 	return true;
@@ -112,9 +113,9 @@ bool j1Scene::PostUpdate()
 
 	}
 
-	App->render->camera.velocity = App->render->camera.target_speed * 0.3F + App->render->camera.velocity * (1 - 0.3F);
-	if (fabs(App->render->camera.velocity.y) < App->player->threshold) App->render->camera.velocity.y = 0.0F;
-	if (fabs(App->render->camera.velocity.x) < App->player->threshold) App->render->camera.velocity.x = 0.0F;
+	App->render->camera.velocity = ((App->render->camera.target_speed * 0.3F) + (App->render->camera.velocity * (1 - 0.3F)));
+	if (fabs(App->render->camera.velocity.y) < App->player->threshold*dt_) App->render->camera.velocity.y = 0.0F;
+	if (fabs(App->render->camera.velocity.x) < App->player->threshold*dt_) App->render->camera.velocity.x = 0.0F;
 	App->render->camera.body.y += App->render->camera.velocity.y;
 	App->render->camera.body.x += App->render->camera.velocity.x;
 

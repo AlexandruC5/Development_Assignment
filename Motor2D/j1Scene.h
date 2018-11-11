@@ -36,6 +36,9 @@ protected:
 	p2SString music_file = "";
 	p2SString map_file = "";
 	p2SString background_file = "";
+
+private:
+	uint dt_;
 };
 
 #endif // __j1SCENE_H__
