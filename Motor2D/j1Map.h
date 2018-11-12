@@ -106,6 +106,9 @@ public:
 	//Translates x,y coordinates from map positions to world positions
 	iPoint MapToWorld(int x, int y) const;
 
+	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer) const;
+	iPoint WorldToMap(int x, int y) const;
+
 private:
 
 	bool LoadMap();

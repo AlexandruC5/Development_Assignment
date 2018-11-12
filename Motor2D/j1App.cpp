@@ -15,6 +15,7 @@
 #include "j1Collision.h"
 #include "j1Map.h"
 #include "j1SwapScene.h"
+#include "j1PathFinding.h"
 #include "j1App.h"
 
 // Constructor
@@ -34,6 +35,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	player = new j1Player();
 	swap_scene = new j1SwapScene();
 	collision = new j1Collision();
+	pathfinding = new j1PathFinding();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -47,6 +49,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(map, true);
 	AddModule(player, true);
 	AddModule(collision, true);	
+	AddModule(pathfinding, true);
 
 
 	// render last to swap buffer
