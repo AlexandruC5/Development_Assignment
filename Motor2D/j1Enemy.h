@@ -1,23 +1,21 @@
-#ifndef __J1PLAYER_H__
-#define __J1PLAYER_H__
-
 #include "j1Module.h"
 #include "p2Point.h"
 #include "j1Animation.h"
+#include "p2DynArray.h"
 
-
-enum Player_State {
-	NO_STATE = -1,
-	IDLE,
-	MOVING,
-	JUMPING,
-	DEAD,
-	CHARGE,
-	WIN,
-	TOTAL_ANIMATIONS,
-	GOD,
+enum Enemy_State {
+	E_NO_STATE = -1,
+	E_IDLE,
+	E_MOVING,
+	E_JUMPING,
+	E_DEAD,
+	E_CHARGE,
+	E_WIN,
+	E_TOTAL_ANIMATIONS,
+	E_GOD,
 };
-class j1Player : public j1Module
+
+class j1Enemy : public j1Module
 {
 private:
 	p2SString sprite_route;
@@ -30,20 +28,13 @@ private:
 	float acceleration = 0.0F;
 	float fall_speed = 0.0F;
 	fPoint target_speed = { 0.0F, 0.0F };
-	float dt_;
-	
+
 	int collider_offset = 0;
 	bool flipX = true;
 	bool is_grounded = true;
 
-	//charged jump variables
-	float charge_value = 0.0F;
-	float charged_time = 0.0F;
-	float boost_x = 0.0F;
-	float max_charge = 0.0F;
-	float charge_increment = 0.0F;
 
-	Animation animations[TOTAL_ANIMATIONS];
+	Animation animations[E_TOTAL_ANIMATIONS];
 	SDL_Rect animation_frame;
 
 	unsigned int jump_fx;
@@ -53,19 +44,33 @@ private:
 	void IdleUpdate();
 	void MovingUpdate();
 	void JumpingUpdate();
-	void ChargingUpdate();
-	void GodUpdate();
-	void Jump(float boost_y);
+	void Jump();
+
+	bool moving_right = false;
+	bool moving_left = false;
+	bool jump = false;
+
+
+	//pathfinding variables
+
+	int current_destination = 0;
+	int previous_destination = 0;
+	int next_destination = 0;
+	bool reached_X = false;
+	bool reached_Y = false;
+	bool current_is_grounded = false;
 
 public:
+	p2DynArray<iPoint> current_path;
+	j1Enemy();
+	~j1Enemy();
+
 	Collider* collider;
 	fPoint position = { 0.0F, 0.0F };
 	fPoint velocity = { 0.0F, 0.0F };
-	Player_State state = IDLE;
+	Enemy_State state = E_IDLE;
 	float threshold = 0.0F;
 
-	j1Player();
-	~j1Player();
 	bool Awake(pugi::xml_node&);
 	bool Start();
 	bool Update(float dt);
@@ -79,4 +84,3 @@ public:
 	void SetPosition(float x, float y);
 };
 
-#endif

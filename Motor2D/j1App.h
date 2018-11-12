@@ -20,6 +20,7 @@ class j1Player;
 class j1Map;
 class j1Collision; 
 class j1SwapScene;
+class j1Enemy;
 class j1PathFinding;
 
 class j1App
@@ -95,6 +96,7 @@ public:
 	j1Collision*		collision;
 	j1SwapScene*		swap_scene;
 	j1Player*			player;
+	j1Enemy*			enemy;
 	j1PathFinding*		pathfinding;
 
 private:

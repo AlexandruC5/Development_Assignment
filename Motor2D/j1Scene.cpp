@@ -13,6 +13,7 @@
 #include "j1Player.h"
 #include "j1Pathfinding.h"
 #include "j1Collision.h"
+#include "j1Enemy.h"
 
 #define RIGHT_CAMERA_LIMIT  (-(App->render->camera.body.x - App->render->camera.body.w / 2))
 #define LEFT_CAMERA_LIMIT  (-(App->render->camera.body.x - App->render->camera.body.w / 6))
@@ -69,6 +70,13 @@ bool j1Scene::PreUpdate()
 		if (origin_selected == true)
 		{
 			App->pathfinding->CreatePath(origin, p, 5,5,3);
+
+			const p2DynArray<iPoint>* tmp_array = App->pathfinding->GetLastPath();
+			for (int i = 0; i < tmp_array->Count() ; i++)
+			{		
+				iPoint p = App->map->MapToWorld(tmp_array->At(i)->x, tmp_array->At(i)->y);
+				App->enemy->current_path.PushBack(p);
+			}
 			origin_selected = false;
 		}
 		else

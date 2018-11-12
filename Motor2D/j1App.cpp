@@ -15,6 +15,7 @@
 #include "j1Collision.h"
 #include "j1Map.h"
 #include "j1SwapScene.h"
+#include "j1Enemy.h"
 #include "j1PathFinding.h"
 #include "j1App.h"
 
@@ -35,6 +36,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	scene_desert = new j1SceneDesert();
 	map = new j1Map();
 	player = new j1Player();
+	enemy = new j1Enemy();
 	swap_scene = new j1SwapScene();
 	collision = new j1Collision();
 	pathfinding = new j1PathFinding();
@@ -50,6 +52,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(swap_scene, true);
 	AddModule(map, true);
 	AddModule(player, true);
+	AddModule(enemy, true);
 	AddModule(collision, true);	
 	AddModule(pathfinding, true);
 
@@ -218,7 +221,7 @@ void j1App::FinishUpdate()
 	{
 		PerfTimer delay_timer;
 		SDL_Delay(frame_rate - last_frame_ms);
-		LOG("waited for: %.2f ms expected time: %u ms", delay_timer.ReadMs(), frame_rate - last_frame_ms);
+		//LOG("waited for: %.2f ms expected time: %u ms", delay_timer.ReadMs(), frame_rate - last_frame_ms);
 	}
 
 	static char title[256];

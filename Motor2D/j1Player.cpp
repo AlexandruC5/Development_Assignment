@@ -93,7 +93,7 @@ bool j1Player::PreUpdate()
 		break;
 	}
 
-	velocity = target_speed * acceleration*dt_ + velocity * (1 - acceleration*dt_); //calculate velocity of this frame
+	velocity = target_speed * acceleration+ velocity * (1 - acceleration); //calculate velocity of this frame
 
 	return true;
 }
@@ -106,10 +106,8 @@ bool j1Player::Update(float dt)
 		else state = IDLE;
 	}
 
-	StepY();
-	StepX();
-	dt_ = dt;
-	CheckDeath();
+	StepY(dt);
+	StepX(dt);
 
 	App->render->Blit(sprite, position.x, position.y, &animation_frame, 1.0f, flipX);	
 	return true;
@@ -141,15 +139,15 @@ void j1Player::IdleUpdate()
 	if (App->input->GetKey(SDL_SCANCODE_D) != App->input->GetKey(SDL_SCANCODE_A)) state = MOVING;
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
 	{
-		charge_value += charge_increment*dt_;
-		if (charge_value >= charged_time*dt_)
+		charge_value += charge_increment;
+		if (charge_value >= charged_time)
 		{
 			state = CHARGE;
 		}
 	}
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
 	{
-		target_speed.y = -jump_speed*dt_;
+		target_speed.y = -jump_speed;
 		is_grounded = false;
 		state = JUMPING;
 		charge_value = 0.0F;
@@ -169,26 +167,26 @@ void j1Player::MovingUpdate()
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)	
 	{
-		target_speed.x = movement_speed*dt_;
+		target_speed.x = movement_speed;
 		flipX = true;
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
-		target_speed.x = -movement_speed*dt_;
+		target_speed.x = -movement_speed;
 		flipX = false;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
 	{
-		charge_value += charge_increment*dt_;
-		if (charge_value >= charged_time*dt_)
+		charge_value += charge_increment;
+		if (charge_value >= charged_time)
 		{
 			state = CHARGE;
 		}
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
 	{
-		target_speed.y = -jump_speed*dt_;
+		target_speed.y = -jump_speed;
 		is_grounded = false;
 		state = JUMPING;
 		charge_value = 0.0F;
@@ -200,8 +198,8 @@ void j1Player::MovingUpdate()
 
 void j1Player::JumpingUpdate() 
 {
-	target_speed.y += gravity*dt_;
-	if (target_speed.y > fall_speed*dt_) target_speed.y = fall_speed*dt_; //limit falling speed
+	target_speed.y += gravity;
+	if (target_speed.y > fall_speed) target_speed.y = fall_speed; //limit falling speed
 
 	animation_frame = animations[JUMPING].GetCurrentFrame();
 	if (App->input->GetKey(SDL_SCANCODE_D) == App->input->GetKey(SDL_SCANCODE_A))
@@ -212,13 +210,13 @@ void j1Player::JumpingUpdate()
 	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
 		if (target_speed.x < 0.0F) boost_x = 0.0F;
-		target_speed.x = movement_speed*dt_ + boost_x;
+		target_speed.x = movement_speed + boost_x;
 		flipX = true;
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
 		if (target_speed.x > 0.0F) boost_x = 0.0F;
-		target_speed.x = -movement_speed*dt_ - boost_x;
+		target_speed.x = -movement_speed - boost_x;
 		flipX = false;
 	}
 
@@ -237,8 +235,8 @@ void j1Player::ChargingUpdate()
 {
 	target_speed.x = 0.0F;
 	animation_frame = animations[CHARGE].GetCurrentFrame();
-	if (charge_value < max_charge*dt_)
-		charge_value += charge_increment*dt_;
+	if (charge_value < max_charge)
+		charge_value += charge_increment;
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
 	{
 		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) 
@@ -255,9 +253,9 @@ void j1Player::ChargingUpdate()
 	}
 }
 
-void j1Player::Jump(const float &boost_y)
+void j1Player::Jump(float boost_y)
 {
-	target_speed.y = -jump_speed*dt_ - boost_y;
+	target_speed.y = -jump_speed - boost_y;
 	is_grounded = false;
 	state = JUMPING;
 	charge_value = 0;
@@ -320,20 +318,23 @@ void j1Player::CheckDeath()
 	}
 }
 
-void j1Player::StepX()
+void j1Player::StepX(float dt)
 {
+	velocity.x = floor(velocity.x * dt);
+
 	if (state != GOD)
 	{
 		if (velocity.x > 0) velocity.x = MIN(velocity.x, App->collision->DistanceToRightCollider(collider)); //movement of the player is min between distance to collider or his velocity
 		else if (velocity.x < 0) velocity.x = MAX(velocity.x, App->collision->DistanceToLeftCollider(collider)); //movement of the player is max between distance to collider or his velocity
 	}
-	if (fabs(velocity.x) < threshold*dt_) velocity.x = 0.0F;
+	if (fabs(velocity.x) < threshold) velocity.x = 0.0F;
 	position.x += velocity.x;
 	collider->rect.x = position.x;
 }
 
-void j1Player::StepY()
+void j1Player::StepY(float dt)
 {
+	velocity.y = floor(velocity.y * dt);
 	if (state != GOD) 
 	{
 		if (velocity.y < 0) 
@@ -348,7 +349,7 @@ void j1Player::StepY()
 			is_grounded = (distance == 0) ? true : false;
 		}
 	}
-	if (fabs(velocity.y) < threshold*dt_) velocity.y = 0.0F;
+	if (fabs(velocity.y) < threshold) velocity.y = 0.0F;
 	position.y += velocity.y;
 	collider->rect.y = position.y + collider_offset;
 }
@@ -361,7 +362,7 @@ void j1Player::ResetPlayer()
 	flipX = true;
 }
 
-void j1Player::SetPosition(const float &x, const float &y)
+void j1Player::SetPosition(float x, float y)
 {
 	position = { x,y };
 	if(collider) collider->SetPos(position.x, position.y);
@@ -373,15 +374,15 @@ void j1Player::GodUpdate()
 	if (App->input->GetKey(SDL_SCANCODE_D) == App->input->GetKey(SDL_SCANCODE_A)) target_speed.x = 0.0F;
 	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
-		target_speed.x = movement_speed*dt_;
+		target_speed.x = movement_speed;
 		flipX = true;
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
-		target_speed.x = -movement_speed*dt_;
+		target_speed.x = -movement_speed;
 		flipX = false;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_W) == App->input->GetKey(SDL_SCANCODE_S)) target_speed.y = 0.0F;
-	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) target_speed.y = -movement_speed*dt_;
-	else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) target_speed.y = movement_speed*dt_;
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) target_speed.y = -movement_speed;
+	else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) target_speed.y = movement_speed;
 }

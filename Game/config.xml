@@ -36,13 +36,13 @@
   <player>
     <sprite>player_spritesheet.png</sprite>
     <folder>textures</folder>
-    <movement_speed value="510.0F"/>
-    <jump_speed value="940.0F"/>
-    <fall_speed value="940.0F"/>
-    <threshold value="220F"/>
-    <acceleration value="40F"/>
-    <gravity value="120.0F"/>
-    <charged_jump time="120.0F" max_charge="940.0F" charge_increment="60F"/>
+    <movement_speed value="80.0F"/>
+    <jump_speed value="280.0F"/>
+    <fall_speed value="280.0F"/>
+    <threshold value="0.1F"/>
+    <acceleration value="6.0F"/>
+    <gravity value="12.0F"/>
+    <charged_jump time="8.0F" max_charge="40.0F" charge_increment="1.0F"/>
     <collider width="94" height="53" offset="40"/>
     <audio>
       <jump_fx>fx_jump.wav</jump_fx>
