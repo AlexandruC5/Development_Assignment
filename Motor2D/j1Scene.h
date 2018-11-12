@@ -39,6 +39,7 @@ protected:
 
 private:
 	SDL_Texture* debug_tex;
+	uint dt_;
 };
 
 #endif // __j1SCENE_H__
