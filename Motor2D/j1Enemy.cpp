@@ -22,7 +22,6 @@ bool j1Enemy::Awake(pugi::xml_node &)
 	animations[E_IDLE].speed = 1;
 	animations[E_IDLE].loop = true;
 
-
 	return true;
 }
 
@@ -30,12 +29,12 @@ bool j1Enemy::Start()
 {
 	sprite = App->tex->Load("textures/dead_buny_floor_spritesheet.png");
 
-	movement_speed = 80.0F;
-	jump_speed = 320.0F;
-	acceleration = 6.0F;
+	movement_speed = 600.0F;
+	jump_speed = 1250.0F;
+	acceleration = 0.8F;
 	threshold = 0.4F;
-	gravity = 12.0F;
-	fall_speed = 280.0F;
+	gravity = 1600.0f;
+	fall_speed = 1250.0F;
 
 
 	position = { 120.0F, 2091.0F };
@@ -50,6 +49,14 @@ bool j1Enemy::Start()
 
 bool j1Enemy::Update(float dt)
 {
+	if (state == E_JUMPING)
+	{
+		target_speed.y += gravity*dt;
+		if (target_speed.y > fall_speed) target_speed.y = fall_speed; //limit falling speed
+		velocity.y = (target_speed.y * acceleration + velocity.y * (1 - acceleration))*dt;
+	}
+	velocity.x = (target_speed.x * acceleration + velocity.x * (1 - acceleration))*dt;
+
 	StepY(dt);
 	StepX(dt);
 	CheckDeath();
@@ -70,6 +77,7 @@ bool j1Enemy::PreUpdate()
 
 		reached_X = (current_path.At(previous_destination)->x <= current_path.At(current_destination)->x  && current_path.At(current_destination)->x <= position.x)
 			|| (current_path.At(previous_destination)->x >= current_path.At(current_destination)->x && current_path.At(current_destination)->x >= position.x);
+
 		reached_Y = (current_path.At(previous_destination)->y <= current_path.At(current_destination)->y && position.y >= current_path.At(current_destination)->y)
 			|| (current_path.At(previous_destination)->y >= current_path.At(current_destination)->y && position.y <= current_path.At(current_destination)->y);
 
@@ -102,17 +110,6 @@ bool j1Enemy::PreUpdate()
 		}
 	}
 
-
-
-
-	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		moving_right = true;
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		moving_left = true;
-	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		jump = true;
-
-
 	switch (state) {
 	case E_IDLE: IdleUpdate();
 		break;
@@ -127,7 +124,6 @@ bool j1Enemy::PreUpdate()
 		break;
 	}
 
-	velocity = target_speed * acceleration + velocity * (1 - acceleration);
 	return true;
 }
 
@@ -163,23 +159,25 @@ void j1Enemy::SetPosition(float x, float y)
 
 void j1Enemy::StepX(float dt)
 {
-	velocity.x = floor(velocity.x * dt);
+	if (velocity.x > 0) 
+		velocity.x = MIN(velocity.x, App->collision->DistanceToRightCollider(collider)); //movement of the player is min between distance to collider or his velocity
+	else if (velocity.x < 0)
+		velocity.x = MAX(velocity.x, App->collision->DistanceToLeftCollider(collider)); //movement of the player is max between distance to collider or his velocity
 
-	if (velocity.x > 0) velocity.x = MIN(velocity.x, App->collision->DistanceToRightCollider(collider)); //movement of the player is min between distance to collider or his velocity
-	else if (velocity.x < 0) velocity.x = MAX(velocity.x, App->collision->DistanceToLeftCollider(collider)); //movement of the player is max between distance to collider or his velocity
-	if (fabs(velocity.x) < threshold) velocity.x = 0.0F;
+	if (fabs(velocity.x) < threshold) 
+		velocity.x = 0.0F;
+
 	position.x += velocity.x;
 	collider->rect.x = position.x;
 }
 
 void j1Enemy::StepY(float dt)
 {
-	velocity.y = floor(velocity.y * dt);
-
 	if (velocity.y < 0)
 	{
 		velocity.y = MAX(velocity.y, App->collision->DistanceToTopCollider(collider)); //movement of the player is max between distance to collider or his velocity
-		if (velocity.y == 0) target_speed.y = 0.0F;
+		if (velocity.y == 0) 
+			target_speed.y = 0.0F;
 	}
 	else
 	{
@@ -187,8 +185,12 @@ void j1Enemy::StepY(float dt)
 		velocity.y = MIN(velocity.y, distance); //movement of the player is min between distance to collider or his velocity
 		is_grounded = (distance == 0) ? true : false;
 	}
-	if (fabs(velocity.y) < threshold) velocity.y = 0.0F;
+
+	if (fabs(velocity.y) < threshold)
+		velocity.y = 0.0F;
+
 	position.y += velocity.y;
+	LOG("velocity %f", velocity.y);
 	collider->rect.y = position.y + collider_offset;
 }
 
@@ -197,10 +199,7 @@ void j1Enemy::IdleUpdate()
 	target_speed.x = 0.0F;
 	if (moving_left != moving_right) 
 		state = E_MOVING;
-	if (jump)
-	{
-		Jump();
-	}
+	if (jump) Jump();
 
 	if (!is_grounded) state = E_JUMPING;
 }
@@ -228,14 +227,12 @@ void j1Enemy::MovingUpdate()
 		Jump();
 	}
 
-	if (!is_grounded) state = E_JUMPING;
+	if (!is_grounded) 
+		state = E_JUMPING;
 }
 
 void j1Enemy::JumpingUpdate()
 {
-	target_speed.y += gravity;
-	if (target_speed.y > fall_speed) target_speed.y = fall_speed; //limit falling speed
-
 	if (moving_left == moving_right)
 	{
 		target_speed.x = 0.0F;

@@ -1,6 +1,6 @@
 <!-- Config file for the game -->
 <config>
-  <app framerate_cap="33">
+  <app framerate_cap="16">
     <title>Salty the Slime</title>
     <organization>UPC</organization>
     <save_file>save_game.xml</save_file>

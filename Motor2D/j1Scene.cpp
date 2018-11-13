@@ -76,7 +76,8 @@ bool j1Scene::PreUpdate()
 			for (int i = 0; i < tmp_array->Count() ; i++)
 			{		
 				iPoint p = App->map->MapToWorld(tmp_array->At(i)->x, tmp_array->At(i)->y);
-				p.x += App->map->data.tile_width/2;
+				p.x += App->map->data.tile_width / 2;
+				p.y += App->map->data.tile_height / 2;
 				App->enemy->current_path.PushBack(p);
 			}
 			origin_selected = false;
