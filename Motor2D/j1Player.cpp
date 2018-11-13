@@ -93,13 +93,31 @@ bool j1Player::PreUpdate()
 		break;
 	}
 
-	velocity = target_speed * acceleration+ velocity * (1 - acceleration); //calculate velocity of this frame
-
+	
 	return true;
 }
 
 bool j1Player::Update(float dt)
 {
+	if (state == JUMPING)
+	{
+		target_speed.y += gravity * dt;
+		if (target_speed.y > fall_speed) target_speed.y = fall_speed; //limit falling speed
+		velocity.y = floor((target_speed.y * acceleration + velocity.y * (1 - acceleration))*dt);
+	}
+	else if(state == CHARGE)
+	{
+		if (charge_value < max_charge)
+			charge_value += charge_increment*dt;
+	}
+	else if (charge)
+	{
+		if (charge_value < max_charge)
+			charge_value += charge_increment * dt;
+	}
+
+	velocity.x = floor((target_speed.x * acceleration + velocity.x * (1 - acceleration))*dt);
+
 	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
 	{
 		if(state != GOD) state = GOD;
@@ -139,10 +157,11 @@ void j1Player::IdleUpdate()
 	if (App->input->GetKey(SDL_SCANCODE_D) != App->input->GetKey(SDL_SCANCODE_A)) state = MOVING;
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
 	{
-		charge_value += charge_increment;
+		charge = true;
 		if (charge_value >= charged_time)
 		{
 			state = CHARGE;
+			charge = false;
 		}
 	}
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
@@ -178,10 +197,11 @@ void j1Player::MovingUpdate()
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
 	{
-		charge_value += charge_increment;
+		charge = true;
 		if (charge_value >= charged_time)
 		{
 			state = CHARGE;
+			charge = false;
 		}
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
@@ -198,9 +218,6 @@ void j1Player::MovingUpdate()
 
 void j1Player::JumpingUpdate() 
 {
-	target_speed.y += gravity;
-	if (target_speed.y > fall_speed) target_speed.y = fall_speed; //limit falling speed
-
 	animation_frame = animations[JUMPING].GetCurrentFrame();
 	if (App->input->GetKey(SDL_SCANCODE_D) == App->input->GetKey(SDL_SCANCODE_A))
 	{
@@ -235,8 +252,7 @@ void j1Player::ChargingUpdate()
 {
 	target_speed.x = 0.0F;
 	animation_frame = animations[CHARGE].GetCurrentFrame();
-	if (charge_value < max_charge)
-		charge_value += charge_increment;
+	
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
 	{
 		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) 
@@ -320,8 +336,6 @@ void j1Player::CheckDeath()
 
 void j1Player::StepX(float dt)
 {
-	velocity.x = floor(velocity.x * dt);
-
 	if (state != GOD)
 	{
 		if (velocity.x > 0) velocity.x = MIN(velocity.x, App->collision->DistanceToRightCollider(collider)); //movement of the player is min between distance to collider or his velocity
@@ -334,7 +348,6 @@ void j1Player::StepX(float dt)
 
 void j1Player::StepY(float dt)
 {
-	velocity.y = floor(velocity.y * dt);
 	if (state != GOD) 
 	{
 		if (velocity.y < 0) 

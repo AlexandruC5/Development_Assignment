@@ -49,16 +49,17 @@ bool j1Audio::Awake(pugi::xml_node& config)
 		active = false;
 		ret = true;
 	}
+	else
+	{
+		music_folder = config.child("music_folder").child_value();
+		music_volume = config.child("music_volume").attribute("value").as_int(MIX_MAX_VOLUME);
+		Mix_VolumeMusic(music_volume);
 
-	music_folder = config.child("music_folder").child_value();
-	music_volume = config.child("music_volume").attribute("value").as_int(MIX_MAX_VOLUME);
-	Mix_VolumeMusic(music_volume);
+		fx_folder = config.child("fx_folder").child_value();
+		fx_volume = config.child("fx_volume").attribute("value").as_int(MIX_MAX_VOLUME);
 
-	fx_folder = config.child("fx_folder").child_value();
-	fx_volume = config.child("fx_volume").attribute("value").as_int(MIX_MAX_VOLUME);
-	//Sound
-	Mix_Volume(-1, fx_volume);
-
+		Mix_Volume(-1, fx_volume);
+	}
 	return ret;
 }
 

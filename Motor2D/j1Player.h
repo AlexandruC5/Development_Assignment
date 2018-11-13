@@ -31,6 +31,7 @@ private:
 	float fall_speed = 0.0F;
 	fPoint target_speed = { 0.0F, 0.0F };
 	float dt_;
+	bool charge = false;
 	
 	int collider_offset = 0;
 	bool flipX = true;
