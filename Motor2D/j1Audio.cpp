@@ -56,6 +56,7 @@ bool j1Audio::Awake(pugi::xml_node& config)
 
 	fx_folder = config.child("fx_folder").child_value();
 	fx_volume = config.child("fx_volume").attribute("value").as_int(MIX_MAX_VOLUME);
+	//Sound
 	Mix_Volume(-1, fx_volume);
 
 	return ret;
