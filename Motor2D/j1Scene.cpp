@@ -72,9 +72,11 @@ bool j1Scene::PreUpdate()
 			App->pathfinding->CreatePath(origin, p, 5,5,3);
 
 			const p2DynArray<iPoint>* tmp_array = App->pathfinding->GetLastPath();
+			App->enemy->current_path.Clear();
 			for (int i = 0; i < tmp_array->Count() ; i++)
 			{		
 				iPoint p = App->map->MapToWorld(tmp_array->At(i)->x, tmp_array->At(i)->y);
+				p.x += App->map->data.tile_width/2;
 				App->enemy->current_path.PushBack(p);
 			}
 			origin_selected = false;

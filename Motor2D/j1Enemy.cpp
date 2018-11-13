@@ -31,7 +31,7 @@ bool j1Enemy::Start()
 	sprite = App->tex->Load("textures/dead_buny_floor_spritesheet.png");
 
 	movement_speed = 80.0F;
-	jump_speed = 280.0F;
+	jump_speed = 320.0F;
 	acceleration = 6.0F;
 	threshold = 0.4F;
 	gravity = 12.0F;
@@ -64,8 +64,14 @@ bool j1Enemy::PreUpdate()
 {
 	if (current_path.Count() > 0)
 	{
-		reached_X = (moving_right && current_path.At(current_destination)->x <= position.x)
-			|| (moving_left && current_path.At(current_destination)->x >= position.x);
+		moving_right = false;
+		moving_left = false;
+		jump = false;
+
+		reached_X = (current_path.At(previous_destination)->x <= current_path.At(current_destination)->x  && current_path.At(current_destination)->x <= position.x)
+			|| (current_path.At(previous_destination)->x >= current_path.At(current_destination)->x && current_path.At(current_destination)->x >= position.x);
+		reached_Y = (current_path.At(previous_destination)->y <= current_path.At(current_destination)->y && position.y >= current_path.At(current_destination)->y)
+			|| (current_path.At(previous_destination)->y >= current_path.At(current_destination)->y && position.y <= current_path.At(current_destination)->y);
 
 
 		if (!reached_X)
@@ -75,9 +81,13 @@ bool j1Enemy::PreUpdate()
 			else if (position.x > current_path.At(current_destination)->x)
 				moving_left = true;
 		}
+		if (!reached_Y)
+		{
+			if (position.y > current_path.At(current_destination)->y)
+				jump = true;
+		}
 
-
-		if (reached_X)
+		if (reached_X && reached_Y)
 		{
 			LOG("reached node %i with position x %i y %i", current_destination, current_path.At(current_destination)->x, current_path.At(current_destination)->y);
 			previous_destination = current_destination;
@@ -86,8 +96,6 @@ bool j1Enemy::PreUpdate()
 			if (current_destination >= current_path.Count())
 			{
 				current_path.Clear();
-				moving_right = false;
-				moving_left = false;
 				current_destination = 0;
 				previous_destination = 0;
 			}
