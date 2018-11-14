@@ -69,7 +69,7 @@ bool j1Scene::PreUpdate()
 	{
 		if (origin_selected == true)
 		{
-			App->pathfinding->CreatePath(origin, p, 5,5,3);
+			App->pathfinding->CreatePath(origin, p, 5,5,2);
 
 			const p2DynArray<iPoint>* tmp_array = App->pathfinding->GetLastPath();
 			//App->enemy->current_path.Clear();

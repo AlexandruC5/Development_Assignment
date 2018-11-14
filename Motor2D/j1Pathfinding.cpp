@@ -46,7 +46,19 @@ bool j1PathFinding::CheckBoundaries(const iPoint& pos) const
 bool j1PathFinding::IsWalkable(const iPoint& pos) const
 {
 	uchar t = GetTileAt(pos);
+	return t != INVALID_WALK_CODE && t < 2;
+}
+
+bool j1PathFinding::IsGround(const iPoint& pos) const
+{
+	uchar t = GetTileAt(pos);
 	return t != INVALID_WALK_CODE && t > 0;
+}
+
+bool j1PathFinding::IsPlatform(const iPoint& pos) const
+{
+	uchar t = GetTileAt(pos);
+	return t != INVALID_WALK_CODE && t == 1;
 }
 
 // Utility: return the walkability value of a tile
@@ -188,13 +200,13 @@ int PathNode::CalculateF(const iPoint& destination, int jump_length)
 // ----------------------------------------------------------------------------------
 int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination, int characterWidth, int characterHeight, short maxCharacterJumpHeight)
 {
+	last_path.Clear();
 	// TODO 1: if origin or destination are not walkable, return -1
 	if (!IsWalkable(origin) || !IsWalkable(destination)) return -1;
 
 	// TODO 2: Create two lists: open, close
 	// Add the origin tile to open
 	// Iterate while we have tile in the open list
-	last_path.Clear();
 	PathList open;
 	PathList close;
 
@@ -246,7 +258,7 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination, i
 
 				if (!close.Find(child_node->data.pos))	// ignore nodes in the closed list
 				{
-					if (!IsWalkable({ child_node->data.pos.x, child_node->data.pos.y + 1 }))
+					if (IsGround({ child_node->data.pos.x, child_node->data.pos.y + 1 }))
 						on_ground = true;
 
 					int parent_jump_length = current_node->data.jump_length;
@@ -267,6 +279,13 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination, i
 							child_jump_length = MAX(maxCharacterJumpHeight * 2, parent_jump_length + 2);
 						else
 							child_jump_length = MAX(maxCharacterJumpHeight * 2, parent_jump_length + 1);
+
+						if (IsPlatform({ child_node->data.pos.x, child_node->data.pos.y }))
+						{
+							LOG("x %i y %i", child_node->data.pos.x, child_node->data.pos.y);
+							child_node = child_node->next;
+							continue;
+						}
 					}
 					else if (!on_ground && child_node->data.pos.x != current_node->data.pos.x)
 						child_jump_length = parent_jump_length + 1;
@@ -301,8 +320,6 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination, i
 		open.list.del(current_node);
 	}
 	
-
-
 
 	return -1;
 }
