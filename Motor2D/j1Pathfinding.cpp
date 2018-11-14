@@ -200,13 +200,13 @@ int PathNode::CalculateF(const iPoint& destination, int jump_length)
 // ----------------------------------------------------------------------------------
 int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination, int characterWidth, int characterHeight, short maxCharacterJumpHeight)
 {
+	last_path.Clear();
 	// TODO 1: if origin or destination are not walkable, return -1
 	if (!IsWalkable(origin) || !IsWalkable(destination)) return -1;
 
 	// TODO 2: Create two lists: open, close
 	// Add the origin tile to open
 	// Iterate while we have tile in the open list
-	last_path.Clear();
 	PathList open;
 	PathList close;
 
@@ -320,8 +320,6 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination, i
 		open.list.del(current_node);
 	}
 	
-
-
 
 	return -1;
 }

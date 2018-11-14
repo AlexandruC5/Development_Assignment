@@ -53,9 +53,9 @@ private:
 
 	//pathfinding variables
 
-	int current_destination = 0;
+	int current_destination = 1;
 	int previous_destination = 0;
-	int next_destination = 1;
+	int next_destination = 2;
 	bool reached_X = false;
 	bool reached_Y = false;
 	bool current_is_grounded = false;

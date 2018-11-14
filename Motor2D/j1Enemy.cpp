@@ -102,8 +102,6 @@ bool j1Enemy::PreUpdate()
 				jump = true;
 		}
 
-
-
 		if (reached_X && reached_Y)
 		{
 			LOG("reached node %i with position x %i y %i", current_destination, current_path.At(current_destination)->x, current_path.At(current_destination)->y);
@@ -116,9 +114,9 @@ bool j1Enemy::PreUpdate()
 			if (current_destination >= current_path.Count())
 			{
 				current_path.Clear();
-				current_destination = 0;
+				current_destination = 1;
 				previous_destination = 0;
-				next_destination = 1;
+				next_destination = 2;
 			}
 		}
 	}
@@ -203,7 +201,6 @@ void j1Enemy::StepY(float dt)
 		velocity.y = 0.0F;
 
 	position.y += velocity.y;
-	LOG("velocity %f", velocity.y);
 	collider->rect.y = position.y + collider_offset;
 }
 
