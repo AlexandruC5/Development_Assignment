@@ -89,23 +89,36 @@ bool j1Enemy::PreUpdate()
 			else if (position.x > current_path.At(current_destination)->x)
 				moving_left = true;
 		}
+		else
+		{
+			if (next_destination != -1 && position.x < current_path.At(next_destination)->x && is_grounded)
+				moving_right = true;
+			else if (next_destination != -1 && position.x > current_path.At(next_destination)->x && is_grounded)
+				moving_left = true;
+		}
 		if (!reached_Y)
 		{
 			if (position.y > current_path.At(current_destination)->y)
 				jump = true;
 		}
 
+
+
 		if (reached_X && reached_Y)
 		{
 			LOG("reached node %i with position x %i y %i", current_destination, current_path.At(current_destination)->x, current_path.At(current_destination)->y);
 			previous_destination = current_destination;
 			current_destination++;
+			next_destination = current_destination + 1;
+			if (next_destination >= current_path.Count())
+				next_destination = -1;
 
 			if (current_destination >= current_path.Count())
 			{
 				current_path.Clear();
 				current_destination = 0;
 				previous_destination = 0;
+				next_destination = 1;
 			}
 		}
 	}

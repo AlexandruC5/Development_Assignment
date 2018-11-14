@@ -46,7 +46,19 @@ bool j1PathFinding::CheckBoundaries(const iPoint& pos) const
 bool j1PathFinding::IsWalkable(const iPoint& pos) const
 {
 	uchar t = GetTileAt(pos);
+	return t != INVALID_WALK_CODE && t < 2;
+}
+
+bool j1PathFinding::IsGround(const iPoint& pos) const
+{
+	uchar t = GetTileAt(pos);
 	return t != INVALID_WALK_CODE && t > 0;
+}
+
+bool j1PathFinding::IsPlatform(const iPoint& pos) const
+{
+	uchar t = GetTileAt(pos);
+	return t != INVALID_WALK_CODE && t == 1;
 }
 
 // Utility: return the walkability value of a tile
@@ -246,7 +258,7 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination, i
 
 				if (!close.Find(child_node->data.pos))	// ignore nodes in the closed list
 				{
-					if (!IsWalkable({ child_node->data.pos.x, child_node->data.pos.y + 1 }))
+					if (IsGround({ child_node->data.pos.x, child_node->data.pos.y + 1 }))
 						on_ground = true;
 
 					int parent_jump_length = current_node->data.jump_length;
@@ -267,6 +279,13 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination, i
 							child_jump_length = MAX(maxCharacterJumpHeight * 2, parent_jump_length + 2);
 						else
 							child_jump_length = MAX(maxCharacterJumpHeight * 2, parent_jump_length + 1);
+
+						if (IsPlatform({ child_node->data.pos.x, child_node->data.pos.y }))
+						{
+							LOG("x %i y %i", child_node->data.pos.x, child_node->data.pos.y);
+							child_node = child_node->next;
+							continue;
+						}
 					}
 					else if (!on_ground && child_node->data.pos.x != current_node->data.pos.x)
 						child_jump_length = parent_jump_length + 1;
