@@ -5,16 +5,15 @@
 #include "j1Input.h"
 #include "p2Log.h"
 #include "j1Enemy.h"
+#include "j1EntityManager.h"
 
 
-j1Enemy::j1Enemy()
-{
-}
+j1Enemy::j1Enemy(EntityType type) : j1Entity(type)
+{}
 
 
 j1Enemy::~j1Enemy()
-{
-}
+{}
 
 bool j1Enemy::Awake(pugi::xml_node &)
 {
@@ -40,7 +39,7 @@ bool j1Enemy::Start()
 	position = { 120.0F, 2091.0F };
 
 	animation_frame = animations[E_IDLE].GetCurrentFrame();
-	collider = App->collision->AddCollider(animation_frame, COLLIDER_PLAYER, this, true);
+	collider = App->collision->AddCollider(animation_frame, COLLIDER_PLAYER, App->entitymanager, true);
 	collider->rect.x = position.x;
 	collider->rect.y = position.y + collider_offset;
 	

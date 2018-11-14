@@ -10,17 +10,14 @@
 #include "p2Log.h"
 #include "j1Input.h"
 #include "j1Player.h"
+#include "j1EntityManager.h"
 
 
-j1Player::j1Player()
-{
-	name.create("player");
-}
-
+j1Player::j1Player(EntityType type) : j1Entity(type)
+{}
 
 j1Player::~j1Player()
-{
-}
+{}
 
 bool j1Player::Awake(pugi::xml_node &conf)
 {
@@ -62,7 +59,7 @@ bool j1Player::Awake(pugi::xml_node &conf)
 bool j1Player::Start()
 {
 	sprite = App->tex->Load(sprite_route.GetString());
-	collider = App->collision->AddCollider(animation_frame, COLLIDER_PLAYER, this, true);
+	collider = App->collision->AddCollider(animation_frame, COLLIDER_PLAYER, App->entitymanager, true);
 	collider->rect.x = position.x;
 	collider->rect.y = position.y + collider_offset;
 	return true;

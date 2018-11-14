@@ -4,7 +4,7 @@
 #include "j1Input.h"
 #include "j1Render.h"
 #include "j1Map.h"
-#include "j1Player.h"
+#include "j1EntityManager.h"
 #include "j1SwapScene.h"
 #include "j1SceneForest.h"
 #include "j1Audio.h"
@@ -48,9 +48,9 @@ bool j1SceneDesert::Update(float dt)
 
 bool j1SceneDesert::OnCollision(Collider* c1, Collider* c2)
 {
-	if (c2->type == COLLIDER_PLAYER && App->player->state != WIN)
+	if (c2->type == COLLIDER_PLAYER && App->entitymanager->player->state != WIN)
 	{
-		App->player->state = WIN;
+		App->entitymanager->player->state = WIN;
 		App->swap_scene->FadeToBlack(this, App->scene_forest);
 	}
 	return true;

@@ -1,4 +1,4 @@
-#include "j1Module.h"
+#include "j1Entity.h"
 #include "p2Point.h"
 #include "j1Animation.h"
 #include "p2DynArray.h"
@@ -15,11 +15,12 @@ enum Enemy_State {
 	E_GOD,
 };
 
-class j1Enemy : public j1Module
+class j1Enemy : public j1Entity
 {
 private:
-	p2SString sprite_route;
-	SDL_Texture* sprite;
+	//SDL_Texture* sprite;
+	/*p2SString sprite_route;
+	
 
 	//movement variables
 	float movement_speed = 0.0F;
@@ -37,7 +38,7 @@ private:
 	Animation animations[E_TOTAL_ANIMATIONS];
 	SDL_Rect animation_frame;
 
-	unsigned int jump_fx;
+	unsigned int jump_fx;*/
 
 	void StepX(float dt);
 	void StepY(float dt);
@@ -62,14 +63,14 @@ private:
 
 public:
 	p2DynArray<iPoint> current_path;
-	j1Enemy();
+	j1Enemy(EntityType type);
 	~j1Enemy();
 
-	Collider* collider;
+	/*Collider* collider;
 	fPoint position = { 0.0F, 0.0F };
-	fPoint velocity = { 0.0F, 0.0F };
+	fPoint velocity = { 0.0F, 0.0F };*/
 	Enemy_State state = E_IDLE;
-	float threshold = 0.0F;
+	//float threshold = 0.0F;
 
 	bool Awake(pugi::xml_node&);
 	bool Start();

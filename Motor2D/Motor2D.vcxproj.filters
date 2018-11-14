@@ -21,6 +21,8 @@
     <ClCompile Include="j1SceneDesert.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="j1Enemy.cpp" />
+    <ClCompile Include="j1EntityManager.cpp" />
+    <ClCompile Include="j1Entity.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Animation.h" />
@@ -50,5 +52,7 @@
     <ClInclude Include="j1SceneDesert.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="j1Enemy.h" />
+    <ClInclude Include="j1EntityManager.h" />
+    <ClInclude Include="j1Entity.h" />
   </ItemGroup>
 </Project>

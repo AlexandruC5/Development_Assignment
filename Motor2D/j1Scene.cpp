@@ -10,7 +10,7 @@
 #include "j1Map.h"
 #include "j1Audio.h"
 #include "j1Scene.h"
-#include "j1Player.h"
+#include "j1EntityManager.h"
 #include "j1Pathfinding.h"
 #include "j1Collision.h"
 #include "j1Enemy.h"
@@ -37,7 +37,7 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 bool j1Scene::Start()
 {
 	App->swap_scene->current_scene = this;
-	App->player->ResetPlayer();
+	App->entitymanager->player->ResetPlayer();
 	App->map->Load(map_file.GetString());
 
 	//pathfinding debug
@@ -72,13 +72,13 @@ bool j1Scene::PreUpdate()
 			App->pathfinding->CreatePath(origin, p, 5,5,3);
 
 			const p2DynArray<iPoint>* tmp_array = App->pathfinding->GetLastPath();
-			App->enemy->current_path.Clear();
+			//App->enemy->current_path.Clear();
 			for (int i = 0; i < tmp_array->Count() ; i++)
 			{		
 				iPoint p = App->map->MapToWorld(tmp_array->At(i)->x, tmp_array->At(i)->y);
 				p.x += App->map->data.tile_width / 2;
 				p.y += App->map->data.tile_height / 2;
-				App->enemy->current_path.PushBack(p);
+				//App->enemy->current_path.PushBack(p);
 			}
 			origin_selected = false;
 		}
@@ -144,30 +144,30 @@ bool j1Scene::PostUpdate()
 {
 	bool ret = true;
 	//Camera movement
-	if (App->player->position.x + App->player->collider->rect.w > RIGHT_CAMERA_LIMIT && App->player->velocity.x > 0.0F)
+	if (App->entitymanager->player->position.x + App->entitymanager->player->collider->rect.w > RIGHT_CAMERA_LIMIT && App->entitymanager->player->velocity.x > 0.0F)
 	{
-		App->render->camera.target_speed.x = -(App->player->velocity.x);
+		App->render->camera.target_speed.x = -(App->entitymanager->player->velocity.x);
 	}
 	else
 	{
-		if (App->player->position.x < LEFT_CAMERA_LIMIT && App->player->velocity.x < 0.0F)
+		if (App->entitymanager->player->position.x < LEFT_CAMERA_LIMIT && App->entitymanager->player->velocity.x < 0.0F)
 		{
-			App->render->camera.target_speed.x = -(App->player->velocity.x);
+			App->render->camera.target_speed.x = -(App->entitymanager->player->velocity.x);
 		}
 		else
 		{
 			App->render->camera.target_speed.x = 0.0F;
 		}
 	}
-	if (App->player->position.y < TOP_CAMERA_LIMIT && App->player->velocity.y < 0.0F)
+	if (App->entitymanager->player->position.y < TOP_CAMERA_LIMIT && App->entitymanager->player->velocity.y < 0.0F)
 	{
-		App->render->camera.target_speed.y = -(App->player->velocity.y);
+		App->render->camera.target_speed.y = -(App->entitymanager->player->velocity.y);
 	}
 	else
 	{
-		if (App->player->position.y + App->player->collider->rect.h > BOTTOM_CAMERA_LIMIT && App->player->velocity.y > 0.0F)
+		if (App->entitymanager->player->position.y + App->entitymanager->player->collider->rect.h > BOTTOM_CAMERA_LIMIT && App->entitymanager->player->velocity.y > 0.0F)
 		{
-			App->render->camera.target_speed.y = -(App->player->velocity.y);
+			App->render->camera.target_speed.y = -(App->entitymanager->player->velocity.y);
 		}
 		else
 		{
@@ -177,8 +177,8 @@ bool j1Scene::PostUpdate()
 	}
 
 	App->render->camera.velocity = ((App->render->camera.target_speed * 0.3F) + (App->render->camera.velocity * (1 - 0.3F)));
-	if (fabs(App->render->camera.velocity.y) < App->player->threshold*dt_) App->render->camera.velocity.y = 0.0F;
-	if (fabs(App->render->camera.velocity.x) < App->player->threshold*dt_) App->render->camera.velocity.x = 0.0F;
+	if (fabs(App->render->camera.velocity.y) < App->entitymanager->player->threshold*dt_) App->render->camera.velocity.y = 0.0F;
+	if (fabs(App->render->camera.velocity.x) < App->entitymanager->player->threshold*dt_) App->render->camera.velocity.x = 0.0F;
 	App->render->camera.body.y += App->render->camera.velocity.y;
 	App->render->camera.body.x += App->render->camera.velocity.x;
 

@@ -1,7 +1,7 @@
 #ifndef __J1PLAYER_H__
 #define __J1PLAYER_H__
 
-#include "j1Module.h"
+#include "j1Entity.h"
 #include "p2Point.h"
 #include "j1Animation.h"
 
@@ -17,25 +17,25 @@ enum Player_State {
 	TOTAL_ANIMATIONS,
 	GOD,
 };
-class j1Player : public j1Module
+class j1Player : public j1Entity
 {
 private:
-	p2SString sprite_route;
-	SDL_Texture* sprite;
+	//p2SString sprite_route;
+	//SDL_Texture* sprite;
 
-	//movement variables
-	float movement_speed = 0.0F;
-	float jump_speed = 0.0F;
-	float gravity = 0.0F;
-	float acceleration = 0.0F;
-	float fall_speed = 0.0F;
-	fPoint target_speed = { 0.0F, 0.0F };
-	float dt_;
+	////movement variables
+	//float movement_speed = 0.0F;
+	//float jump_speed = 0.0F;
+	//float gravity = 0.0F;
+	//float acceleration = 0.0F;
+	//float fall_speed = 0.0F;
+	//fPoint target_speed = { 0.0F, 0.0F };
+	//float dt_;
 	bool charge = false;
 	
-	int collider_offset = 0;
+	/*int collider_offset = 0;
 	bool flipX = true;
-	bool is_grounded = true;
+	bool is_grounded = true;*/
 
 	//charged jump variables
 	float charge_value = 0.0F;
@@ -44,10 +44,10 @@ private:
 	float max_charge = 0.0F;
 	float charge_increment = 0.0F;
 
-	Animation animations[TOTAL_ANIMATIONS];
+	/*Animation animations[TOTAL_ANIMATIONS];
 	SDL_Rect animation_frame;
 
-	unsigned int jump_fx;
+	unsigned int jump_fx;*/
 
 	void StepX(float dt);
 	void StepY(float dt);
@@ -59,13 +59,13 @@ private:
 	void Jump(float boost_y);
 
 public:
-	Collider* collider;
+	/*Collider* collider;
 	fPoint position = { 0.0F, 0.0F };
-	fPoint velocity = { 0.0F, 0.0F };
+	fPoint velocity = { 0.0F, 0.0F };*/
 	Player_State state = IDLE;
-	float threshold = 0.0F;
+	//float threshold = 0.0F;
 
-	j1Player();
+	j1Player(EntityType type);
 	~j1Player();
 	bool Awake(pugi::xml_node&);
 	bool Start();
