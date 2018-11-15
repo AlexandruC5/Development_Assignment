@@ -5,18 +5,6 @@
 #include "p2Point.h"
 #include "j1Animation.h"
 
-
-enum Player_State {
-	NO_STATE = -1,
-	IDLE,
-	MOVING,
-	JUMPING,
-	DEAD,
-	CHARGE,
-	WIN,
-	TOTAL_ANIMATIONS,
-	GOD,
-};
 class j1Player : public j1Entity
 {
 private:
@@ -62,7 +50,7 @@ public:
 	/*Collider* collider;
 	fPoint position = { 0.0F, 0.0F };
 	fPoint velocity = { 0.0F, 0.0F };*/
-	Player_State state = IDLE;
+	EntityState state = IDLE;
 	//float threshold = 0.0F;
 
 	j1Player(EntityType type);

@@ -13,6 +13,18 @@ enum class EntityType {
 	UNKNOWN
 };
 
+enum EntityState {
+	NO_STATE = -1,
+	IDLE,
+	MOVING,
+	JUMPING,
+	DEAD,
+	CHARGE,
+	WIN,
+	GOD,
+};
+
+
 class j1Entity
 {
 protected:

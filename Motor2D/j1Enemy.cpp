@@ -17,9 +17,9 @@ j1Enemy::~j1Enemy()
 
 bool j1Enemy::Awake(pugi::xml_node &)
 {
-	animations[E_IDLE].PushBack({14,1,37,33});
-	animations[E_IDLE].speed = 1;
-	animations[E_IDLE].loop = true;
+	animations[IDLE].PushBack({14,1,37,33});
+	animations[IDLE].speed = 1;
+	animations[IDLE].loop = true;
 
 	return true;
 }
@@ -38,7 +38,7 @@ bool j1Enemy::Start()
 
 	position = { 120.0F, 2091.0F };
 
-	animation_frame = animations[E_IDLE].GetCurrentFrame();
+	animation_frame = animations[IDLE].GetCurrentFrame();
 	collider = App->collision->AddCollider(animation_frame, COLLIDER_PLAYER, App->entitymanager, true);
 	collider->rect.x = position.x;
 	collider->rect.y = position.y + collider_offset;
@@ -48,7 +48,7 @@ bool j1Enemy::Start()
 
 bool j1Enemy::Update(float dt)
 {
-	if (state == E_JUMPING)
+	if (state == JUMPING)
 	{
 		target_speed.y += gravity*dt;
 		if (target_speed.y > fall_speed) target_speed.y = fall_speed; //limit falling speed
@@ -60,7 +60,7 @@ bool j1Enemy::Update(float dt)
 	StepX(dt);
 	CheckDeath();
 
-	animation_frame = animations[E_IDLE].GetCurrentFrame();
+	animation_frame = animations[IDLE].GetCurrentFrame();
 	App->render->Blit(sprite, position.x, position.y, &animation_frame, 1.0f, flipX);
 
 	return true;
@@ -121,14 +121,14 @@ bool j1Enemy::PreUpdate()
 	}
 
 	switch (state) {
-	case E_IDLE: IdleUpdate();
+	case IDLE: IdleUpdate();
 		break;
-	case E_MOVING: MovingUpdate();
+	case MOVING: MovingUpdate();
 		break;
-	case E_JUMPING: JumpingUpdate();
+	case JUMPING: JumpingUpdate();
 		break;
-	case E_DEAD:
-		animation_frame = animations[E_DEAD].GetCurrentFrame();
+	case DEAD:
+		animation_frame = animations[DEAD].GetCurrentFrame();
 		break;
 	default:
 		break;
@@ -207,17 +207,17 @@ void j1Enemy::IdleUpdate()
 {
 	target_speed.x = 0.0F;
 	if (moving_left != moving_right) 
-		state = E_MOVING;
+		state = MOVING;
 	if (jump) Jump();
 
-	if (!is_grounded) state = E_JUMPING;
+	if (!is_grounded) state = JUMPING;
 }
 
 void j1Enemy::MovingUpdate()
 {
 	if (moving_left == moving_right)
 	{
-		state = E_IDLE;
+		state = IDLE;
 		target_speed.x = 0.0F;
 	}
 	else if (moving_right)
@@ -237,7 +237,7 @@ void j1Enemy::MovingUpdate()
 	}
 
 	if (!is_grounded) 
-		state = E_JUMPING;
+		state = JUMPING;
 }
 
 void j1Enemy::JumpingUpdate()
@@ -259,8 +259,8 @@ void j1Enemy::JumpingUpdate()
 
 	if (is_grounded)
 	{
-		if (moving_left == moving_right) state = E_IDLE;
-		else state = E_MOVING;
+		if (moving_left == moving_right) state = IDLE;
+		else state = MOVING;
 
 		target_speed.y = 0.0F;
 		velocity.y = 0.0F;
@@ -271,5 +271,5 @@ void j1Enemy::Jump()
 {
 	target_speed.y = -jump_speed;
 	is_grounded = false;
-	state = E_JUMPING;
+	state = JUMPING;
 }

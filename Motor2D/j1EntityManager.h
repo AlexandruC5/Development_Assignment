@@ -6,14 +6,11 @@
 #include "j1Entity.h"
 #include "j1Player.h"
 
-//class j1Player;
-
-
 class j1EntityManager : public j1Module
 {
 public:
 
-	j1Entity* entities;
+	p2List<j1Entity*> entities;
 	j1Player* player;
 	j1EntityManager();
 	~j1EntityManager();
@@ -22,6 +19,7 @@ public:
 	bool Start();
 	bool Update(float dt);
 	bool PreUpdate();
+	bool CleanUp();
 	bool CreateEntity(EntityType type);
 	j1Entity* getEntity(EntityType type);
 	bool DeleteEntity(j1Entity* entity);

@@ -1,6 +1,6 @@
 <!-- Config file for the game -->
 <config>
-  <app framerate_cap="33">
+  <app framerate_cap="16">
     <title>Salty the Slime</title>
     <organization>UPC</organization>
     <save_file>save_game.xml</save_file>
@@ -10,6 +10,57 @@
     <vsync value="false"/>
   </renderer>
 
+  <entity_manager>
+    <player>
+      <sprite>player_spritesheet.png</sprite>
+      <folder>textures</folder>
+      <movement_speed value="600.0F.0F"/>
+      <jump_speed value="1500.0F"/>
+      <fall_speed value="1500.0F"/>
+      <threshold value="0.4F"/>
+      <acceleration value="0.8F"/>
+      <gravity value="2200.0F"/>
+      <charged_jump time="4.0F" max_charge="1000.0F" charge_increment="300.0F"/>
+      <collider width="94" height="53" offset="40"/>
+      <audio>
+        <jump_fx>fx_jump.wav</jump_fx>
+      </audio>
+      <animations>
+        <idle speed="0.1F">
+          <frame x="17" y="36" width="94" height="92"/>
+          <frame x="143" y="35" width="98" height="92"/>
+          <frame x="270" y="33" width="101" height="92"/>
+        </idle>
+        <move speed="0.1F">
+          <frame x="16" y="164" width="99" height="92"/>
+          <frame x="140" y="163" width="107" height="92"/>
+          <frame x="267" y="163" width="110" height="92"/>
+          <frame x="397" y="160" width="103" height="92"/>
+        </move>
+        <jump speed="0.3F" loops="false">
+          <frame x="784" y="192" width="98" height="92"/>
+          <frame x="909" y="150" width="98" height="92"/>
+          <frame x="1037" y="143" width="98" height="92"/>
+        </jump>
+        <die speed="0.3F" loops ="false">
+          <frame x="772" y="547" width="115" height="92"/>
+          <frame x="899" y="552" width="118" height="92"/>
+          <frame x="1026" y="553" width="121" height="92"/>
+        </die>
+        <charge speed="0.3F">
+          <frame x="17" y="292" width="94" height="92"/>
+          <frame x="143" y="292" width="96" height="92"/>
+          <frame x="270" y="292" width="98" height="92"/>
+        </charge>
+        <win speed="0.1F">
+          <frame x="652" y="292" width="103" height="92"/>
+          <frame x="525" y="292" width="102" height="92"/>
+          <frame x="397" y="292" width="102" height="92"/>
+        </win>
+      </animations>
+    </player>
+  </entity_manager>
+  
   <window>
     <resolution width="1280" height="720" scale="1"/>
     <fullscreen value="false"/>
@@ -31,56 +82,6 @@
     <map_file>lvl_2.tmx</map_file>
     <music>music_desert.ogg</music>
   </scene_desert>
-
-
-  <player>
-    <sprite>player_spritesheet.png</sprite>
-    <folder>textures</folder>
-    <movement_speed value="600.0F.0F"/>
-    <jump_speed value="1500.0F"/>
-    <fall_speed value="1500.0F"/>
-    <threshold value="0.4F"/>
-    <acceleration value="0.8F"/>
-    <gravity value="2200.0F"/>
-    <charged_jump time="4.0F" max_charge="1000.0F" charge_increment="300.0F"/>
-    <collider width="94" height="53" offset="40"/>
-    <audio>
-      <jump_fx>fx_jump.wav</jump_fx>
-    </audio>
-    <animations>
-      <idle speed="0.1F">
-        <frame x="17" y="36" width="94" height="92"/>
-        <frame x="143" y="35" width="98" height="92"/>
-        <frame x="270" y="33" width="101" height="92"/>
-      </idle>
-      <move speed="0.1F">
-        <frame x="16" y="164" width="99" height="92"/>
-        <frame x="140" y="163" width="107" height="92"/>
-        <frame x="267" y="163" width="110" height="92"/>
-        <frame x="397" y="160" width="103" height="92"/>
-      </move>
-      <jump speed="0.3F" loops="false">
-        <frame x="784" y="192" width="98" height="92"/>
-        <frame x="909" y="150" width="98" height="92"/>
-        <frame x="1037" y="143" width="98" height="92"/>
-      </jump>
-      <die speed="0.3F" loops ="false">
-        <frame x="772" y="547" width="115" height="92"/>
-        <frame x="899" y="552" width="118" height="92"/>
-        <frame x="1026" y="553" width="121" height="92"/>
-      </die>
-	    <charge speed="0.3F">
-        <frame x="17" y="292" width="94" height="92"/>
-        <frame x="143" y="292" width="96" height="92"/>
-        <frame x="270" y="292" width="98" height="92"/>
-      </charge>
-      <win speed="0.1F">
-        <frame x="652" y="292" width="103" height="92"/>
-        <frame x="525" y="292" width="102" height="92"/>
-        <frame x="397" y="292" width="102" height="92"/>
-      </win>
-    </animations>
-  </player>
 
   <collision>
     <max_colliders value="50"/>

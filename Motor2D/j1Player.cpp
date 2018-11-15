@@ -286,7 +286,7 @@ bool j1Player::Load(pugi::xml_node &player)
 	target_speed.x = player.child("target_speed").attribute("x").as_float();
 	target_speed.y = player.child("target_speed").attribute("y").as_float();
 
-	state = (Player_State)player.child("state").attribute("value").as_int();
+	state = (EntityState)player.child("state").attribute("value").as_int();
 	is_grounded = player.child("is_grounded").attribute("value").as_bool();
 	flipX = player.child("flipX").attribute("value").as_bool();
 

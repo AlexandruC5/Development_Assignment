@@ -3,17 +3,6 @@
 #include "j1Animation.h"
 #include "p2DynArray.h"
 
-enum Enemy_State {
-	E_NO_STATE = -1,
-	E_IDLE,
-	E_MOVING,
-	E_JUMPING,
-	E_DEAD,
-	E_CHARGE,
-	E_WIN,
-	E_TOTAL_ANIMATIONS,
-	E_GOD,
-};
 
 class j1Enemy : public j1Entity
 {
@@ -69,7 +58,7 @@ public:
 	/*Collider* collider;
 	fPoint position = { 0.0F, 0.0F };
 	fPoint velocity = { 0.0F, 0.0F };*/
-	Enemy_State state = E_IDLE;
+	EntityState state = IDLE;
 	//float threshold = 0.0F;
 
 	bool Awake(pugi::xml_node&);

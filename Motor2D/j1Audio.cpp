@@ -162,7 +162,6 @@ unsigned int j1Audio::LoadFx(const char* file)
 	}
 	else
 	{
-		LOG("LUL");
 		fx.add(chunk);
 		ret = fx.count();
 	}
