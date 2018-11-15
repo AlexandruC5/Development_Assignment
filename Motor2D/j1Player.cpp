@@ -96,6 +96,7 @@ bool j1Player::PreUpdate()
 
 bool j1Player::Update(float dt)
 {
+	LOG("position x %f", position.x);
 	if (state == JUMPING)
 	{
 		target_speed.y += gravity * dt;
@@ -370,12 +371,6 @@ void j1Player::ResetPlayer()
 	velocity = { 0.0F, 0.0F };
 	target_speed = { 0.0F, 0.0F };
 	flipX = true;
-}
-
-void j1Player::SetPosition(float x, float y)
-{
-	position = { x,y };
-	if(collider) collider->SetPos(position.x, position.y);
 }
 
 void j1Player::GodUpdate()

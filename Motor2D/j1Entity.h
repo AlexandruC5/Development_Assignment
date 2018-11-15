@@ -59,6 +59,7 @@ public:
 	fPoint position = { 0.0F, 0.0F };
 	fPoint velocity = { 0.0F, 0.0F };
 	Collider * collider;
+	EntityState state = IDLE;
 	float threshold = 0.0F;
 	
 	j1Entity(EntityType type);

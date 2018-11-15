@@ -4,6 +4,8 @@
 #include "j1Collision.h"
 #include "j1Input.h"
 #include "p2Log.h"
+#include "j1Pathfinding.h"
+#include "j1Map.h"
 #include "j1Enemy.h"
 #include "j1EntityManager.h"
 
@@ -17,9 +19,6 @@ j1Enemy::~j1Enemy()
 
 bool j1Enemy::Awake(pugi::xml_node &)
 {
-	animations[IDLE].PushBack({14,1,37,33});
-	animations[IDLE].speed = 1;
-	animations[IDLE].loop = true;
 
 	return true;
 }
@@ -27,6 +26,9 @@ bool j1Enemy::Awake(pugi::xml_node &)
 bool j1Enemy::Start()
 {
 	sprite = App->tex->Load("textures/dead_buny_floor_spritesheet.png");
+	animations[IDLE].PushBack({ 14,1,37,33 });
+	animations[IDLE].speed = 1;
+	animations[IDLE].loop = true;
 
 	movement_speed = 600.0F;
 	jump_speed = 1250.0F;
@@ -48,6 +50,9 @@ bool j1Enemy::Start()
 
 bool j1Enemy::Update(float dt)
 {
+	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN) chase = !chase;
+	if(chase) GetPath();
+
 	if (state == JUMPING)
 	{
 		target_speed.y += gravity*dt;
@@ -113,9 +118,6 @@ bool j1Enemy::PreUpdate()
 			if (current_destination >= current_path.Count())
 			{
 				current_path.Clear();
-				current_destination = 1;
-				previous_destination = 0;
-				next_destination = 2;
 			}
 		}
 	}
@@ -150,21 +152,6 @@ bool j1Enemy::Load(pugi::xml_node &)
 bool j1Enemy::Save(pugi::xml_node &) const
 {
 	return true;
-}
-
-void j1Enemy::CheckDeath()
-{
-
-}
-
-void j1Enemy::ResetPlayer()
-{
-
-}
-
-void j1Enemy::SetPosition(float x, float y)
-{
-
 }
 
 void j1Enemy::StepX(float dt)
@@ -272,4 +259,31 @@ void j1Enemy::Jump()
 	target_speed.y = -jump_speed;
 	is_grounded = false;
 	state = JUMPING;
+}
+
+bool j1Enemy::GetPath()
+{
+	iPoint origin = App->map->WorldToMap(position.x, position.y);
+	iPoint destination = App->map->WorldToMap(App->entitymanager->player->position.x, App->entitymanager->player->position.y);
+
+	App->pathfinding->CreatePath(origin, destination, 5, 5, 2);
+
+	const p2DynArray<iPoint>* tmp_array = App->pathfinding->GetLastPath();
+	current_path.Clear();
+	for (int i = 0; i < tmp_array->Count(); i++)
+	{
+		iPoint p = App->map->MapToWorld(tmp_array->At(i)->x, tmp_array->At(i)->y);
+		p.x += App->map->data.tile_width / 2;
+		p.y += App->map->data.tile_height / 2;
+		current_path.PushBack(p);
+	}
+	current_destination = current_path.Count() > 1 ? 1 : 0;
+	previous_destination = 0;
+	next_destination = current_path.Count() > 2 ? 2:-1;
+
+	moving_right = false;
+	moving_left = false;
+	jump = false;
+
+	return true;
 }

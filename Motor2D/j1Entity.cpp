@@ -77,4 +77,6 @@ void j1Entity::CheckDeath()
 
 void j1Entity::SetPosition(float x, float y)
 {
+	position = { x,y };
+	if (collider) collider->SetPos(position.x, position.y);
 }

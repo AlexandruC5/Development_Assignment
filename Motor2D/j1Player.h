@@ -47,12 +47,6 @@ private:
 	void Jump(float boost_y);
 
 public:
-	/*Collider* collider;
-	fPoint position = { 0.0F, 0.0F };
-	fPoint velocity = { 0.0F, 0.0F };*/
-	EntityState state = IDLE;
-	//float threshold = 0.0F;
-
 	j1Player(EntityType type);
 	~j1Player();
 	bool Awake(pugi::xml_node&);
@@ -65,7 +59,7 @@ public:
 
 	void CheckDeath();
 	void ResetPlayer();
-	void SetPosition(float x, float y);
+
 };
 
 #endif
