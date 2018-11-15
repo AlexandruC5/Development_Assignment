@@ -114,7 +114,7 @@ bool j1Player::Update(float dt)
 			charge_value += charge_increment * dt;
 	}
 
-	velocity.x = floor((target_speed.x * acceleration + velocity.x * (1 - acceleration))*dt);
+	velocity.x = (target_speed.x * acceleration + velocity.x * (1 - acceleration))*dt;
 
 	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
 	{
