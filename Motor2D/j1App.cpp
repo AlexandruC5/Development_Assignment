@@ -188,7 +188,7 @@ void j1App::PrepareUpdate()
 	last_sec_frame_count++;
 
 	// TODO 4: Calculate the dt: differential time since last frame
-	dt = frame_time.ReadSec();
+	dt = frame_time.ReadMs()*0.001;
 	frame_time.Start();
 }
 
@@ -210,21 +210,18 @@ void j1App::FinishUpdate()
 
 	float avg_fps = float(frame_count) / startup_time.ReadSec();
 	float seconds_since_startup = startup_time.ReadSec();
-	uint32 last_frame_ms = frame_time.Read();
+	uint32 last_frame_ms = frame_time.ReadMs();
 	uint32 frames_on_last_update = prev_last_sec_frame_count;
-
-
-	if (last_frame_ms < frame_rate)
-	{
-		PerfTimer delay_timer;
-		SDL_Delay(frame_rate - last_frame_ms);
-		//LOG("waited for: %.2f ms expected time: %u ms", delay_timer.ReadMs(), frame_rate - last_frame_ms);
-	}
 
 	static char title[256];
 	sprintf_s(title, 256, "Av.FPS: %.2f Last Frame Ms: %02u Last sec frames: %i  Time since startup: %.3f Frame Count: %lu ",
 		avg_fps, last_frame_ms, frames_on_last_update, seconds_since_startup, frame_count);
 	App->win->SetTitle(title);
+
+	if (last_frame_ms < frame_rate)
+	{
+		SDL_Delay(frame_rate - last_frame_ms);
+	}
 }
 
 // Call modules before each loop iteration

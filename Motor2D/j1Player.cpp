@@ -96,7 +96,7 @@ bool j1Player::PreUpdate()
 
 bool j1Player::Update(float dt)
 {
-	LOG("position x %f", position.x);
+	CheckDeath();
 	if (state == JUMPING)
 	{
 		target_speed.y += gravity * dt;
@@ -110,7 +110,7 @@ bool j1Player::Update(float dt)
 	}
 	else if (charge)
 	{
-		if (charge_value < max_charge)
+		if (charge_value < charged_time)
 			charge_value += charge_increment * dt;
 	}
 

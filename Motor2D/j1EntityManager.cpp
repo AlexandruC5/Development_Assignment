@@ -68,7 +68,7 @@ bool j1EntityManager::CreateEntity(EntityType type)
 		entities.add(player);
 		break;
 	case EntityType::ENEMY:
-		entities.add(new j1Enemy(type));
+		entities.add(new j1Enemy(type))->data->Start();;
 		break;
 	}
 	return true;
