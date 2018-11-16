@@ -71,22 +71,27 @@ bool j1Player::PreUpdate()
 {
 	
 	switch (state) {
-	case IDLE: IdleUpdate();
+	case IDLE: 
+		IdleUpdate();
 		break;
-	case MOVING: MovingUpdate();
+	case MOVING:
+		MovingUpdate();
 		break;
-	case JUMPING: JumpingUpdate();
+	case JUMPING: 
+		JumpingUpdate();
 		break;
 	case DEAD:
 		animation_frame = animations[DEAD].GetCurrentFrame();
 		break;
-	case CHARGE: ChargingUpdate();
+	case CHARGE: 
+		ChargingUpdate();
 		break;
 	case WIN: 
 		target_speed.x = 0.0F;
 		animation_frame = animations[WIN].GetCurrentFrame();
 		break;
-	case GOD: GodUpdate();
+	case GOD: 
+		GodUpdate();
 		break;
 	default:
 		break;
@@ -98,6 +103,7 @@ bool j1Player::PreUpdate()
 
 bool j1Player::Update(float dt)
 {
+	LOG("x %f y %f", position.x, position.y);
 	CheckDeath();
 	if (state == JUMPING)
 	{
@@ -373,6 +379,11 @@ void j1Player::ResetPlayer()
 	velocity = { 0.0F, 0.0F };
 	target_speed = { 0.0F, 0.0F };
 	flipX = true;
+	if (collider)
+	{
+		collider->rect.x = position.x;
+		collider->rect.y = position.y + collider_offset;
+	}
 }
 
 void j1Player::GodUpdate()

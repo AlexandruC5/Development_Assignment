@@ -2,7 +2,6 @@
 #include "j1Textures.h"
 #include "j1App.h"
 #include "j1Collision.h"
-#include "j1Input.h"
 #include "p2Log.h"
 #include "j1Pathfinding.h"
 #include "j1Map.h"
@@ -52,17 +51,15 @@ bool j1Enemy::Start()
 
 bool j1Enemy::Update(float dt)
 {
-	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN) chase = !chase;
 	if(chase) GetPath();
 
 	if (state == JUMPING)
 	{
 		target_speed.y += gravity*dt;
 		if (target_speed.y > fall_speed) target_speed.y = fall_speed; //limit falling speed
-		velocity.y = (target_speed.y * acceleration + velocity.y * (1 - acceleration))*dt;
 	}
-	velocity.x = (target_speed.x * acceleration + velocity.x * (1 - acceleration))*dt;
 
+	velocity = (target_speed * acceleration + velocity * (1 - acceleration))*dt;
 	StepY(dt);
 	StepX(dt);
 	CheckDeath();
@@ -75,6 +72,11 @@ bool j1Enemy::Update(float dt)
 
 bool j1Enemy::PreUpdate()
 {
+	if (position.DistanceManhattan(App->entitymanager->player->position) < MINIMUM_DISTANCE) 
+		chase = true;
+	else 
+		chase = false;
+
 	if (current_path.Count() > 0)
 	{
 		moving_right = false;
@@ -110,17 +112,15 @@ bool j1Enemy::PreUpdate()
 
 		if (reached_X && reached_Y)
 		{
-			LOG("reached node %i with position x %i y %i", current_destination, current_path.At(current_destination)->x, current_path.At(current_destination)->y);
 			previous_destination = current_destination;
 			current_destination++;
 			next_destination = current_destination + 1;
+
 			if (next_destination >= current_path.Count())
 				next_destination = -1;
 
 			if (current_destination >= current_path.Count())
-			{
 				current_path.Clear();
-			}
 		}
 	}
 
@@ -268,7 +268,7 @@ bool j1Enemy::GetPath()
 	iPoint origin = App->map->WorldToMap(position.x, position.y);
 	iPoint destination = App->map->WorldToMap(App->entitymanager->player->position.x, App->entitymanager->player->position.y);
 
-	App->pathfinding->CreatePath(origin, destination, 5, 5, 2);
+	App->pathfinding->CreatePath(origin, destination, 5, 5, jump_height);
 
 	const p2DynArray<iPoint>* tmp_array = App->pathfinding->GetLastPath();
 	current_path.Clear();

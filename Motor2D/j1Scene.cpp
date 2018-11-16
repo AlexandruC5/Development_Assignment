@@ -37,8 +37,8 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 bool j1Scene::Start()
 {
 	App->swap_scene->current_scene = this;
-	App->entitymanager->player->ResetPlayer();
 	App->map->Load(map_file.GetString());
+	App->entitymanager->player->ResetPlayer();
 
 	//pathfinding
 	int w, h;
@@ -49,6 +49,7 @@ bool j1Scene::Start()
 	RELEASE_ARRAY(data);
 
 	App->entitymanager->CreateEntity(EntityType::ENEMY);
+	App->entitymanager->CreateEntity(EntityType::FLIER);
 	App->audio->PlayMusic(music_file.GetString());
 	return true;
 }

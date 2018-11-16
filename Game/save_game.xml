@@ -10,19 +10,13 @@
 		<scene value="scene_forest" />
 	</swap_scene>
 	<map>
-		<background_1 x="3850" />
+		<background_1 x="0" />
 		<background_2 x="1925" />
 	</map>
-	<player>
-		<position x="7781.29297" y="1325.68921" />
-		<velocity x="0" y="0" />
-		<target_speed x="0" y="0" />
-		<state value="0" />
-		<is_grounded value="true" />
-		<flipX value="true" />
-	</player>
+	<entity_manager />
 	<collision />
+	<pathfinding />
 	<renderer>
-		<camera x="-7129" y="-1020" />
+		<camera x="0" y="-1584" />
 	</renderer>
 </game_state>

@@ -10,6 +10,7 @@ struct Collider;
 enum class EntityType {
 	PLAYER,
 	ENEMY,
+	FLIER,
 	UNKNOWN
 };
 

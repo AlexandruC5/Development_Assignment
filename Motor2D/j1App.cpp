@@ -150,8 +150,6 @@ bool j1App::Start()
 bool j1App::Update()
 {
 	BROFILER_CATEGORY("Update", Profiler::Color::OldLace);
-	dt = frame_time.ReadMs() * 0.001;
-	frame_time.Start();
 	bool ret = true;
 	PrepareUpdate();
 
@@ -208,7 +206,7 @@ void j1App::FinishUpdate()
 	if(want_to_load == true)
 		LoadGameNow();
 
-	if (last_sec_frame_time.Read() > 1000)
+	if (last_sec_frame_time.Read() >= 1000)
 	{
 		last_sec_frame_time.Start();
 		prev_last_sec_frame_count = last_sec_frame_count;
@@ -221,21 +219,17 @@ void j1App::FinishUpdate()
 	uint32 frames_on_last_update = prev_last_sec_frame_count;
 
 	static char title[256];
-	sprintf_s(title, 256, "Av.FPS: %.2f Last Frame Ms: %02u Last sec frames: %i  Time since startup: %.3f Frame Count: %lu ",
-		avg_fps, last_frame_ms, frames_on_last_update, seconds_since_startup, frame_count);
-	App->win->SetTitle(title);
-
-	static char title[256];
 	sprintf_s(title, 256, "Av.FPS: %.2f Last Frame Ms: %f Last sec frames: %i  Time since startup: %.3f Frame Count: %lu ",
 		avg_fps, last_frame_ms, frames_on_last_update, seconds_since_startup, frame_count);
 	App->win->SetTitle(title);
+
 	BROFILER_CATEGORY("Wait", Profiler::Color::OldLace);
 
 	if (last_frame_ms < frame_rate)
 	{
 		PerfTimer wait_timer;
 		SDL_Delay(frame_rate - last_frame_ms);
-		LOG("waited for: %.2f ms expected time: %f ms", wait_timer.ReadMs(), frame_rate - last_frame_ms);
+		//LOG("waited for: %.2f ms expected time: %f ms", wait_timer.ReadMs(), frame_rate - last_frame_ms);
 	}
 }
 

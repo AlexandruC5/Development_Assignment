@@ -4,10 +4,11 @@
 #include "p2DynArray.h"
 
 #define TOTAL_ANIMATIONS 1
+#define MINIMUM_DISTANCE 700
 
 class j1Enemy : public j1Entity
 {
-private:
+protected:
 	void StepX(float dt);
 	void StepY(float dt);
 	void IdleUpdate();
@@ -19,6 +20,7 @@ private:
 	int current_destination = 0;
 	int previous_destination = 0;
 	int next_destination = -1;
+	int jump_height = 2;
 	bool reached_X = false;
 	bool reached_Y = false;
 	bool current_is_grounded = false;

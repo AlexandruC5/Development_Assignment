@@ -1,7 +1,7 @@
 #include "j1App.h"
 #include "j1Render.h"
 #include "j1Textures.h"
-#include "j1Enemy.h"
+#include "j1FlyingEnemy.h"
 #include "j1EntityManager.h"
 
 j1EntityManager::j1EntityManager() : j1Module()
@@ -68,7 +68,10 @@ bool j1EntityManager::CreateEntity(EntityType type)
 		entities.add(player);
 		break;
 	case EntityType::ENEMY:
-		entities.add(new j1Enemy(type))->data->Start();;
+		entities.add(new j1Enemy(type))->data->Start();
+		break;
+	case EntityType::FLIER:
+		entities.add(new j1FlyingEnemy(type))->data->Start();
 		break;
 	}
 	return true;
