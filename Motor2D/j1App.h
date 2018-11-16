@@ -108,7 +108,7 @@ private:
 
 	p2SString			title;
 	p2SString			organization;
-	uint32				frame_rate;
+	double				frame_rate;
 
 	mutable bool		want_to_save;
 	bool				want_to_load;
@@ -118,7 +118,7 @@ private:
 	PerfTimer			ptimer;
 	uint64				frame_count = 0;
 	Timer				startup_time;
-	Timer				frame_time;
+	PerfTimer			frame_time;
 	Timer				last_sec_frame_time;
 	uint32				last_sec_frame_count = 0;
 	uint32				prev_last_sec_frame_count = 0;

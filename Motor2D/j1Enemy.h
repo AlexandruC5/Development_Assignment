@@ -3,6 +3,7 @@
 #include "j1Animation.h"
 #include "p2DynArray.h"
 
+#define TOTAL_ANIMATIONS 1
 
 class j1Enemy : public j1Entity
 {

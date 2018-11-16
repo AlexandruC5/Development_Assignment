@@ -44,7 +44,7 @@ protected:
 	bool flipX = true;
 	bool is_grounded = true;
 
-	Animation animations[10];
+	Animation* animations;
 	SDL_Rect animation_frame;
 	unsigned int jump_fx;
 

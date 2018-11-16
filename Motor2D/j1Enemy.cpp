@@ -11,7 +11,9 @@
 
 
 j1Enemy::j1Enemy(EntityType type) : j1Entity(type)
-{}
+{
+	animations = new Animation[TOTAL_ANIMATIONS];
+}
 
 
 j1Enemy::~j1Enemy()
