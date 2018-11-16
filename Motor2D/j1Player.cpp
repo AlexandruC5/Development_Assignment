@@ -14,7 +14,9 @@
 
 
 j1Player::j1Player(EntityType type) : j1Entity(type)
-{}
+{
+	animations = new Animation[TOTAL_ANIMATIONS];
+}
 
 j1Player::~j1Player()
 {}

@@ -108,7 +108,7 @@ private:
 
 	p2SString			title;
 	p2SString			organization;
-	uint32				frame_rate;
+	double				frame_rate;
 
 	mutable bool		want_to_save;
 	bool				want_to_load;

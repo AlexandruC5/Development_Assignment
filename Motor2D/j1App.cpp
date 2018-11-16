@@ -17,6 +17,8 @@
 #include "j1PathFinding.h"
 #include "j1App.h"
 #include "j1EntityManager.h"
+#include "Brofiler/Brofiler.h"
+
 
 // Constructor
 j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
@@ -147,6 +149,9 @@ bool j1App::Start()
 // Called each loop iteration
 bool j1App::Update()
 {
+	BROFILER_CATEGORY("Update", Profiler::Color::OldLace);
+	dt = frame_time.ReadMs() * 0.001;
+	frame_time.Start();
 	bool ret = true;
 	PrepareUpdate();
 
@@ -184,6 +189,7 @@ pugi::xml_node j1App::LoadConfig(pugi::xml_document& config_file) const
 // ---------------------------------------------
 void j1App::PrepareUpdate()
 {
+	BROFILER_CATEGORY("PrepareUpdate", Profiler::Color::Violet);
 	frame_count++;
 	last_sec_frame_count++;
 
@@ -195,6 +201,7 @@ void j1App::PrepareUpdate()
 // ---------------------------------------------
 void j1App::FinishUpdate()
 {
+	BROFILER_CATEGORY("FinishUpdate", Profiler::Color::Crimson);
 	if(want_to_save == true)
 		SavegameNow();
 
@@ -210,7 +217,7 @@ void j1App::FinishUpdate()
 
 	float avg_fps = float(frame_count) / startup_time.ReadSec();
 	float seconds_since_startup = startup_time.ReadSec();
-	uint32 last_frame_ms = frame_time.ReadMs();
+	double last_frame_ms = frame_time.ReadMs();
 	uint32 frames_on_last_update = prev_last_sec_frame_count;
 
 	static char title[256];
@@ -218,15 +225,24 @@ void j1App::FinishUpdate()
 		avg_fps, last_frame_ms, frames_on_last_update, seconds_since_startup, frame_count);
 	App->win->SetTitle(title);
 
+	static char title[256];
+	sprintf_s(title, 256, "Av.FPS: %.2f Last Frame Ms: %f Last sec frames: %i  Time since startup: %.3f Frame Count: %lu ",
+		avg_fps, last_frame_ms, frames_on_last_update, seconds_since_startup, frame_count);
+	App->win->SetTitle(title);
+	BROFILER_CATEGORY("Wait", Profiler::Color::OldLace);
+
 	if (last_frame_ms < frame_rate)
 	{
+		PerfTimer wait_timer;
 		SDL_Delay(frame_rate - last_frame_ms);
+		LOG("waited for: %.2f ms expected time: %f ms", wait_timer.ReadMs(), frame_rate - last_frame_ms);
 	}
 }
 
 // Call modules before each loop iteration
 bool j1App::PreUpdate()
 {
+	BROFILER_CATEGORY("PreUpdate", Profiler::Color::SeaGreen);
 	bool ret = true;
 	p2List_item<j1Module*>* item;
 	item = modules.start;
@@ -249,6 +265,7 @@ bool j1App::PreUpdate()
 // Call modules on each loop iteration
 bool j1App::DoUpdate()
 {
+	BROFILER_CATEGORY("DoUpdate", Profiler::Color::LemonChiffon);
 	bool ret = true;
 	p2List_item<j1Module*>* item;
 	item = modules.start;
@@ -271,6 +288,7 @@ bool j1App::DoUpdate()
 // Call modules after each loop iteration
 bool j1App::PostUpdate()
 {
+	BROFILER_CATEGORY("PostUpdate", Profiler::Color::AliceBlue);
 	bool ret = true;
 	p2List_item<j1Module*>* item;
 	j1Module* pModule = NULL;
