@@ -194,11 +194,13 @@ int PathNode::Score() const
 int PathNode::CalculateF(const iPoint& destination, int jump_length)
 {
 	if (jump_length > 0)
+	{
 		g = parent->g + 1 + jump_length / 4;
+	}
 	else
 		g = parent->g + 1;
-
 	h = pos.DistanceNoSqrt(destination);
+
 	this->jump_length = jump_length;
 
 	return g + h;
@@ -227,12 +229,12 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination, i
 
 	if (!flier)
 	{
-		if (!IsGround({ origin.x, origin.y + 1 }))
+		if (IsGround({ origin.x, origin.y + 1 }))
 			node_origin.jump_length = 0;
 		else
 			node_origin.jump_length = maxCharacterJumpHeight * 2;
 	}
-	else 
+	else
 		node_origin.jump_length = 0;
 
 	open.list.add(node_origin);
@@ -242,7 +244,7 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination, i
 		p2List_item<PathNode>* current_node = open.GetNodeLowestScore();
 		// TODO 3: Move the lowest score cell from open list to the closed list
 		close.list.add(current_node->data);
-		open.list.del(current_node);
+	
 
 		// TODO 4: If we just added the destination, we are done!
 		// Backtrack to create the final path
@@ -298,7 +300,6 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination, i
 
 							if (IsPlatform({ child_node->data.pos.x, child_node->data.pos.y }))
 							{
-								LOG("x %i y %i", child_node->data.pos.x, child_node->data.pos.y);
 								child_node = child_node->next;
 								continue;
 							}
@@ -325,8 +326,8 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination, i
 						{
 							// If it is a better path, Update the parent
 							// replace old node at open
-							open.Find(child_node->data.pos)->data.g = child_node->data.g;
-							open.Find(child_node->data.pos)->data.parent = child_node->data.parent;
+							//open.Find(child_node->data.pos)->data.g = child_node->data.g;
+							//open.Find(child_node->data.pos)->data.parent = child_node->data.parent;
 						}
 					}
 					else open.list.add(child_node->data);
@@ -334,6 +335,7 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination, i
 				child_node = child_node->next;
 			}
 		}
+		open.list.del(current_node);
 	}
 	
 

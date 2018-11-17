@@ -15,7 +15,7 @@ j1Enemy::j1Enemy(EntityType type, pugi::xml_node config, fPoint position, p2SStr
 	animations = new Animation[TOTAL_ANIMATIONS];
 	LoadAnimations(config);
 
-	collider = App->collision->AddCollider(animation_frame, COLLIDER_PLAYER, App->entitymanager, true);
+	collider = App->collision->AddCollider(animation_frame, COLLIDER_ENEMY, App->entitymanager, true);
 	collider->rect.x = position.x;
 	collider->rect.y = position.y + collider_offset;
 }
@@ -214,12 +214,12 @@ void j1Enemy::MovingUpdate()
 	else if (moving_right)
 	{
 		target_speed.x = movement_speed;
-		flipX = true;
+		flipX = false;
 	}
 	else if (moving_left)
 	{
 		target_speed.x = -movement_speed;
-		flipX = false;
+		flipX = true;
 	}
 
 	if (jump)
@@ -240,12 +240,12 @@ void j1Enemy::JumpingUpdate()
 	else if (moving_right)
 	{
 		target_speed.x = movement_speed;
-		flipX = true;
+		flipX = false;
 	}
 	else if (moving_left)
 	{
 		target_speed.x = -movement_speed;
-		flipX = false;
+		flipX = true;
 	}
 
 	if (is_grounded)

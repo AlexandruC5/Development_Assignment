@@ -26,8 +26,6 @@ j1FlyingEnemy::~j1FlyingEnemy()
 
 bool j1FlyingEnemy::Start()
 {
-	
-
 	return true;
 }
 
@@ -73,13 +71,7 @@ bool j1FlyingEnemy::PreUpdate()
 			else if (position.y < current_path.At(current_destination)->y)
 				moving_down = true;
 		}
-		else
-		{
-			if (next_destination != -1 && position.y > current_path.At(next_destination)->y)
-				jump = true;
-			else if (next_destination != -1 && position.y < current_path.At(next_destination)->y)
-				moving_down = true;
-		}
+
 
 		if (reached_X && reached_Y)
 		{
@@ -168,12 +160,12 @@ void j1FlyingEnemy::JumpingUpdate()
 	else if (moving_right)
 	{
 		target_speed.x = movement_speed;
-		flipX = true;
+		flipX = false;
 	}
 	else if (moving_left)
 	{
 		target_speed.x = -movement_speed;
-		flipX = false;
+		flipX = true;
 	}
 
 	if (jump == moving_down)

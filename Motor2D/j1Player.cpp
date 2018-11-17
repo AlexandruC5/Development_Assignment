@@ -76,7 +76,6 @@ bool j1Player::PreUpdate()
 
 bool j1Player::Update(float dt)
 {
-	LOG("x %f y %f", position.x, position.y);
 	CheckDeath();
 	if (state == JUMPING)
 	{
