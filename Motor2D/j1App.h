@@ -109,6 +109,7 @@ private:
 	p2SString			title;
 	p2SString			organization;
 	double				frame_rate;
+	pugi::xml_document	config_file;
 
 	mutable bool		want_to_save;
 	bool				want_to_load;

@@ -11,7 +11,7 @@ enum class EntityType {
 	PLAYER,
 	ENEMY,
 	FLIER,
-	UNKNOWN
+	COUNT
 };
 
 enum EntityState {
@@ -55,6 +55,7 @@ protected:
 	virtual void MovingUpdate();
 	virtual void JumpingUpdate();
 	virtual void Jump();
+	virtual void LoadAnimations(pugi::xml_node conf);
 
 public:
 	fPoint position = { 0.0F, 0.0F };
@@ -63,9 +64,9 @@ public:
 	EntityState state = IDLE;
 	float threshold = 0.0F;
 	
-	j1Entity(EntityType type);
+	j1Entity(EntityType type, pugi::xml_node config);
 	~j1Entity();
-	virtual bool Awake(pugi::xml_node&);
+	virtual bool Awake();
 	virtual bool Start();
 	virtual bool Update(float dt);
 	virtual bool PreUpdate();

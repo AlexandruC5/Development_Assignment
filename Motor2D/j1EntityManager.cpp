@@ -7,7 +7,6 @@
 j1EntityManager::j1EntityManager() : j1Module()
 {
 	name.create("entity_manager");
-	CreateEntity(EntityType::PLAYER);
 }
 
 j1EntityManager::~j1EntityManager()
@@ -17,7 +16,7 @@ j1EntityManager::~j1EntityManager()
 
 bool j1EntityManager::Awake(pugi::xml_node &conf)
 {
-	player->Awake(conf.child("player"));
+	entity_configs = conf;
 	return true;
 }
 
@@ -64,14 +63,14 @@ bool j1EntityManager::CreateEntity(EntityType type)
 	switch (type)
 	{
 	case EntityType::PLAYER:
-		player = new j1Player(type);
+		player = new j1Player(type, entity_configs.child("player"));
 		entities.add(player);
 		break;
 	case EntityType::ENEMY:
-		entities.add(new j1Enemy(type))->data->Start();
+		entities.add(new j1Enemy(type, entity_configs.child("enemy")));
 		break;
 	case EntityType::FLIER:
-		entities.add(new j1FlyingEnemy(type))->data->Start();
+		entities.add(new j1FlyingEnemy(type, entity_configs.child("flying_enemy")));
 		break;
 	}
 	return true;

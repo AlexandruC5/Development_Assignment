@@ -29,9 +29,9 @@ private:
 	void Jump(float boost_y);
 
 public:
-	j1Player(EntityType type);
+	j1Player(EntityType type, pugi::xml_node);
 	~j1Player();
-	bool Awake(pugi::xml_node&);
+	bool Awake();
 	bool Start();
 	bool Update(float dt);
 	bool PreUpdate();

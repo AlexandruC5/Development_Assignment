@@ -9,16 +9,23 @@
 #include "j1EntityManager.h"
 
 
-j1Enemy::j1Enemy(EntityType type) : j1Entity(type)
+j1Enemy::j1Enemy(EntityType type, pugi::xml_node config) : j1Entity(type, config)
 {
 	animations = new Animation[TOTAL_ANIMATIONS];
+	LoadAnimations(config);
+
+	position = { 120.0F, 2091.0F };
+	collider = App->collision->AddCollider(animation_frame, COLLIDER_PLAYER, App->entitymanager, true);
+	collider->rect.x = position.x;
+	collider->rect.y = position.y + collider_offset;
+
 }
 
 
 j1Enemy::~j1Enemy()
 {}
 
-bool j1Enemy::Awake(pugi::xml_node &)
+bool j1Enemy::Awake()
 {
 
 	return true;
@@ -26,7 +33,7 @@ bool j1Enemy::Awake(pugi::xml_node &)
 
 bool j1Enemy::Start()
 {
-	sprite = App->tex->Load("textures/dead_buny_floor_spritesheet.png");
+	/*sprite = App->tex->Load("textures/dead_buny_floor_spritesheet.png");
 	animations[IDLE].PushBack({ 14,1,37,33 });
 	animations[IDLE].speed = 1;
 	animations[IDLE].loop = true;
@@ -36,15 +43,13 @@ bool j1Enemy::Start()
 	acceleration = 0.8F;
 	threshold = 0.4F;
 	gravity = 1600.0f;
-	fall_speed = 1250.0F;
+	fall_speed = 1250.0F;*/
 
 
-	position = { 120.0F, 2091.0F };
 
-	animation_frame = animations[IDLE].GetCurrentFrame();
-	collider = App->collision->AddCollider(animation_frame, COLLIDER_PLAYER, App->entitymanager, true);
-	collider->rect.x = position.x;
-	collider->rect.y = position.y + collider_offset;
+
+
+
 	
 	return true;
 }

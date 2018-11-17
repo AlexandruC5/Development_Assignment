@@ -6,18 +6,6 @@
 #include "j1Entity.h"
 #include "j1Player.h"
 
-struct EntityData
-{
-	float movement_speed = 0.0F;
-	float jump_speed = 0.0F;
-	float gravity = 0.0F;
-	float acceleration = 0.0F;
-	float fall_speed = 0.0F;
-	fPoint position = { 0.0F, 0.0F };
-	fPoint velocity = { 0.0F, 0.0F };
-	float threshold = 0.0F;
-	Animation* animations = nullptr;
-};
 
 class j1EntityManager : public j1Module
 {
@@ -37,6 +25,8 @@ public:
 	j1Entity* getEntity(EntityType type);
 	bool DeleteEntity(j1Entity* entity);
 
+private:
+	pugi::xml_node entity_configs;
 };
 
 #endif

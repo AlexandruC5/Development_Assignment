@@ -13,57 +13,30 @@
 #include "j1EntityManager.h"
 
 
-j1Player::j1Player(EntityType type) : j1Entity(type)
+j1Player::j1Player(EntityType type, pugi::xml_node config) : j1Entity(type,config)
 {
 	animations = new Animation[TOTAL_ANIMATIONS];
+	LoadAnimations(config);
+	jump_fx = App->audio->LoadFx(config.child("audio").child("jump_fx").child_value());
+	charged_time = config.child("charged_jump").attribute("time").as_float();
+	charge_increment = config.child("charged_jump").attribute("charge_increment").as_float();
+	max_charge = config.child("charged_jump").attribute("max_charge").as_float();
+
+	collider = App->collision->AddCollider(animation_frame, COLLIDER_PLAYER, App->entitymanager, true);
+	collider->rect.x = position.x;
+	collider->rect.y = position.y + collider_offset;
 }
 
 j1Player::~j1Player()
 {}
 
-bool j1Player::Awake(pugi::xml_node &conf)
+bool j1Player::Awake()
 {
-	//load spritesheet
-	sprite_route = PATH(conf.child("folder").child_value(), conf.child("sprite").child_value());
-
-	//load animations
-	int index = 0;
-	pugi::xml_node animation;
-	for (animation = conf.child("animations").first_child(); animation; animation = animation.next_sibling())
-	{
-		pugi::xml_node frame;
-		for (frame = animation.child("frame"); frame; frame = frame.next_sibling("frame"))
-		{
-			animations[index].PushBack({ frame.attribute("x").as_int(), frame.attribute("y").as_int(), frame.attribute("width").as_int(), frame.attribute("height").as_int() });
-		}
-		animations[index].speed = animation.attribute("speed").as_float();
-		animations[index].loop = animation.attribute("loops").as_bool(true);
-		index++;
-	}
-
-	//load player stats
-	movement_speed = conf.child("movement_speed").attribute("value").as_float();
-	jump_speed = conf.child("jump_speed").attribute("value").as_float();
-	acceleration = conf.child("acceleration").attribute("value").as_float();
-	threshold = conf.child("threshold").attribute("value").as_float();
-	gravity = conf.child("gravity").attribute("value").as_float();
-	fall_speed = conf.child("fall_speed").attribute("value").as_float();
-	charged_time = conf.child("charged_jump").attribute("time").as_float();
-	charge_increment = conf.child("charged_jump").attribute("charge_increment").as_float();
-	max_charge = conf.child("charged_jump").attribute("max_charge").as_float();
-
-	animation_frame = { 0, 0, conf.child("collider").attribute("width").as_int(), conf.child("collider").attribute("height").as_int() };
-	collider_offset = conf.child("collider").attribute("offset").as_int();
-	jump_fx = App->audio->LoadFx(conf.child("audio").child("jump_fx").child_value());
 	return true;
 }
 
 bool j1Player::Start()
 {
-	sprite = App->tex->Load(sprite_route.GetString());
-	collider = App->collision->AddCollider(animation_frame, COLLIDER_PLAYER, App->entitymanager, true);
-	collider->rect.x = position.x;
-	collider->rect.y = position.y + collider_offset;
 	return true;
 }
 

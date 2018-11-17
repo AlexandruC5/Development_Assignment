@@ -9,10 +9,19 @@
 #include "j1FlyingEnemy.h"
 
 
-j1FlyingEnemy::j1FlyingEnemy(EntityType type):j1Enemy(type)
+j1FlyingEnemy::j1FlyingEnemy(EntityType type, pugi::xml_node config):j1Enemy(type, config)
 {
 	animations = new Animation[TOTAL_ANIMATIONS];
+	LoadAnimations(config);
 	state = JUMPING;
+
+	position = { 120.0F, 1000.0F };
+	collider = App->collision->AddCollider(animation_frame, COLLIDER_PLAYER, App->entitymanager, true);
+	collider->rect.x = position.x;
+	collider->rect.y = position.y + collider_offset;
+
+	jump_height = -1;
+
 }
 
 
@@ -22,23 +31,19 @@ j1FlyingEnemy::~j1FlyingEnemy()
 
 bool j1FlyingEnemy::Start()
 {
-	sprite = App->tex->Load("textures/dead_bat_spritesheet.png");
+	/*sprite = App->tex->Load("textures/dead_bat_spritesheet.png");
 	animations[IDLE].PushBack({ 6,8,42,30 });
 	animations[IDLE].speed = 1;
 	animations[IDLE].loop = true;
 
 	movement_speed = 600.0F;
 	acceleration = 0.8F;
-	threshold = 0.4F;
+	threshold = 0.4F;*/
 
-	position = { 120.0F, 1000.0F };
+	
 
-	animation_frame = animations[IDLE].GetCurrentFrame();
-	collider = App->collision->AddCollider(animation_frame, COLLIDER_PLAYER, App->entitymanager, true);
-	collider->rect.x = position.x;
-	collider->rect.y = position.y + collider_offset;
-
-	jump_height = -1;
+	//animation_frame = animations[IDLE].GetCurrentFrame();
+	
 
 	return true;
 }

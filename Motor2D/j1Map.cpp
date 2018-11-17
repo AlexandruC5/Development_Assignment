@@ -430,6 +430,9 @@ bool j1Map::LoadUtilsLayer(pugi::xml_node & node)
 	App->render->camera.body.y = -(App->map->data.height * App->map->data.tile_height - App->render->camera.body.h);
 	App->render->camera.body.x = 0;
 	pugi::xml_node spawn = node.find_child_by_attribute("name", "spawn");
+	
+	if (!App->entitymanager->player)
+		App->entitymanager->CreateEntity(EntityType::PLAYER);
 	App->entitymanager->player->SetPosition(spawn.attribute("x").as_float(), spawn.attribute("y").as_float());
 
 	return true;

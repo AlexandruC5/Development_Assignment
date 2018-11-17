@@ -52,7 +52,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(swap_scene, true);
 	AddModule(map, true);
 	AddModule(entitymanager, true);
-	AddModule(collision, true);	
+	AddModule(collision, true);
 	AddModule(pathfinding, true);
 
 
@@ -88,7 +88,6 @@ bool j1App::Awake()
 {
 	PERF_START(ptimer);
 
-	pugi::xml_document	config_file;
 	pugi::xml_node		config;
 	pugi::xml_node		app_config;
 

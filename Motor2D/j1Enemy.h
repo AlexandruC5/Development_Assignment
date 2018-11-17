@@ -34,10 +34,10 @@ protected:
 
 public:
 	p2DynArray<iPoint> current_path;
-	j1Enemy(EntityType type);
+	j1Enemy(EntityType type, pugi::xml_node);
 	~j1Enemy();
 
-	bool Awake(pugi::xml_node&);
+	bool Awake();
 	bool Start();
 	bool Update(float dt);
 	bool PreUpdate();

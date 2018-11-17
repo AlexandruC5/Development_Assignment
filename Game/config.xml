@@ -14,7 +14,7 @@
     <player>
       <sprite>player_spritesheet.png</sprite>
       <folder>textures</folder>
-      <movement_speed value="600.0F.0F"/>
+      <movement_speed value="600.0F"/>
       <jump_speed value="1500.0F"/>
       <fall_speed value="1500.0F"/>
       <threshold value="0.4F"/>
@@ -59,6 +59,55 @@
         </win>
       </animations>
     </player>
+    <enemy>
+      <sprite>dead_buny_floor_spritesheet.png</sprite>
+      <folder>textures</folder>
+      <movement_speed value="400.0F"/>
+      <jump_speed value="1400.0F"/>
+      <fall_speed value="1400.0F"/>
+      <threshold value="0.4F"/>
+      <acceleration value="0.8F"/>
+      <gravity value="2200.0F"/>
+      <collider width="39" height="37" offset="0"/>
+      <animations>
+        <idle speed="0.1F">
+          <frame x="14" y="1" width="39" height="37"/>
+          <frame x="71" y="1" width="39" height="37"/>
+        </idle>
+        <move speed="0.1F">
+          <frame x="11" y="43" width="39" height="37"/>
+          <frame x="69" y="46" width="39" height="37"/>
+          <frame x="125" y="45" width="39" height="37"/>
+          <frame x="182" y="41" width="39" height="37"/>
+        </move>
+        <jump speed="0.3F" loops="false">
+          <frame x="8" y="91" width="39" height="37"/>
+          <frame x="64" y="86" width="39" height="37"/>
+          <frame x="123" y="81" width="39" height="37"/>
+          <frame x="182" y="81" width="39" height="37"/>
+        </jump>
+      </animations>
+    </enemy>
+    <flying_enemy>
+      <sprite>dead_bat_spritesheet.png</sprite>
+      <folder>textures</folder>
+      <movement_speed value="400.0F"/>
+      <threshold value="0.4F"/>
+      <acceleration value="0.8F"/>
+      <collider width="42" height="30" offset="0"/>
+      <animations>
+        <idle speed="0.1F">
+          <frame x="6" y="8" width="42" height="30"/>
+          <frame x="59" y="8" width="42" height="30"/>
+          <frame x="112" y="8" width="42" height="30"/>
+          <frame x="164" y="8" width="42" height="30"/>
+          <frame x="217" y="7" width="42" height="30"/>
+          <frame x="270" y="8" width="42" height="30"/>
+          <frame x="323" y="8" width="42" height="30"/>
+          <frame x="375" y="8" width="42" height="30"/>
+        </idle>
+      </animations>
+    </flying_enemy>
   </entity_manager>
   
   <window>

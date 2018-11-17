@@ -13,7 +13,7 @@ protected:
 	void JumpingUpdate();
 
 public:
-	j1FlyingEnemy(EntityType type);
+	j1FlyingEnemy(EntityType type, pugi::xml_node);
 	~j1FlyingEnemy();
 
 	bool Start();
