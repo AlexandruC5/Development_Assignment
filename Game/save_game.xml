@@ -13,7 +13,97 @@
 		<background_1 x="0" />
 		<background_2 x="1925" />
 	</map>
-	<entity_manager />
+	<entity_manager>
+		<player_0>
+			<position x="250.828537" y="2091" />
+			<velocity x="0" y="0" />
+			<target_speed x="0" y="0" />
+			<state value="0" />
+			<is_grounded value="true" />
+			<flipX value="true" />
+		</player_0>
+		<enemy_1>
+			<position x="1583.32996" y="2147.8501" />
+			<velocity x="0" y="0" />
+			<target_speed x="0" y="0" />
+			<state value="0" />
+			<is_grounded value="true" />
+			<flipX value="true" />
+			<state value="0" />
+			<chase value="false" />
+			<movement_controls moving_right="false" />
+			<movement_controls moving_left="false" />
+			<movement_controls jump="false" />
+		</enemy_1>
+		<enemy_2>
+			<position x="3146.12012" y="1509.18542" />
+			<velocity x="0" y="0" />
+			<target_speed x="0" y="0" />
+			<state value="0" />
+			<is_grounded value="true" />
+			<flipX value="true" />
+			<state value="0" />
+			<chase value="false" />
+			<movement_controls moving_right="false" />
+			<movement_controls moving_left="false" />
+			<movement_controls jump="false" />
+		</enemy_2>
+		<enemy_3>
+			<position x="7154.12012" y="2149.18579" />
+			<velocity x="0" y="0" />
+			<target_speed x="0" y="0" />
+			<state value="0" />
+			<is_grounded value="true" />
+			<flipX value="true" />
+			<state value="0" />
+			<chase value="false" />
+			<movement_controls moving_right="false" />
+			<movement_controls moving_left="false" />
+			<movement_controls jump="false" />
+		</enemy_3>
+		<flier_4>
+			<position x="2158.12012" y="851.333008" />
+			<velocity x="0" y="0" />
+			<target_speed x="0" y="0" />
+			<state value="2" />
+			<is_grounded value="true" />
+			<flipX value="true" />
+			<state value="2" />
+			<chase value="false" />
+			<movement_controls moving_right="false" />
+			<movement_controls moving_left="false" />
+			<movement_controls jump="false" />
+			<movement_controls moving_down="false" />
+		</flier_4>
+		<flier_5>
+			<position x="4290.12012" y="967.333008" />
+			<velocity x="0" y="0" />
+			<target_speed x="0" y="0" />
+			<state value="2" />
+			<is_grounded value="true" />
+			<flipX value="true" />
+			<state value="2" />
+			<chase value="false" />
+			<movement_controls moving_right="false" />
+			<movement_controls moving_left="false" />
+			<movement_controls jump="false" />
+			<movement_controls moving_down="false" />
+		</flier_5>
+		<flier_6>
+			<position x="7806.12012" y="1071.32996" />
+			<velocity x="0" y="0" />
+			<target_speed x="0" y="0" />
+			<state value="2" />
+			<is_grounded value="true" />
+			<flipX value="true" />
+			<state value="2" />
+			<chase value="false" />
+			<movement_controls moving_right="false" />
+			<movement_controls moving_left="false" />
+			<movement_controls jump="false" />
+			<movement_controls moving_down="false" />
+		</flier_6>
+	</entity_manager>
 	<collision />
 	<pathfinding />
 	<renderer>

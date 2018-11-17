@@ -13,13 +13,12 @@ protected:
 	void JumpingUpdate();
 
 public:
-	j1FlyingEnemy(EntityType type, pugi::xml_node, fPoint position);
+	j1FlyingEnemy(EntityType type, pugi::xml_node, fPoint position, p2SString id);
 	~j1FlyingEnemy();
 
 	bool Start();
 	bool PreUpdate();
 	bool Update(float dt);
-	bool CleanUp();
 	bool Load(pugi::xml_node&);
 	bool Save(pugi::xml_node&) const;
 };

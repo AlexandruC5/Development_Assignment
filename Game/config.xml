@@ -133,7 +133,7 @@
   </scene_desert>
 
   <collision>
-    <max_colliders value="50"/>
+    <max_colliders value="200"/>
   </collision>
 
   <map>

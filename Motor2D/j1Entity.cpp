@@ -6,7 +6,7 @@
 #include "p2Log.h"
 #include "j1Entity.h"
 
-j1Entity::j1Entity(EntityType type, pugi::xml_node config, fPoint position)
+j1Entity::j1Entity(EntityType type, pugi::xml_node config, fPoint position, p2SString id)
 {
 	this->type = type;
 
@@ -22,6 +22,8 @@ j1Entity::j1Entity(EntityType type, pugi::xml_node config, fPoint position)
 
 	collider_offset = config.child("collider").attribute("offset").as_int();
 	this->position = position;
+
+	this->id = id;
 }
 
 j1Entity::~j1Entity()
@@ -93,17 +95,62 @@ void j1Entity::StepY(float dt)
 
 bool j1Entity::CleanUp()
 {
-	return false;
+	if (sprite)
+	{
+		App->tex->UnLoad(sprite);
+		sprite = nullptr;
+	}
+
+	if (collider)
+	{
+		collider->to_delete = true;
+		collider = nullptr;
+	}
+
+	return true;
 }
 
-bool j1Entity::Load(pugi::xml_node &)
+bool j1Entity::Load(pugi::xml_node &data)
 {
-	return false;
+	position.x = data.child("position").attribute("x").as_float();
+	position.y = data.child("position").attribute("y").as_float();
+
+	velocity.x = data.child("velocity").attribute("x").as_float();
+	velocity.y = data.child("velocity").attribute("y").as_float();
+
+	target_speed.x = data.child("target_speed").attribute("x").as_float();
+	target_speed.y = data.child("target_speed").attribute("y").as_float();
+
+	state = (EntityState)data.child("state").attribute("value").as_int();
+	is_grounded = data.child("is_grounded").attribute("value").as_bool();
+	flipX = data.child("flipX").attribute("value").as_bool();
+
+	collider->SetPos(position.x, position.y + collider_offset);
+	return true;
 }
 
-bool j1Entity::Save(pugi::xml_node &) const
+bool j1Entity::Save(pugi::xml_node &conf) const
 {
-	return false;
+	//save position of entity
+	pugi::xml_node position_node = conf.append_child("position");
+	position_node.append_attribute("x") = position.x;
+	position_node.append_attribute("y") = position.y;
+
+	//save current speed of entity
+	pugi::xml_node velocity_node = conf.append_child("velocity");
+	velocity_node.append_attribute("x") = velocity.x;
+	velocity_node.append_attribute("y") = velocity.y;
+
+	pugi::xml_node target_speed_node = conf.append_child("target_speed");
+	target_speed_node.append_attribute("x") = target_speed.x;
+	target_speed_node.append_attribute("y") = target_speed.y;
+
+	//save state of entity
+	conf.append_child("state").append_attribute("value") = state != DEAD ? (int)state : (int)IDLE;
+	conf.append_child("is_grounded").append_attribute("value") = is_grounded;
+	conf.append_child("flipX").append_attribute("value") = flipX;
+
+	return true;
 }
 
 void j1Entity::CheckDeath()

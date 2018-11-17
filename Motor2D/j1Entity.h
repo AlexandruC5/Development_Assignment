@@ -63,8 +63,9 @@ public:
 	Collider * collider;
 	EntityState state = IDLE;
 	float threshold = 0.0F;
+	p2SString id;
 	
-	j1Entity(EntityType type, pugi::xml_node config, fPoint position);
+	j1Entity(EntityType type, pugi::xml_node config, fPoint position, p2SString id);
 	~j1Entity();
 	virtual bool Awake();
 	virtual bool Start();

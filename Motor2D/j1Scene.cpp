@@ -37,6 +37,7 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 bool j1Scene::Start()
 {
 	App->swap_scene->current_scene = this;
+	App->entitymanager->CleanUp();
 	App->map->Load(map_file.GetString());
 	App->entitymanager->player->ResetPlayer();
 

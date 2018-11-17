@@ -6,21 +6,17 @@
 #include "j1Pathfinding.h"
 #include "j1Map.h"
 #include "j1EntityManager.h"
+#include "j1Input.h"
 #include "j1FlyingEnemy.h"
 
 
-j1FlyingEnemy::j1FlyingEnemy(EntityType type, pugi::xml_node config, fPoint position):j1Enemy(type, config, position)
+j1FlyingEnemy::j1FlyingEnemy(EntityType type, pugi::xml_node config, fPoint position, p2SString id):j1Enemy(type, config, position, id)
 {
 	animations = new Animation[TOTAL_ANIMATIONS];
 	LoadAnimations(config);
 	state = JUMPING;
 
-	collider = App->collision->AddCollider(animation_frame, COLLIDER_PLAYER, App->entitymanager, true);
-	collider->rect.x = position.x;
-	collider->rect.y = position.y + collider_offset;
-
 	jump_height = -1;
-
 }
 
 
@@ -30,18 +26,6 @@ j1FlyingEnemy::~j1FlyingEnemy()
 
 bool j1FlyingEnemy::Start()
 {
-	/*sprite = App->tex->Load("textures/dead_bat_spritesheet.png");
-	animations[IDLE].PushBack({ 6,8,42,30 });
-	animations[IDLE].speed = 1;
-	animations[IDLE].loop = true;
-
-	movement_speed = 600.0F;
-	acceleration = 0.8F;
-	threshold = 0.4F;*/
-
-	
-
-	//animation_frame = animations[IDLE].GetCurrentFrame();
 	
 
 	return true;
@@ -126,7 +110,13 @@ bool j1FlyingEnemy::PreUpdate()
 
 bool j1FlyingEnemy::Update(float dt)
 {
-	if (chase) GetPath();
+	if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) draw_path = !draw_path;
+
+	if (chase)
+	{
+		GetPath();
+		if (draw_path) DrawPath();
+	}
 
 	velocity = (target_speed * acceleration + velocity * (1 - acceleration))*dt;
 	StepY(dt);
@@ -137,18 +127,17 @@ bool j1FlyingEnemy::Update(float dt)
 	return true;
 }
 
-bool j1FlyingEnemy::CleanUp()
+bool j1FlyingEnemy::Load(pugi::xml_node &conf)
 {
+	j1Enemy::Load(conf);
+	moving_down = conf.child("movement_controls").attribute("moving_down").as_bool();
 	return true;
 }
 
-bool j1FlyingEnemy::Load(pugi::xml_node &)
+bool j1FlyingEnemy::Save(pugi::xml_node &conf) const
 {
-	return true;
-}
-
-bool j1FlyingEnemy::Save(pugi::xml_node &) const
-{
+	j1Enemy::Save(conf);
+	conf.append_child("movement_controls").append_attribute("moving_down") = moving_down;
 	return true;
 }
 

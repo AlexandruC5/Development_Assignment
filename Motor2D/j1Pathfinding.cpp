@@ -225,9 +225,9 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination, i
 
 	bool flier = maxCharacterJumpHeight > 0 ? false : true;
 
-	if (flier)
+	if (!flier)
 	{
-		if (IsGround({ origin.x, origin.y + 1 }))
+		if (!IsGround({ origin.x, origin.y + 1 }))
 			node_origin.jump_length = 0;
 		else
 			node_origin.jump_length = maxCharacterJumpHeight * 2;

@@ -4,12 +4,13 @@
 #include "j1Collision.h"
 #include "p2Log.h"
 #include "j1Pathfinding.h"
+#include "j1Input.h"
 #include "j1Map.h"
 #include "j1Enemy.h"
 #include "j1EntityManager.h"
 
 
-j1Enemy::j1Enemy(EntityType type, pugi::xml_node config, fPoint position) : j1Entity(type, config, position)
+j1Enemy::j1Enemy(EntityType type, pugi::xml_node config, fPoint position, p2SString id) : j1Entity(type, config, position, id)
 {
 	animations = new Animation[TOTAL_ANIMATIONS];
 	LoadAnimations(config);
@@ -17,7 +18,6 @@ j1Enemy::j1Enemy(EntityType type, pugi::xml_node config, fPoint position) : j1En
 	collider = App->collision->AddCollider(animation_frame, COLLIDER_PLAYER, App->entitymanager, true);
 	collider->rect.x = position.x;
 	collider->rect.y = position.y + collider_offset;
-
 }
 
 
@@ -32,30 +32,19 @@ bool j1Enemy::Awake()
 
 bool j1Enemy::Start()
 {
-	/*sprite = App->tex->Load("textures/dead_buny_floor_spritesheet.png");
-	animations[IDLE].PushBack({ 14,1,37,33 });
-	animations[IDLE].speed = 1;
-	animations[IDLE].loop = true;
-
-	movement_speed = 600.0F;
-	jump_speed = 1250.0F;
-	acceleration = 0.8F;
-	threshold = 0.4F;
-	gravity = 1600.0f;
-	fall_speed = 1250.0F;*/
-
-
-
-
-
-
 	
 	return true;
 }
 
 bool j1Enemy::Update(float dt)
 {
-	if(chase) GetPath();
+	if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) draw_path = !draw_path;
+
+	if (chase) 
+	{
+		GetPath();
+		if(draw_path) DrawPath();
+	}
 
 	if (state == JUMPING)
 	{
@@ -145,18 +134,27 @@ bool j1Enemy::PreUpdate()
 	return true;
 }
 
-bool j1Enemy::CleanUp()
+bool j1Enemy::Load(pugi::xml_node &conf)
 {
+	j1Entity::Load(conf);
+	state = (EntityState) conf.child("state").attribute("value").as_int();
+	chase = conf.child("chase").attribute("value").as_bool();
+	moving_right = conf.child("movement_controls").attribute("moving_right").as_bool();
+	moving_left = conf.child("movement_controls").attribute("moving_left").as_bool();
+	jump = conf.child("movement_controls").attribute("jump").as_bool();
+
+	current_path.Clear();
 	return true;
 }
 
-bool j1Enemy::Load(pugi::xml_node &)
+bool j1Enemy::Save(pugi::xml_node &conf) const
 {
-	return true;
-}
-
-bool j1Enemy::Save(pugi::xml_node &) const
-{
+	j1Entity::Save(conf);
+	conf.append_child("state").append_attribute("value") = state;
+	conf.append_child("chase").append_attribute("value") = chase;
+	conf.append_child("movement_controls").append_attribute("moving_right") = moving_right;
+	conf.append_child("movement_controls").append_attribute("moving_left") = moving_left;
+	conf.append_child("movement_controls").append_attribute("jump") = jump;
 	return true;
 }
 
@@ -272,7 +270,7 @@ bool j1Enemy::GetPath()
 	iPoint origin = App->map->WorldToMap(position.x, position.y);
 	iPoint destination = App->map->WorldToMap(App->entitymanager->player->position.x, App->entitymanager->player->position.y);
 
-	App->pathfinding->CreatePath(origin, destination, 5, 5, jump_height);
+ 	App->pathfinding->CreatePath(origin, destination, 5, 5, jump_height);
 
 	const p2DynArray<iPoint>* tmp_array = App->pathfinding->GetLastPath();
 	current_path.Clear();
@@ -292,4 +290,17 @@ bool j1Enemy::GetPath()
 	jump = false;
 
 	return true;
+}
+
+void j1Enemy::DrawPath()
+{
+	for (int i = 0; i < current_path.Count(); i++)
+	{
+		iPoint p = { current_path.At(i)->x, current_path.At(i)->y };
+		p.x -= App->map->data.tile_width / 2;
+		p.y -= App->map->data.tile_height / 2;
+
+		SDL_Rect quad = { p.x, p.y, App->map->data.tile_width , App->map->data.tile_height };
+		App->render->DrawQuad(quad, 255, 255, 0, 75, true);
+	}
 }

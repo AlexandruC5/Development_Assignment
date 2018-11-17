@@ -13,7 +13,7 @@
 #include "j1EntityManager.h"
 
 
-j1Player::j1Player(EntityType type, pugi::xml_node config, fPoint position) : j1Entity(type, config, position)
+j1Player::j1Player(EntityType type, pugi::xml_node config, fPoint position, p2SString id) : j1Entity(type, config, position, id)
 {
 	animations = new Animation[TOTAL_ANIMATIONS];
 	LoadAnimations(config);
@@ -107,25 +107,6 @@ bool j1Player::Update(float dt)
 	StepX(dt);
 
 	App->render->Blit(sprite, position.x, position.y, &animation_frame, 1.0f, flipX);	
-	return true;
-}
-
-
-bool j1Player::CleanUp()
-{
-	if (sprite) 
-	{
-		App->tex->UnLoad(sprite);
-		sprite = nullptr;
-	}
-
-	if (collider) 
-	{
-		collider->to_delete = true;
-		collider = nullptr;
-	}
-	if (!is_grounded) state = JUMPING;
-
 	return true;
 }
 
@@ -255,51 +236,6 @@ void j1Player::Jump(float boost_y)
 	state = JUMPING;
 	charge_value = 0;
 	App->audio->PlayFx(jump_fx);
-}
-
-bool j1Player::Load(pugi::xml_node &player) 
-{
-	position.x = player.child("position").attribute("x").as_float();
-	position.y = player.child("position").attribute("y").as_float();
-
-	velocity.x = player.child("velocity").attribute("x").as_float();
-	velocity.y = player.child("velocity").attribute("y").as_float();
-
-	target_speed.x = player.child("target_speed").attribute("x").as_float();
-	target_speed.y = player.child("target_speed").attribute("y").as_float();
-
-	state = (EntityState)player.child("state").attribute("value").as_int();
-	is_grounded = player.child("is_grounded").attribute("value").as_bool();
-	flipX = player.child("flipX").attribute("value").as_bool();
-
-	collider->SetPos(position.x, position.y + collider_offset); //set collider to loaded position
-
-	return true;
-}
-
-
-bool j1Player::Save(pugi::xml_node &player) const
-{
-	//save position of player
-	pugi::xml_node position_node = player.append_child("position");
-	position_node.append_attribute("x") = position.x;
-	position_node.append_attribute("y") = position.y;
-
-	//save current speed of palyer
-	pugi::xml_node velocity_node = player.append_child("velocity");
-	velocity_node.append_attribute("x") = velocity.x;
-	velocity_node.append_attribute("y") = velocity.y;
-
-	pugi::xml_node target_speed_node = player.append_child("target_speed");
-	target_speed_node.append_attribute("x") = target_speed.x;
-	target_speed_node.append_attribute("y") = target_speed.y;
-
-	//save state of player
-	player.append_child("state").append_attribute("value") = state != DEAD ? (int)state : (int)IDLE;
-	player.append_child("is_grounded").append_attribute("value") = is_grounded;
-	player.append_child("flipX").append_attribute("value") = flipX;
-
-	return true;
 }
 
 void j1Player::CheckDeath()

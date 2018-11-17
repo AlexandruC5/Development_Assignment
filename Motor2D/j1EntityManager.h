@@ -21,12 +21,15 @@ public:
 	bool Update(float dt);
 	bool PreUpdate();
 	bool CleanUp();
+	bool Load(pugi::xml_node&);
+	bool Save(pugi::xml_node&) const;
 	bool CreateEntity(EntityType type, fPoint position);
 	j1Entity* getEntity(EntityType type);
 	bool DeleteEntity(j1Entity* entity);
 
 private:
 	pugi::xml_node entity_configs;
+	int id_count = 0;
 };
 
 #endif

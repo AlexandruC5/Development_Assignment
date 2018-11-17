@@ -42,7 +42,7 @@ void j1Map::Draw()
 	p2List_item<TileSet*>* tileset;
 	tileset = data.tilesets.start;
 
-	while (layer != NULL)
+	while (layer != NULL && layer->data->name != "Navigation")
 	{
 		for (int x = 0; x < data.width; x++) {
 			for (int y = 0; y < data.height; y++) {

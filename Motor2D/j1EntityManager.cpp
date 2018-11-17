@@ -2,6 +2,7 @@
 #include "j1Render.h"
 #include "j1Textures.h"
 #include "j1FlyingEnemy.h"
+#include "p2Log.h"
 #include "j1EntityManager.h"
 
 j1EntityManager::j1EntityManager() : j1Module()
@@ -54,25 +55,55 @@ bool j1EntityManager::CleanUp()
 		entity->data->CleanUp();
 	}
 	entities.clear();
+	player = nullptr;
+	id_count = 0;
 
+	return true;
+}
+
+bool j1EntityManager::Load(pugi::xml_node &file)
+{
+	for (p2List_item<j1Entity*>* entity = entities.start; entity; entity = entity->next)
+	{
+		entity->data->Load(file.child(entity->data->id.GetString()));
+	}
+	return true;
+}
+
+bool j1EntityManager::Save(pugi::xml_node &file) const
+{
+	for (p2List_item<j1Entity*>* entity = entities.start; entity; entity = entity->next)
+	{
+		entity->data->Save(file.append_child(entity->data->id.GetString()));
+	}
 	return true;
 }
 
 bool j1EntityManager::CreateEntity(EntityType type, fPoint position)
 {
+	char* count = (char*)malloc(sizeof(char) * 2);
+	_itoa_s(id_count++, count, 2, 10);
+	p2SString id;
 	switch (type)
 	{
 	case EntityType::PLAYER:
-		player = new j1Player(type, entity_configs.child("player"), position);
+		id = "player_";
+		id += count;
+		player = new j1Player(type, entity_configs.child("player"), position, id);
 		entities.add(player);
 		break;
 	case EntityType::ENEMY:
-		entities.add(new j1Enemy(type, entity_configs.child("enemy"), position));
+		id = "enemy_";
+		id += count;
+		entities.add(new j1Enemy(type, entity_configs.child("enemy"), position, id));
 		break;
 	case EntityType::FLIER:
-		entities.add(new j1FlyingEnemy(type, entity_configs.child("flying_enemy"), position));
+		id = "flier_";
+		id += count;
+		entities.add(new j1FlyingEnemy(type, entity_configs.child("flying_enemy"), position, id));
 		break;
 	}
+	memset(count, 0, sizeof(char) * 2);
 	return true;
 }
 

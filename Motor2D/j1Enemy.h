@@ -15,6 +15,7 @@ protected:
 	void MovingUpdate();
 	void JumpingUpdate();
 	void Jump();
+	void DrawPath();
 
 	//Pathfinding
 	int current_destination = 0;
@@ -31,17 +32,17 @@ protected:
 	bool chase = false;
 
 	bool GetPath();
+	bool draw_path = false;
 
 public:
 	p2DynArray<iPoint> current_path;
-	j1Enemy(EntityType type, pugi::xml_node, fPoint position);
+	j1Enemy(EntityType type, pugi::xml_node, fPoint position, p2SString id);
 	~j1Enemy();
 
 	bool Awake();
 	bool Start();
 	bool Update(float dt);
 	bool PreUpdate();
-	bool CleanUp();
 	bool Load(pugi::xml_node&);
 	bool Save(pugi::xml_node&) const;
 };
