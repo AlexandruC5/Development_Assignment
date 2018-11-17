@@ -54,14 +54,12 @@ bool j1Player::PreUpdate()
 		JumpingUpdate();
 		break;
 	case DEAD:
-		animation_frame = animations[DEAD].GetCurrentFrame();
 		break;
 	case CHARGE: 
 		ChargingUpdate();
 		break;
 	case WIN: 
 		target_speed.x = 0.0F;
-		animation_frame = animations[WIN].GetCurrentFrame();
 		break;
 	case GOD: 
 		GodUpdate();
@@ -104,6 +102,7 @@ bool j1Player::Update(float dt)
 	StepY(dt);
 	StepX(dt);
 
+	animation_frame = animations[state == GOD? (int)JUMPING:state].GetCurrentFrame(dt);
 	App->render->Blit(sprite, position.x, position.y, &animation_frame, 1.0f, flipX);	
 	return true;
 }
@@ -111,7 +110,6 @@ bool j1Player::Update(float dt)
 void j1Player::IdleUpdate() 
 {
 	target_speed.x = 0.0F;
-	animation_frame = animations[IDLE].GetCurrentFrame();
 	if (App->input->GetKey(SDL_SCANCODE_D) != App->input->GetKey(SDL_SCANCODE_A)) state = MOVING;
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
 	{
@@ -136,7 +134,6 @@ void j1Player::IdleUpdate()
 
 void j1Player::MovingUpdate() 
 {
-	animation_frame = animations[MOVING].GetCurrentFrame();
 	if (App->input->GetKey(SDL_SCANCODE_D) == App->input->GetKey(SDL_SCANCODE_A))
 	{
 		state = IDLE;
@@ -176,7 +173,6 @@ void j1Player::MovingUpdate()
 
 void j1Player::JumpingUpdate() 
 {
-	animation_frame = animations[JUMPING].GetCurrentFrame();
 	if (App->input->GetKey(SDL_SCANCODE_D) == App->input->GetKey(SDL_SCANCODE_A))
 	{
 		target_speed.x = 0.0F;
@@ -209,7 +205,6 @@ void j1Player::JumpingUpdate()
 void j1Player::ChargingUpdate()
 {
 	target_speed.x = 0.0F;
-	animation_frame = animations[CHARGE].GetCurrentFrame();
 	
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
 	{
@@ -240,10 +235,7 @@ void j1Player::CheckDeath()
 {
 	if(position.y > App->map->data.height * App->map->data.tile_height && state != DEAD && state != GOD)
 	{
-		state = DEAD;
-		velocity.x = 0.0F;
-		target_speed.x = 0.0F;
-		App->swap_scene->Reload();
+		Die();
 	}
 }
 
@@ -295,7 +287,6 @@ void j1Player::ResetPlayer()
 
 void j1Player::GodUpdate()
 {
-	animation_frame = animations[JUMPING].GetCurrentFrame();
 	if (App->input->GetKey(SDL_SCANCODE_D) == App->input->GetKey(SDL_SCANCODE_A)) target_speed.x = 0.0F;
 	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
@@ -313,4 +304,19 @@ void j1Player::GodUpdate()
 		target_speed.y = -movement_speed;
 	else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 		target_speed.y = movement_speed;
+}
+
+
+void j1Player::OnCollision(Collider* c1, Collider* c2)
+{
+	if (c2->type == COLLIDER_ENEMY && state != GOD)
+	{
+		Die();
+	}
+}
+
+void j1Player::Die()
+{
+	j1Entity::Die();
+	App->swap_scene->Reload();
 }

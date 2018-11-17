@@ -15,7 +15,7 @@ j1Enemy::j1Enemy(EntityType type, pugi::xml_node config, fPoint position, p2SStr
 	animations = new Animation[TOTAL_ANIMATIONS];
 	LoadAnimations(config);
 
-	collider = App->collision->AddCollider(animation_frame, COLLIDER_ENEMY, App->entitymanager, true);
+	collider = App->collision->AddCollider(animation_frame, COLLIDER_ENEMY, App->entitymanager, false);
 	collider->rect.x = position.x;
 	collider->rect.y = position.y + collider_offset;
 }
@@ -62,7 +62,7 @@ bool j1Enemy::Update(float dt)
 	StepX(dt);
 	CheckDeath();
 
-	animation_frame = animations[IDLE].GetCurrentFrame();
+	animation_frame = animations[state].GetCurrentFrame(dt);
 	App->render->Blit(sprite, position.x, position.y, &animation_frame, 1.0f, flipX);
 
 	return true;
@@ -124,7 +124,6 @@ bool j1Enemy::PreUpdate()
 	case JUMPING: JumpingUpdate();
 		break;
 	case DEAD:
-		animation_frame = animations[DEAD].GetCurrentFrame();
 		break;
 	default:
 		break;

@@ -122,3 +122,15 @@ bool j1EntityManager::DeleteEntity(j1Entity * entity)
 
 	return true;
 }
+
+bool j1EntityManager::OnCollision(Collider * c1, Collider * c2)
+{
+	for (p2List_item<j1Entity*>* entity = entities.start; entity; entity = entity->next)
+	{
+		if (entity->data->collider && entity->data->collider == c1)
+			entity->data->OnCollision(c1, c2);
+		else if (entity->data->collider && entity->data->collider == c2)
+			entity->data->OnCollision(c2, c1);
+	}
+	return true;
+}

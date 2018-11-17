@@ -85,7 +85,6 @@ bool j1FlyingEnemy::PreUpdate()
 	case JUMPING: JumpingUpdate();
 		break;
 	case DEAD:
-		animation_frame = animations[DEAD].GetCurrentFrame();
 		break;
 	default:
 		break;
@@ -113,7 +112,7 @@ bool j1FlyingEnemy::Update(float dt)
 	StepY(dt);
 	StepX(dt);
 
-	animation_frame = animations[IDLE].GetCurrentFrame();
+	animation_frame = animations[IDLE].GetCurrentFrame(dt);
 	App->render->Blit(sprite, position.x, position.y, &animation_frame, 1.0f, flipX);
 	return true;
 }

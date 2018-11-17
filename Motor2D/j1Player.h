@@ -27,6 +27,7 @@ private:
 	void ChargingUpdate();
 	void GodUpdate();
 	void Jump(float boost_y);
+	void Die();
 
 public:
 	j1Player(EntityType type, pugi::xml_node, fPoint position, p2SString id);
@@ -39,7 +40,7 @@ public:
 
 	void CheckDeath();
 	void ResetPlayer();
-
+	void OnCollision(Collider* c1, Collider* c2);
 };
 
 #endif

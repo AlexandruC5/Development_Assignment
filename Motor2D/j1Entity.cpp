@@ -162,3 +162,15 @@ void j1Entity::SetPosition(float x, float y)
 	position = { x,y };
 	if (collider) collider->SetPos(position.x, position.y);
 }
+
+void j1Entity::Die()
+{
+	state = DEAD;
+	velocity.x = 0.0F;
+	target_speed.x = 0.0F;
+}
+
+void j1Entity::OnCollision(Collider* c1, Collider* c2)
+{
+
+}

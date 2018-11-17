@@ -26,6 +26,7 @@ public:
 	bool CreateEntity(EntityType type, fPoint position);
 	j1Entity* getEntity(EntityType type);
 	bool DeleteEntity(j1Entity* entity);
+	bool OnCollision(Collider* c1, Collider* c2);
 
 	bool draw_path = false;
 

@@ -1,6 +1,6 @@
 <!-- Config file for the game -->
 <config>
-  <app framerate_cap="33">
+  <app framerate_cap="16">
     <title>Salty the Slime</title>
     <organization>UPC</organization>
     <save_file>save_game.xml</save_file>
@@ -26,33 +26,31 @@
         <jump_fx>fx_jump.wav</jump_fx>
       </audio>
       <animations>
-        <idle speed="0.1F">
+        <idle speed="5.0F">
           <frame x="17" y="36" width="94" height="92"/>
           <frame x="143" y="35" width="98" height="92"/>
           <frame x="270" y="33" width="101" height="92"/>
         </idle>
-        <move speed="0.1F">
+        <move speed="5.0F">
           <frame x="16" y="164" width="99" height="92"/>
           <frame x="140" y="163" width="107" height="92"/>
           <frame x="267" y="163" width="110" height="92"/>
           <frame x="397" y="160" width="103" height="92"/>
         </move>
-        <jump speed="0.3F" loops="false">
-          <frame x="784" y="192" width="98" height="92"/>
-          <frame x="909" y="150" width="98" height="92"/>
+        <jump speed="8.0F" loops="false">
           <frame x="1037" y="143" width="98" height="92"/>
         </jump>
-        <die speed="0.3F" loops ="false">
+        <die speed="5.0F">
           <frame x="772" y="547" width="115" height="92"/>
-          <frame x="899" y="552" width="118" height="92"/>
-          <frame x="1026" y="553" width="121" height="92"/>
+          <frame x="899" y="547" width="118" height="92"/>
+          <frame x="1026" y="547" width="121" height="92"/>
         </die>
-        <charge speed="0.3F">
+        <charge speed="10.0F">
           <frame x="17" y="292" width="94" height="92"/>
           <frame x="143" y="292" width="96" height="92"/>
           <frame x="270" y="292" width="98" height="92"/>
         </charge>
-        <win speed="0.1F">
+        <win speed="5.0F">
           <frame x="652" y="292" width="103" height="92"/>
           <frame x="525" y="292" width="102" height="92"/>
           <frame x="397" y="292" width="102" height="92"/>
@@ -70,17 +68,17 @@
       <gravity value="2200.0F"/>
       <collider width="39" height="37" offset="0"/>
       <animations>
-        <idle speed="0.1F">
+        <idle speed="5.0F">
           <frame x="14" y="1" width="39" height="37"/>
           <frame x="71" y="1" width="39" height="37"/>
         </idle>
-        <move speed="0.1F">
+        <move speed="5.0F">
           <frame x="11" y="43" width="39" height="37"/>
           <frame x="69" y="46" width="39" height="37"/>
           <frame x="125" y="45" width="39" height="37"/>
           <frame x="182" y="41" width="39" height="37"/>
         </move>
-        <jump speed="0.3F" loops="false">
+        <jump speed="8.0F" loops="false">
           <frame x="8" y="91" width="39" height="37"/>
           <frame x="64" y="86" width="39" height="37"/>
           <frame x="123" y="81" width="39" height="37"/>
@@ -96,7 +94,7 @@
       <acceleration value="0.8F"/>
       <collider width="42" height="30" offset="0"/>
       <animations>
-        <idle speed="0.1F">
+        <idle speed="10.0F">
           <frame x="6" y="8" width="42" height="30"/>
           <frame x="59" y="8" width="42" height="30"/>
           <frame x="112" y="8" width="42" height="30"/>
