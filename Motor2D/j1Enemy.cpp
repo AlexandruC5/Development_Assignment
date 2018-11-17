@@ -38,12 +38,17 @@ bool j1Enemy::Start()
 
 bool j1Enemy::Update(float dt)
 {
-	if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) draw_path = !draw_path;
-
 	if (chase) 
 	{
 		GetPath();
-		if(draw_path) DrawPath();
+		if(App->entitymanager->draw_path) DrawPath();
+	}
+	else
+	{
+		current_path.Clear();
+		moving_right = false;
+		moving_left = false;
+		jump = false;
 	}
 
 	if (state == JUMPING)

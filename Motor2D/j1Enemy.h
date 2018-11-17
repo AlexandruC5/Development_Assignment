@@ -32,7 +32,6 @@ protected:
 	bool chase = false;
 
 	bool GetPath();
-	bool draw_path = false;
 
 public:
 	p2DynArray<iPoint> current_path;

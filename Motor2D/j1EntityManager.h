@@ -27,6 +27,8 @@ public:
 	j1Entity* getEntity(EntityType type);
 	bool DeleteEntity(j1Entity* entity);
 
+	bool draw_path = false;
+
 private:
 	pugi::xml_node entity_configs;
 	int id_count = 0;

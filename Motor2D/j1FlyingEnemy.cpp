@@ -102,12 +102,17 @@ bool j1FlyingEnemy::PreUpdate()
 
 bool j1FlyingEnemy::Update(float dt)
 {
-	if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) draw_path = !draw_path;
-
 	if (chase)
 	{
 		GetPath();
-		if (draw_path) DrawPath();
+		if (App->entitymanager->draw_path) DrawPath();
+	}
+	else
+	{
+		current_path.Clear();
+		moving_right = false;
+		moving_left = false;
+		jump = false;
 	}
 
 	velocity = (target_speed * acceleration + velocity * (1 - acceleration))*dt;

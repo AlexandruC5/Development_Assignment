@@ -3,6 +3,7 @@
 #include "j1Textures.h"
 #include "j1FlyingEnemy.h"
 #include "p2Log.h"
+#include "j1Input.h"
 #include "j1EntityManager.h"
 
 j1EntityManager::j1EntityManager() : j1Module()
@@ -32,6 +33,9 @@ bool j1EntityManager::Start()
 
 bool j1EntityManager::Update(float dt)
 {
+	if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) 
+		draw_path = !draw_path;
+
 	for (p2List_item<j1Entity*>* entity = entities.start; entity; entity = entity->next)
 	{
 		entity->data->Update(dt);
