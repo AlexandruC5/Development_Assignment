@@ -57,13 +57,7 @@ bool j1FlyingEnemy::PreUpdate()
 			else if (position.x > current_path.At(current_destination)->x)
 				moving_left = true;
 		}
-		else
-		{
-			if (next_destination != -1 && position.x < current_path.At(next_destination)->x && is_grounded)
-				moving_right = true;
-			else if (next_destination != -1 && position.x > current_path.At(next_destination)->x && is_grounded)
-				moving_left = true;
-		}
+
 		if (!reached_Y)
 		{
 			if (position.y > current_path.At(current_destination)->y)

@@ -81,7 +81,6 @@ bool j1Player::Update(float dt)
 	{
 		target_speed.y += gravity * dt;
 		if (target_speed.y > fall_speed) target_speed.y = fall_speed; //limit falling speed
-		velocity.y = floor((target_speed.y * acceleration + velocity.y * (1 - acceleration))*dt);
 	}
 	else if(state == CHARGE)
 	{
@@ -94,7 +93,7 @@ bool j1Player::Update(float dt)
 			charge_value += charge_increment * dt;
 	}
 
-	velocity.x = (target_speed.x * acceleration + velocity.x * (1 - acceleration))*dt;
+	velocity = (target_speed * acceleration + velocity * (1 - acceleration))*dt;
 
 	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
 	{
@@ -308,7 +307,10 @@ void j1Player::GodUpdate()
 		target_speed.x = -movement_speed;
 		flipX = false;
 	}
-	if (App->input->GetKey(SDL_SCANCODE_W) == App->input->GetKey(SDL_SCANCODE_S)) target_speed.y = 0.0F;
-	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) target_speed.y = -movement_speed;
-	else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) target_speed.y = movement_speed;
+	if (App->input->GetKey(SDL_SCANCODE_W) == App->input->GetKey(SDL_SCANCODE_S))
+		target_speed.y = 0.0F;
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) 
+		target_speed.y = -movement_speed;
+	else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+		target_speed.y = movement_speed;
 }
