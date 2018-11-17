@@ -48,8 +48,6 @@ bool j1Scene::Start()
 
 	RELEASE_ARRAY(data);
 
-	App->entitymanager->CreateEntity(EntityType::ENEMY);
-	App->entitymanager->CreateEntity(EntityType::FLIER);
 	App->audio->PlayMusic(music_file.GetString());
 	return true;
 }

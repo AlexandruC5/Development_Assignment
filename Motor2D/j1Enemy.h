@@ -34,7 +34,7 @@ protected:
 
 public:
 	p2DynArray<iPoint> current_path;
-	j1Enemy(EntityType type, pugi::xml_node);
+	j1Enemy(EntityType type, pugi::xml_node, fPoint position);
 	~j1Enemy();
 
 	bool Awake();

@@ -6,7 +6,7 @@
 #include "p2Log.h"
 #include "j1Entity.h"
 
-j1Entity::j1Entity(EntityType type, pugi::xml_node config)
+j1Entity::j1Entity(EntityType type, pugi::xml_node config, fPoint position)
 {
 	this->type = type;
 
@@ -21,6 +21,7 @@ j1Entity::j1Entity(EntityType type, pugi::xml_node config)
 	fall_speed = config.child("fall_speed").attribute("value").as_float();
 
 	collider_offset = config.child("collider").attribute("offset").as_int();
+	this->position = position;
 }
 
 j1Entity::~j1Entity()

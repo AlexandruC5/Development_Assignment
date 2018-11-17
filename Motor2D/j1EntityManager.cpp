@@ -58,19 +58,19 @@ bool j1EntityManager::CleanUp()
 	return true;
 }
 
-bool j1EntityManager::CreateEntity(EntityType type)
+bool j1EntityManager::CreateEntity(EntityType type, fPoint position)
 {
 	switch (type)
 	{
 	case EntityType::PLAYER:
-		player = new j1Player(type, entity_configs.child("player"));
+		player = new j1Player(type, entity_configs.child("player"), position);
 		entities.add(player);
 		break;
 	case EntityType::ENEMY:
-		entities.add(new j1Enemy(type, entity_configs.child("enemy")));
+		entities.add(new j1Enemy(type, entity_configs.child("enemy"), position));
 		break;
 	case EntityType::FLIER:
-		entities.add(new j1FlyingEnemy(type, entity_configs.child("flying_enemy")));
+		entities.add(new j1FlyingEnemy(type, entity_configs.child("flying_enemy"), position));
 		break;
 	}
 	return true;

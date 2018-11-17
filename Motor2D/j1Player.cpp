@@ -13,7 +13,7 @@
 #include "j1EntityManager.h"
 
 
-j1Player::j1Player(EntityType type, pugi::xml_node config) : j1Entity(type,config)
+j1Player::j1Player(EntityType type, pugi::xml_node config, fPoint position) : j1Entity(type, config, position)
 {
 	animations = new Animation[TOTAL_ANIMATIONS];
 	LoadAnimations(config);

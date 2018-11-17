@@ -29,7 +29,7 @@ private:
 	void Jump(float boost_y);
 
 public:
-	j1Player(EntityType type, pugi::xml_node);
+	j1Player(EntityType type, pugi::xml_node, fPoint position);
 	~j1Player();
 	bool Awake();
 	bool Start();

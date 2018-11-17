@@ -9,12 +9,11 @@
 #include "j1EntityManager.h"
 
 
-j1Enemy::j1Enemy(EntityType type, pugi::xml_node config) : j1Entity(type, config)
+j1Enemy::j1Enemy(EntityType type, pugi::xml_node config, fPoint position) : j1Entity(type, config, position)
 {
 	animations = new Animation[TOTAL_ANIMATIONS];
 	LoadAnimations(config);
 
-	position = { 120.0F, 2091.0F };
 	collider = App->collision->AddCollider(animation_frame, COLLIDER_PLAYER, App->entitymanager, true);
 	collider->rect.x = position.x;
 	collider->rect.y = position.y + collider_offset;

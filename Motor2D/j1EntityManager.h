@@ -21,7 +21,7 @@ public:
 	bool Update(float dt);
 	bool PreUpdate();
 	bool CleanUp();
-	bool CreateEntity(EntityType type);
+	bool CreateEntity(EntityType type, fPoint position);
 	j1Entity* getEntity(EntityType type);
 	bool DeleteEntity(j1Entity* entity);
 

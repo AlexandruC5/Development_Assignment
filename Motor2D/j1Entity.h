@@ -64,7 +64,7 @@ public:
 	EntityState state = IDLE;
 	float threshold = 0.0F;
 	
-	j1Entity(EntityType type, pugi::xml_node config);
+	j1Entity(EntityType type, pugi::xml_node config, fPoint position);
 	~j1Entity();
 	virtual bool Awake();
 	virtual bool Start();

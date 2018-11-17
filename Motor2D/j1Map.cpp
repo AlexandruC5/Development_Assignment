@@ -198,9 +198,12 @@ bool j1Map::Load(const char* file_name)
 	data.background_2.background_rect.x = data.background_2.default_x == 0? data.background_1.background_rect.w:data.background_2.default_x;
 	data.background_1.default_x = 0;
 	data.background_2.default_x = 0;
+
 	//Load Utils
 	pugi::xml_node utils = map_file.child("map").find_child_by_attribute("name", "utils");
 	LoadUtilsLayer(utils);
+
+	LoadEnemiesLayer(map_file.child("map").find_child_by_attribute("name", "enemies"));
 
 	if(ret == true)
 	{
@@ -431,9 +434,10 @@ bool j1Map::LoadUtilsLayer(pugi::xml_node & node)
 	App->render->camera.body.x = 0;
 	pugi::xml_node spawn = node.find_child_by_attribute("name", "spawn");
 	
+	fPoint position = { spawn.attribute("x").as_float(), spawn.attribute("y").as_float() };
 	if (!App->entitymanager->player)
-		App->entitymanager->CreateEntity(EntityType::PLAYER);
-	App->entitymanager->player->SetPosition(spawn.attribute("x").as_float(), spawn.attribute("y").as_float());
+		App->entitymanager->CreateEntity(EntityType::PLAYER, position);
+	App->entitymanager->player->SetPosition(position.x, position.y);
 
 	return true;
 }
@@ -465,6 +469,17 @@ void j1Map::InfiniteBackground()
 
 	App->render->Blit(data.background_1.background_img, data.background_1.background_rect.x, data.background_1.background_offset, NULL, data.background_1.background_speed);
 	App->render->Blit(data.background_2.background_img, data.background_2.background_rect.x, data.background_2.background_offset, NULL, data.background_2.background_speed);
+}
+
+bool j1Map::LoadEnemiesLayer(pugi::xml_node &enemies)
+{
+	for (pugi::xml_node enemy = enemies.child("object"); enemy; enemy = enemy.next_sibling("object"))
+	{
+		EntityType type = (EntityType) enemy.attribute("type").as_int();
+		fPoint position = { enemy.attribute("x").as_float(), enemy.attribute("y").as_float() };
+		App->entitymanager->CreateEntity(type, position);
+	}
+	return true;
 }
 
 TileSet* j1Map::GetTileset(uint id) const
