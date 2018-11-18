@@ -219,6 +219,7 @@ void j1Player::ChargingUpdate()
 void j1Player::Jump(float boost_y)
 {
 	target_speed.y = -jump_speed - boost_y;
+	if(!App->frame_cap) position.y--;
 	is_grounded = false;
 	state = JUMPING;
 	charge_value = 0;
