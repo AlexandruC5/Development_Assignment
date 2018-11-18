@@ -182,7 +182,7 @@ bool j1Enemy::GetPath()
 		iPoint origin = App->map->WorldToMap(pivot.x, pivot.y);
 		destination = new_destination;
 
-		App->pathfinding->CreatePath(origin, destination, 5, 5, jump_height);
+		App->pathfinding->CreatePath(origin, destination, jump_height);
 
 		const p2DynArray<iPoint>* tmp_array = App->pathfinding->GetLastPath();
 		current_path.Clear();
