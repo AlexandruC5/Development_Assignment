@@ -15,10 +15,10 @@
 #include "j1Collision.h"
 #include "j1Enemy.h"
 
-#define RIGHT_CAMERA_LIMIT  (-(App->render->camera.body.x - App->render->camera.body.w / 2))
-#define LEFT_CAMERA_LIMIT  (-(App->render->camera.body.x - App->render->camera.body.w / 6))
-#define TOP_CAMERA_LIMIT  (-(App->render->camera.body.y - App->render->camera.body.h / 8))
-#define BOTTOM_CAMERA_LIMIT (-(App->render->camera.body.y - App->render->camera.body.h / 2))
+#define RIGHT_CAMERA_LIMIT  (-(App->render->camera.position.x - App->render->camera.body.w / 2))
+#define LEFT_CAMERA_LIMIT  (-(App->render->camera.position.x - App->render->camera.body.w / 6))
+#define TOP_CAMERA_LIMIT  (-(App->render->camera.position.y - App->render->camera.body.h / 8))
+#define BOTTOM_CAMERA_LIMIT (-(App->render->camera.position.y - App->render->camera.body.h / 2))
 
 j1Scene::j1Scene() : j1Module()
 {}
@@ -90,7 +90,26 @@ bool j1Scene::Update(float dt)
 		else App->audio->DecreaseMusicVolume();
 	}			
 
-	dt_ = dt;
+	
+	App->render->camera.velocity = ((App->render->camera.target_speed * 0.8F) + (App->render->camera.velocity * (1 - 0.8F)));
+	if (fabs(App->render->camera.velocity.y) < 0.001F) App->render->camera.velocity.y = 0.0F;
+	if (fabs(App->render->camera.velocity.x) < 0.001F) App->render->camera.velocity.x = 0.0F;
+
+	App->render->camera.position.y += App->render->camera.velocity.y;
+	App->render->camera.position.x += App->render->camera.velocity.x;
+	App->render->camera.body.x = App->render->camera.position.x;
+	App->render->camera.body.y = App->render->camera.position.y;
+
+	//Check if camera out of bounds and place it on right spot
+	if (-(App->render->camera.position.y - App->render->camera.body.h) > App->map->data.height * App->map->data.tile_height)
+		App->render->camera.position.y = -(App->map->data.height * App->map->data.tile_height - App->render->camera.body.h);
+	else if (-App->render->camera.position.y < 0)
+		App->render->camera.position.y = 0;
+	if (-App->render->camera.position.x < 0)
+		App->render->camera.position.x = 0;
+	else if (-(App->render->camera.position.x - App->render->camera.body.w) > App->map->data.width*App->map->data.tile_width)
+		App->render->camera.position.x = -(App->map->data.width * App->map->data.tile_width - App->render->camera.body.w);
+
 	App->map->Draw();
 
 	return true;
@@ -133,21 +152,6 @@ bool j1Scene::PostUpdate()
 
 	}
 
-	App->render->camera.velocity = ((App->render->camera.target_speed * 0.3F) + (App->render->camera.velocity * (1 - 0.3F)));
-	if (fabs(App->render->camera.velocity.y) < App->entitymanager->player->threshold*dt_) App->render->camera.velocity.y = 0.0F;
-	if (fabs(App->render->camera.velocity.x) < App->entitymanager->player->threshold*dt_) App->render->camera.velocity.x = 0.0F;
-	App->render->camera.body.y += App->render->camera.velocity.y;
-	App->render->camera.body.x += App->render->camera.velocity.x;
-
-	//Check if camera out of bounds and place it on right spot
-	if (-(App->render->camera.body.y - App->render->camera.body.h) > App->map->data.height * App->map->data.tile_height)
-		App->render->camera.body.y = -(App->map->data.height * App->map->data.tile_height - App->render->camera.body.h);
-	else if (-App->render->camera.body.y < 0)
-		App->render->camera.body.y = 0;
-	if (-App->render->camera.body.x < 0)
-		App->render->camera.body.x = 0;
-	else if (-(App->render->camera.body.x - App->render->camera.body.w) > App->map->data.width*App->map->data.tile_width)
-		App->render->camera.body.x = -(App->map->data.width * App->map->data.tile_width - App->render->camera.body.w);
 
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;

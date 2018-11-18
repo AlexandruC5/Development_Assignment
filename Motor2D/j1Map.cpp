@@ -430,8 +430,11 @@ bool j1Map::LoadUtilsLayer(pugi::xml_node & node)
 	temp_trigger.h = end_trigger.attribute("height").as_int();
 	data.colliders.add(App->collision->AddCollider(temp_trigger, COLLIDER_TRIGGER, (j1Module*)App->swap_scene->current_scene));
 
-	App->render->camera.body.y = -(App->map->data.height * App->map->data.tile_height - App->render->camera.body.h);
-	App->render->camera.body.x = 0;
+	App->render->camera.position.y = -(App->map->data.height * App->map->data.tile_height - App->render->camera.body.h);
+	App->render->camera.position.x = 0;
+	App->render->camera.body.x = App->render->camera.position.x;
+	App->render->camera.body.y = App->render->camera.position.y;
+
 	pugi::xml_node spawn = node.find_child_by_attribute("name", "spawn");
 	
 	fPoint position = { spawn.attribute("x").as_float(), spawn.attribute("y").as_float() };
@@ -444,24 +447,24 @@ bool j1Map::LoadUtilsLayer(pugi::xml_node & node)
 
 void j1Map::InfiniteBackground()
 {
-	if (data.background_2.background_rect.x + data.background_2.background_rect.w < -App->render->camera.body.x * data.background_2.background_speed && App->render->camera.velocity.x < 0)
+	if (data.background_2.background_rect.x + data.background_2.background_rect.w < -App->render->camera.position.x * data.background_2.background_speed && App->render->camera.velocity.x < 0)
 	{
 		data.background_2.background_rect.x = data.background_1.background_rect.x + data.background_2.background_rect.w;
 	}
 	else
 	{
-		if (data.background_2.background_rect.x >(-App->render->camera.body.x * data.background_2.background_speed) + App->render->camera.body.w  && App->render->camera.velocity.x > 0)
+		if (data.background_2.background_rect.x >(-App->render->camera.position.x * data.background_2.background_speed) + App->render->camera.body.w  && App->render->camera.velocity.x > 0)
 		{
 			data.background_2.background_rect.x = data.background_1.background_rect.x - data.background_2.background_rect.w;
 		}
 	}
-	if (data.background_1.background_rect.x + data.background_1.background_rect.w < -App->render->camera.body.x * data.background_1.background_speed && App->render->camera.velocity.x < 0)
+	if (data.background_1.background_rect.x + data.background_1.background_rect.w < -App->render->camera.position.x * data.background_1.background_speed && App->render->camera.velocity.x < 0)
 	{
 		data.background_1.background_rect.x = data.background_2.background_rect.x + data.background_1.background_rect.w;
 	}
 	else
 	{
-		if (data.background_1.background_rect.x >(-App->render->camera.body.x * data.background_1.background_speed) + App->render->camera.body.w  && App->render->camera.velocity.x > 0)
+		if (data.background_1.background_rect.x >(-App->render->camera.position.x * data.background_1.background_speed) + App->render->camera.body.w  && App->render->camera.velocity.x > 0)
 		{
 			data.background_1.background_rect.x = data.background_2.background_rect.x - data.background_1.background_rect.w;
 		}
