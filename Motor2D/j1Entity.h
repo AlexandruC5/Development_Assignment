@@ -52,10 +52,10 @@ protected:
 
 	virtual void StepX();
 	virtual void StepY();
-	virtual void IdleUpdate();
-	virtual void MovingUpdate();
-	virtual void JumpingUpdate();
-	virtual void Jump();
+	virtual void IdleUpdate() {};
+	virtual void MovingUpdate() {};
+	virtual void JumpingUpdate() {};
+	virtual void Jump() {};
 	virtual void LoadAnimations(pugi::xml_node conf);
 
 public:
@@ -70,14 +70,14 @@ public:
 	
 	j1Entity(EntityType type, pugi::xml_node config, fPoint position, p2SString id);
 	~j1Entity();
-	virtual bool Awake();
-	virtual bool Start();
-	virtual bool Update(float dt);
-	virtual bool PreUpdate();
+	virtual bool Awake() { return true; };
+	virtual bool Start() { return true; };
+	virtual bool Update(float dt) { return true; };
+	virtual bool PreUpdate() { return true; };
 	virtual bool CleanUp();
 	virtual bool Load(pugi::xml_node&);
 	virtual bool Save(pugi::xml_node&) const;
-	virtual void OnCollision(Collider* c1, Collider* c2);
+	virtual void OnCollision(Collider* c1, Collider* c2) {};
 	virtual void Die();
 
 	virtual void ResetEntity();
