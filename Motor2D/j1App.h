@@ -98,6 +98,7 @@ public:
 	j1SwapScene*		swap_scene;
 	j1PathFinding*		pathfinding;
 	j1EntityManager*	entitymanager;
+	bool				frame_cap = true;
 
 private:
 
@@ -109,6 +110,7 @@ private:
 	p2SString			title;
 	p2SString			organization;
 	double				frame_rate;
+	bool				vsync;
 	pugi::xml_document	config_file;
 
 	mutable bool		want_to_save;
