@@ -175,27 +175,31 @@ void j1Enemy::Jump()
 
 bool j1Enemy::GetPath()
 {
+	iPoint new_destination = App->map->WorldToMap(App->entitymanager->player->pivot.x, App->entitymanager->player->pivot.y);
 
-	iPoint origin = App->map->WorldToMap(pivot.x, pivot.y);
-	destination = App->map->WorldToMap(App->entitymanager->player->pivot.x, App->entitymanager->player->pivot.y);
-
-	App->pathfinding->CreatePath(origin, destination, 5, 5, jump_height);
-
-	const p2DynArray<iPoint>* tmp_array = App->pathfinding->GetLastPath();
-	current_path.Clear();
-	for (int i = 0; i < tmp_array->Count(); i++)
+	if (new_destination != destination || current_path.Count() == 0)
 	{
-		iPoint p = App->map->MapToWorld(tmp_array->At(i)->x, tmp_array->At(i)->y);
-		p.x += App->map->data.tile_width / 2;
-		p.y += App->map->data.tile_height / 2 + App->entitymanager->player->collider_offset;
-		current_path.PushBack(p);
+		iPoint origin = App->map->WorldToMap(pivot.x, pivot.y);
+		destination = new_destination;
+
+		App->pathfinding->CreatePath(origin, destination, 5, 5, jump_height);
+
+		const p2DynArray<iPoint>* tmp_array = App->pathfinding->GetLastPath();
+		current_path.Clear();
+		for (int i = 0; i < tmp_array->Count(); i++)
+		{
+			iPoint p = App->map->MapToWorld(tmp_array->At(i)->x, tmp_array->At(i)->y);
+			p.x += App->map->data.tile_width / 2;
+			p.y += App->map->data.tile_height / 2 + App->entitymanager->player->collider_offset;
+			current_path.PushBack(p);
+		}
+		current_destination = current_path.Count() > 1 ? 1 : 0;
+		previous_destination = 0;
+		next_destination = current_path.Count() > 2 ? 2 : -1;
+
+		ResetPathfindingVariables();
 	}
-	current_destination = current_path.Count() > 1 ? 1 : 0;
-	previous_destination = 0;
-	next_destination = current_path.Count() > 2 ? 2 : -1;
-
-	ResetPathfindingVariables();
-
+	
 
 	return true;
 }
@@ -241,18 +245,35 @@ void j1Enemy::ResetPathfindingVariables()
 
 void j1Enemy::PathfindX()
 {
-	reached_X = (current_path.At(previous_destination)->x <= current_path.At(current_destination)->x  && current_path.At(current_destination)->x <= pivot.x)
+	reached_X = (current_path.At(previous_destination)->x <= current_path.At(current_destination)->x && current_path.At(current_destination)->x <= pivot.x)
 		|| (current_path.At(previous_destination)->x >= current_path.At(current_destination)->x && current_path.At(current_destination)->x >= pivot.x);
-
-	if (abs(pivot.x - current_path.At(current_destination)->x) < POSITION_ERROR_X)
-		reached_X = true;
 
 	if (!reached_X)
 	{
 		if (pivot.x < current_path.At(current_destination)->x)
 			moving_right = true;
+	
 		else if (pivot.x > current_path.At(current_destination)->x)
 			moving_left = true;
+	}
+	else
+	{
+		if (next_destination > 0)
+		{
+			iPoint point = App->map->WorldToMap(current_path.At(next_destination)->x, current_path.At(next_destination)->y);
+			if (!App->pathfinding->IsGround({ point.x, point.y+1 }))
+			{
+				moving_right = false;
+				moving_left = false;
+			}
+			else
+			{
+				if (pivot.x < current_path.At(next_destination)->x)
+					moving_right = true;
+				else if (pivot.x > current_path.At(next_destination)->x)
+					moving_left = true;
+			}
+		}
 	}
 }
 
