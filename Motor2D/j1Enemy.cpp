@@ -12,9 +12,6 @@
 
 j1Enemy::j1Enemy(EntityType type, pugi::xml_node config, fPoint position, p2SString id) : j1Entity(type, config, position, id)
 {
-	animations = new Animation[TOTAL_ANIMATIONS];
-	LoadAnimations(config);
-
 	collider = App->collision->AddCollider(animation_frame, COLLIDER_ENEMY, App->entitymanager, false);
 	collider->rect.x = position.x;
 	collider->rect.y = position.y + collider_offset;
@@ -239,7 +236,7 @@ void j1Enemy::PathfindX()
 {
 	reached_X = (current_path.At(previous_destination)->x <= current_path.At(current_destination)->x  && current_path.At(current_destination)->x <= pivot.x)
 		|| (current_path.At(previous_destination)->x >= current_path.At(current_destination)->x && current_path.At(current_destination)->x >= pivot.x);
-	if (abs(pivot.x - current_path.At(current_destination)->x) > 2.5F)
+	if (abs(pivot.x - current_path.At(current_destination)->x) > POSITION_ERROR)
 		reached_X = false;
 
 	if (!reached_X)

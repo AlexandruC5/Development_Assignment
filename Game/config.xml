@@ -25,7 +25,7 @@
       <audio>
         <jump_fx>fx_jump.wav</jump_fx>
       </audio>
-      <animations>
+      <animations count="6">
         <idle speed="5.0F">
           <frame x="17" y="36" width="94" height="92"/>
           <frame x="143" y="35" width="98" height="92"/>
@@ -67,7 +67,7 @@
       <acceleration value="0.8F"/>
       <gravity value="2200.0F"/>
       <collider width="39" height="37" offset="0"/>
-      <animations>
+      <animations count ="3">
         <idle speed="5.0F">
           <frame x="14" y="1" width="39" height="37"/>
           <frame x="71" y="1" width="39" height="37"/>
@@ -93,7 +93,7 @@
       <threshold value="0.4F"/>
       <acceleration value="0.8F"/>
       <collider width="42" height="30" offset="0"/>
-      <animations>
+      <animations count ="1">
         <idle speed="10.0F">
           <frame x="6" y="8" width="42" height="30"/>
           <frame x="59" y="8" width="42" height="30"/>

@@ -1,7 +1,6 @@
 #pragma once
 #include "j1Enemy.h"
 
-#define TOTAL_ANIMATIONS 1
 #define MINIMUM_DISTANCE 700
 
 class j1FlyingEnemy : public j1Enemy

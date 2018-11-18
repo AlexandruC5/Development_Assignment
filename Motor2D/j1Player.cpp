@@ -15,8 +15,6 @@
 
 j1Player::j1Player(EntityType type, pugi::xml_node config, fPoint position, p2SString id) : j1Entity(type, config, position, id)
 {
-	animations = new Animation[TOTAL_ANIMATIONS];
-	LoadAnimations(config);
 	jump_fx = App->audio->LoadFx(config.child("audio").child("jump_fx").child_value());
 	charged_time = config.child("charged_jump").attribute("time").as_float();
 	charge_increment = config.child("charged_jump").attribute("charge_increment").as_float();

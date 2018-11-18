@@ -3,7 +3,7 @@
 #include "j1Animation.h"
 #include "p2DynArray.h"
 
-#define TOTAL_ANIMATIONS 1
+#define POSITION_ERROR 2.5F
 #define MINIMUM_DISTANCE 700
 
 class j1Enemy : public j1Entity
