@@ -67,7 +67,7 @@
       <acceleration value="0.8F"/>
       <gravity value="2200.0F"/>
       <collider width="39" height="37" offset="0"/>
-      <chase_distance value="700.0F"/>
+      <chase_distance value="800.0F"/>
       <animations count ="3">
         <idle speed="5.0F">
           <frame x="14" y="1" width="39" height="37"/>
