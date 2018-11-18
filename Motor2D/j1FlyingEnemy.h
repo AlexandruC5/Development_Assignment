@@ -11,6 +11,8 @@ protected:
 	void StepX();
 	void StepY();
 	void JumpingUpdate();
+	void ResetPathfindingVariables();
+	void PathfindY();
 
 public:
 	j1FlyingEnemy(EntityType type, pugi::xml_node, fPoint position, p2SString id);

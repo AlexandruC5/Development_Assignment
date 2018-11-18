@@ -27,18 +27,7 @@ j1Enemy::~j1Enemy()
 
 bool j1Enemy::Update(float dt)
 {
-	if (chase) 
-	{
-		GetPath();
-		if(App->entitymanager->draw_path) DrawPath();
-	}
-	else
-	{
-		current_path.Clear();
-		moving_right = false;
-		moving_left = false;
-		jump = false;
-	}
+	PathfindingUpdate();
 
 	if (state == JUMPING)
 	{
@@ -49,7 +38,6 @@ bool j1Enemy::Update(float dt)
 	velocity = (target_speed * acceleration + velocity * (1 - acceleration))*dt;
 	StepY();
 	StepX();
-	CheckDeath();
 
 	animation_frame = animations[state].GetCurrentFrame(dt);
 	App->render->Blit(sprite, position.x, position.y, &animation_frame, 1.0f, flipX);
@@ -64,46 +52,7 @@ bool j1Enemy::PreUpdate()
 	else 
 		chase = false;
 
-	if (current_path.Count() > 0)
-	{
-		moving_right = false;
-		moving_left = false;
-		jump = false;
-
-		reached_X = (current_path.At(previous_destination)->x <= current_path.At(current_destination)->x  && current_path.At(current_destination)->x <= position.x)
-			|| (current_path.At(previous_destination)->x >= current_path.At(current_destination)->x && current_path.At(current_destination)->x >= position.x);
-
-		reached_Y = (current_path.At(previous_destination)->y <= current_path.At(current_destination)->y && position.y >= current_path.At(current_destination)->y)
-			|| (current_path.At(previous_destination)->y >= current_path.At(current_destination)->y && position.y <= current_path.At(current_destination)->y);
-
-
-		if (!reached_X)
-		{
-			if (position.x < current_path.At(current_destination)->x)
-				moving_right = true;
-			else if (position.x > current_path.At(current_destination)->x)
-				moving_left = true;
-		}
-
-		if (!reached_Y)
-		{
-			if (position.y > current_path.At(current_destination)->y)
-				jump = true;
-		}
-
-		if (reached_X && reached_Y)
-		{
-			previous_destination = current_destination;
-			current_destination++;
-			next_destination = current_destination + 1;
-
-			if (next_destination >= current_path.Count())
-				next_destination = -1;
-
-			if (current_destination >= current_path.Count())
-				current_path.Clear();
-		}
-	}
+	PathfindingPreupdate();
 
 	switch (state) {
 	case IDLE: IdleUpdate();
@@ -241,6 +190,79 @@ bool j1Enemy::GetPath()
 	jump = false;
 
 	return true;
+}
+
+void j1Enemy::PathfindingUpdate()
+{
+	if (chase)
+	{
+		GetPath();
+		if (App->entitymanager->draw_path) DrawPath();
+	}
+	else
+	{
+		current_path.Clear();
+		moving_right = false;
+		moving_left = false;
+		jump = false;
+	}
+}
+
+void j1Enemy::PathfindingPreupdate()
+{
+	if (current_path.Count() > 0)
+	{
+		ResetPathfindingVariables();
+		
+		PathfindX();
+		PathfindY();
+
+		if (reached_X && reached_Y)
+		{
+			previous_destination = current_destination;
+			current_destination++;
+			next_destination = current_destination + 1;
+
+			if (next_destination >= current_path.Count())
+				next_destination = -1;
+
+			if (current_destination >= current_path.Count())
+				current_path.Clear();
+		}
+	}
+}
+
+void j1Enemy::ResetPathfindingVariables()
+{
+	moving_right = false;
+	moving_left = false;
+	jump = false;
+}
+
+void j1Enemy::PathfindX()
+{
+	reached_X = (current_path.At(previous_destination)->x <= current_path.At(current_destination)->x  && current_path.At(current_destination)->x <= position.x)
+		|| (current_path.At(previous_destination)->x >= current_path.At(current_destination)->x && current_path.At(current_destination)->x >= position.x);
+
+	if (!reached_X)
+	{
+		if (position.x < current_path.At(current_destination)->x)
+			moving_right = true;
+		else if (position.x > current_path.At(current_destination)->x)
+			moving_left = true;
+	}
+}
+
+void j1Enemy::PathfindY()
+{
+	reached_Y = (current_path.At(previous_destination)->y <= current_path.At(current_destination)->y && position.y >= current_path.At(current_destination)->y)
+		|| (current_path.At(previous_destination)->y >= current_path.At(current_destination)->y && position.y <= current_path.At(current_destination)->y);
+
+	if (!reached_Y)
+	{
+		if (position.y > current_path.At(current_destination)->y)
+			jump = true;
+	}
 }
 
 void j1Enemy::DrawPath()

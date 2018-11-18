@@ -30,6 +30,11 @@ protected:
 	bool chase = false;
 
 	bool GetPath();
+	void PathfindingUpdate();
+	void PathfindingPreupdate();
+	virtual void ResetPathfindingVariables();
+	virtual void PathfindX();
+	virtual void PathfindY();
 
 public:
 	p2DynArray<iPoint> current_path;
