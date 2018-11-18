@@ -25,7 +25,7 @@ j1FlyingEnemy::~j1FlyingEnemy()
 bool j1FlyingEnemy::PreUpdate()
 {
 	//Check start chase
-	if (position.DistanceManhattan(App->entitymanager->player->position) < MINIMUM_DISTANCE)
+	if (position.DistanceManhattan(App->entitymanager->player->position) < chase_distance)
 		chase = true;
 	else
 		chase = false;

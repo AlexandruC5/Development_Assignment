@@ -12,6 +12,8 @@
 
 j1Enemy::j1Enemy(EntityType type, pugi::xml_node config, fPoint position, p2SString id) : j1Entity(type, config, position, id)
 {
+	chase_distance = config.child("chase_distance").attribute("value").as_float();
+
 	collider = App->collision->AddCollider(animation_frame, COLLIDER_ENEMY, App->entitymanager, false);
 	collider->rect.x = position.x;
 	collider->rect.y = position.y + collider_offset;
@@ -44,7 +46,7 @@ bool j1Enemy::Update(float dt)
 
 bool j1Enemy::PreUpdate()
 {
-	if (position.DistanceManhattan(App->entitymanager->player->position) < MINIMUM_DISTANCE) 
+	if (position.DistanceManhattan(App->entitymanager->player->position) < chase_distance) 
 		chase = true;
 	else 
 		chase = false;

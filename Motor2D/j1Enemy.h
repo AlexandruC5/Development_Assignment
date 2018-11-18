@@ -4,7 +4,6 @@
 #include "p2DynArray.h"
 
 #define POSITION_ERROR 2.5F
-#define MINIMUM_DISTANCE 700
 
 class j1Enemy : public j1Entity
 {
@@ -16,6 +15,7 @@ protected:
 	void DrawPath();
 
 	//Pathfinding
+	float chase_distance = 0.0F;
 	int current_destination = 0;
 	int previous_destination = 0;
 	int next_destination = -1;

@@ -1,8 +1,6 @@
 #pragma once
 #include "j1Enemy.h"
 
-#define MINIMUM_DISTANCE 700
-
 class j1FlyingEnemy : public j1Enemy
 {
 protected:
