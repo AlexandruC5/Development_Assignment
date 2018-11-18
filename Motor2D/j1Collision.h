@@ -67,13 +67,12 @@ public:
 	float DistanceToRightCollider(Collider* coll) const;
 	float DistanceToLeftCollider(Collider* coll) const;
 	float DistanceToTopCollider(Collider* coll) const;
-	float DistanceToBottomCollider(Collider* coll) const;
+	float DistanceToBottomCollider(Collider* coll, bool ignore_platforms = false) const;
 	Collider* AddCollider(const SDL_Rect &rect, const COLLIDER_TYPE &type, j1Module* callback = nullptr, const bool &player = false);
 
 	void DebugDraw();
 
 private:
-
 	Collider** colliders = nullptr;
 	Collider* player_collider = nullptr;
 	bool debug = false;

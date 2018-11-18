@@ -12,8 +12,7 @@
 
 j1Enemy::j1Enemy(EntityType type, pugi::xml_node config, fPoint position, p2SString id) : j1Entity(type, config, position, id)
 {
-	animations = new Animation[TOTAL_ANIMATIONS];
-	LoadAnimations(config);
+	chase_distance = config.child("chase_distance").attribute("value").as_float();
 
 	collider = App->collision->AddCollider(animation_frame, COLLIDER_ENEMY, App->entitymanager, false);
 	collider->rect.x = position.x;
@@ -47,7 +46,7 @@ bool j1Enemy::Update(float dt)
 
 bool j1Enemy::PreUpdate()
 {
-	if (position.DistanceManhattan(App->entitymanager->player->position) < MINIMUM_DISTANCE) 
+	if (position.DistanceManhattan(App->entitymanager->player->position) < chase_distance) 
 		chase = true;
 	else 
 		chase = false;
@@ -239,7 +238,7 @@ void j1Enemy::PathfindX()
 {
 	reached_X = (current_path.At(previous_destination)->x <= current_path.At(current_destination)->x  && current_path.At(current_destination)->x <= pivot.x)
 		|| (current_path.At(previous_destination)->x >= current_path.At(current_destination)->x && current_path.At(current_destination)->x >= pivot.x);
-	if (abs(pivot.x - current_path.At(current_destination)->x) > 2.5F)
+	if (abs(pivot.x - current_path.At(current_destination)->x) > POSITION_ERROR)
 		reached_X = false;
 
 	if (!reached_X)

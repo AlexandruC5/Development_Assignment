@@ -3,8 +3,7 @@
 #include "j1Animation.h"
 #include "p2DynArray.h"
 
-#define TOTAL_ANIMATIONS 1
-#define MINIMUM_DISTANCE 700
+#define POSITION_ERROR 3.0F
 
 class j1Enemy : public j1Entity
 {
@@ -16,6 +15,7 @@ protected:
 	void DrawPath();
 
 	//Pathfinding
+	float chase_distance = 0.0F;
 	int current_destination = 0;
 	int previous_destination = 0;
 	int next_destination = -1;

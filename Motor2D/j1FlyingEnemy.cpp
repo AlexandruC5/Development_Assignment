@@ -12,11 +12,9 @@
 
 j1FlyingEnemy::j1FlyingEnemy(EntityType type, pugi::xml_node config, fPoint position, p2SString id):j1Enemy(type, config, position, id)
 {
-	animations = new Animation[TOTAL_ANIMATIONS];
-	LoadAnimations(config);
 	state = JUMPING;
-
 	jump_height = -1;
+	ignore_platforms = true;
 }
 
 
@@ -27,7 +25,7 @@ j1FlyingEnemy::~j1FlyingEnemy()
 bool j1FlyingEnemy::PreUpdate()
 {
 	//Check start chase
-	if (position.DistanceManhattan(App->entitymanager->player->position) < MINIMUM_DISTANCE)
+	if (position.DistanceManhattan(App->entitymanager->player->position) < chase_distance)
 		chase = true;
 	else
 		chase = false;
@@ -119,7 +117,7 @@ void j1FlyingEnemy::PathfindY()
 	reached_Y = (current_path.At(previous_destination)->y <= current_path.At(current_destination)->y && pivot.y >= current_path.At(current_destination)->y)
 		|| (current_path.At(previous_destination)->y >= current_path.At(current_destination)->y && pivot.y <= current_path.At(current_destination)->y);
 
-	if (abs(pivot.y - current_path.At(current_destination)->y) > 2.5F)
+	if (abs(pivot.y - current_path.At(current_destination)->y) > POSITION_ERROR)
 		reached_Y = false;
 
 	if (!reached_Y)

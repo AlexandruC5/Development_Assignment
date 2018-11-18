@@ -5,8 +5,6 @@
 #include "p2Point.h"
 #include "j1Animation.h"
 
-#define TOTAL_ANIMATIONS 6
-
 class j1Player : public j1Entity
 {
 private:

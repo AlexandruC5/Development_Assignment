@@ -44,6 +44,7 @@ protected:
 
 	bool flipX = true;
 	bool is_grounded = true;
+	bool ignore_platforms = false;
 
 	Animation* animations;
 	SDL_Rect animation_frame;

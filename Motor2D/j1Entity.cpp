@@ -23,6 +23,8 @@ j1Entity::j1Entity(EntityType type, pugi::xml_node config, fPoint position, p2SS
 	collider_offset = config.child("collider").attribute("offset").as_int();
 	this->position = position;
 
+	LoadAnimations(config);
+
 	this->id = id;
 }
 
@@ -67,6 +69,7 @@ void j1Entity::Jump()
 
 void j1Entity::LoadAnimations(pugi::xml_node config)
 {
+	animations = new Animation[config.child("animations").attribute("count").as_int(1)];
 	//load animations
 	int index = 0;
 	pugi::xml_node animation;
@@ -109,7 +112,7 @@ void j1Entity::StepY()
 		}
 		else
 		{
-			float distance = App->collision->DistanceToBottomCollider(collider);
+			float distance = App->collision->DistanceToBottomCollider(collider, ignore_platforms);
 			velocity.y = MIN(velocity.y, distance); //movement of the player is min between distance to collider or his velocity
 			is_grounded = (distance == 0) ? true : false;
 		}
