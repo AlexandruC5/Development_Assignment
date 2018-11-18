@@ -35,7 +35,7 @@ bool j1Player::PreUpdate()
 	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
 	{
 		if (state != GOD) state = GOD;
-		else state = IDLE;
+		else state = JUMPING;
 	}
 
 

@@ -156,6 +156,12 @@ void j1Enemy::JumpingUpdate()
 
 		target_speed.y = 0.0F;
 		velocity.y = 0.0F;
+		total_jumps = 0;
+	}
+
+	if (jump && total_jumps < MAX_JUMPS)
+	{
+		Jump();
 	}
 }
 
@@ -164,14 +170,16 @@ void j1Enemy::Jump()
 	target_speed.y = -jump_speed;
 	is_grounded = false;
 	state = JUMPING;
+	total_jumps++;
 }
 
 bool j1Enemy::GetPath()
 {
-	iPoint origin = App->map->WorldToMap(pivot.x, pivot.y);
-	iPoint destination = App->map->WorldToMap(App->entitymanager->player->pivot.x, App->entitymanager->player->pivot.y);
 
- 	App->pathfinding->CreatePath(origin, destination, 5, 5, jump_height);
+	iPoint origin = App->map->WorldToMap(pivot.x, pivot.y);
+	destination = App->map->WorldToMap(App->entitymanager->player->pivot.x, App->entitymanager->player->pivot.y);
+
+	App->pathfinding->CreatePath(origin, destination, 5, 5, jump_height);
 
 	const p2DynArray<iPoint>* tmp_array = App->pathfinding->GetLastPath();
 	current_path.Clear();
@@ -184,9 +192,10 @@ bool j1Enemy::GetPath()
 	}
 	current_destination = current_path.Count() > 1 ? 1 : 0;
 	previous_destination = 0;
-	next_destination = current_path.Count() > 2 ? 2:-1;
+	next_destination = current_path.Count() > 2 ? 2 : -1;
 
 	ResetPathfindingVariables();
+
 
 	return true;
 }
@@ -234,8 +243,9 @@ void j1Enemy::PathfindX()
 {
 	reached_X = (current_path.At(previous_destination)->x <= current_path.At(current_destination)->x  && current_path.At(current_destination)->x <= pivot.x)
 		|| (current_path.At(previous_destination)->x >= current_path.At(current_destination)->x && current_path.At(current_destination)->x >= pivot.x);
-	if (abs(pivot.x - current_path.At(current_destination)->x) > POSITION_ERROR_X)
-		reached_X = false;
+
+	if (abs(pivot.x - current_path.At(current_destination)->x) < POSITION_ERROR_X)
+		reached_X = true;
 
 	if (!reached_X)
 	{

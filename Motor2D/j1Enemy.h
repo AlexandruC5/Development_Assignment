@@ -4,6 +4,7 @@
 #include "p2DynArray.h"
 
 #define POSITION_ERROR_X 10.0F
+#define MAX_JUMPS 1
 
 class j1Enemy : public j1Entity
 {
@@ -23,11 +24,13 @@ protected:
 	bool reached_X = false;
 	bool reached_Y = false;
 	bool current_is_grounded = false;
+	iPoint destination = { -1, -1 };
 
 	bool moving_right = false;
 	bool moving_left = false;
 	bool jump = false;
 	bool chase = false;
+	int total_jumps = 0;
 
 	bool GetPath();
 	void PathfindingUpdate();

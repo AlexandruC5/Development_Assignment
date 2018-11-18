@@ -1,13 +1,13 @@
 #pragma once
 #include "j1Enemy.h"
 
-#define POSITION_ERROR_Y 5.0F
+#define POSITION_ERROR_Y 10.0F
 
 class j1FlyingEnemy : public j1Enemy
 {
 protected:
 	bool moving_down = false;
-	void JumpingUpdate();
+	void MovingUpdate();
 	void ResetPathfindingVariables();
 	void PathfindY();
 

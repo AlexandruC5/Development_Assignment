@@ -59,7 +59,7 @@
     <enemy>
       <sprite>dead_buny_floor_spritesheet.png</sprite>
       <folder>textures</folder>
-      <movement_speed value="400.0F"/>
+      <movement_speed value="500.0F"/>
       <jump_speed value="1400.0F"/>
       <fall_speed value="1400.0F"/>
       <acceleration value="0.8F"/>
