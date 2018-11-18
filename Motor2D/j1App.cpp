@@ -217,17 +217,16 @@ void j1App::FinishUpdate()
 
 	float avg_fps = float(frame_count) / startup_time.ReadSec();
 	float seconds_since_startup = startup_time.ReadSec();
-	double last_frame_ms = frame_time.ReadSec();
+	double last_frame_ms = frame_time.Read();
 	uint32 frames_on_last_update = prev_last_sec_frame_count;
 
 	static char title[256];
-	sprintf_s(title, 256, "Av.FPS: %.2f Last Frame Ms: %f Last sec frames: %i Cap: %s Vsync: %s ",
+	sprintf_s(title, 256, "Av.FPS: %.2f Last Frame Ms: %.2f Last sec frames: %i Cap: %s Vsync: %s ",
 		avg_fps, last_frame_ms, frames_on_last_update, frame_cap ? "ON" : "OFF", vsync ? "ON":"OFF");
 	App->win->SetTitle(title);
 
 	BROFILER_CATEGORY("Wait", Profiler::Color::OldLace);
 
-	PerfTimer wait_timer;
 	float waiting_time =  (1000 / frame_rate)-last_frame_ms;
 	if (waiting_time > (1000 / frame_rate))
 	{

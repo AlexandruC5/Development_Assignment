@@ -193,7 +193,7 @@ void j1Enemy::PathfindingUpdate()
 {
 	if (chase)
 	{
-		GetPath();
+		if (state!=JUMPING) GetPath();
 		if (App->entitymanager->draw_path) DrawPath();
 	}
 	else
