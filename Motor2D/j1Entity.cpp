@@ -117,7 +117,7 @@ void j1Entity::StepY()
 	}
 	position.y += velocity.y;
 	collider->rect.y = position.y + collider_offset;
-	pivot.y = position.y + (collider->rect.h / 2) + collider_offset;
+	pivot.y = position.y + (collider->rect.h / 2);
 }
 
 bool j1Entity::CleanUp()

@@ -89,7 +89,7 @@
       <sprite>dead_bat_spritesheet.png</sprite>
       <folder>textures</folder>
       <movement_speed value="400.0F"/>
-      <acceleration value="0.01F"/>
+      <acceleration value="0.8F"/>
       <collider width="42" height="30" offset="0"/>
       <chase_distance value="700.0F"/>
       <animations count ="1">

@@ -50,6 +50,21 @@ bool j1PathFinding::IsWalkable(const iPoint& pos) const
 	return t != INVALID_WALK_CODE && t < 2;
 }
 
+bool j1PathFinding::HasGroundBelow(const iPoint& pos) const
+{
+	LOG("point y = %i", pos.y);
+	bool ret = false;
+
+	for (int i = pos.y; i < height; i++)
+	{
+		LOG("evaluation %i", i);
+		if (IsGround({ pos.x,i }))
+			return true;
+	}
+
+	return ret;
+}
+
 bool j1PathFinding::IsGround(const iPoint& pos) const
 {
 	uchar t = GetTileAt(pos);
@@ -213,8 +228,10 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination, i
 {
 	BROFILER_CATEGORY("CreatePath", Profiler::Color::SeaGreen);
 	last_path.Clear();
+	bool flier = maxCharacterJumpHeight > 0 ? false : true;
+
 	// TODO 1: if origin or destination are not walkable, return -1
-	if (!IsWalkable(destination)) return -1;
+	if (!IsWalkable(destination) || (!flier && !HasGroundBelow(destination))) return -1;
 
 	// TODO 2: Create two lists: open, close
 	// Add the origin tile to open
@@ -225,7 +242,7 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination, i
 	PathNode node_origin = PathNode(0, origin.DistanceNoSqrt(destination), origin, nullptr);
 	open.list.add(node_origin);
 
-	bool flier = maxCharacterJumpHeight > 0 ? false : true;
+	
 
 	if (!flier)
 	{

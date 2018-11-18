@@ -47,6 +47,8 @@ public:
 	//Utility: return true if the tile is a one way platform
 	bool IsPlatform(const iPoint& pos) const;
 
+	bool HasGroundBelow(const iPoint& pos) const;
+
 	// Utility: return the walkability value of a tile
 	uchar GetTileAt(const iPoint& pos) const;
 

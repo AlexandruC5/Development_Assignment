@@ -238,7 +238,7 @@ void j1Enemy::PathfindX()
 {
 	reached_X = (current_path.At(previous_destination)->x <= current_path.At(current_destination)->x  && current_path.At(current_destination)->x <= pivot.x)
 		|| (current_path.At(previous_destination)->x >= current_path.At(current_destination)->x && current_path.At(current_destination)->x >= pivot.x);
-	if (abs(pivot.x - current_path.At(current_destination)->x) > POSITION_ERROR)
+	if (abs(pivot.x - current_path.At(current_destination)->x) > POSITION_ERROR_X)
 		reached_X = false;
 
 	if (!reached_X)
