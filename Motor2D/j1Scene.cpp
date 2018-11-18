@@ -71,6 +71,8 @@ bool j1Scene::Update(float dt)
 		App->LoadGame();
 	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
 		App->SaveGame();
+	if (App->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
+		App->frame_cap = false;
 	if (App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_REPEAT)
 	{
 		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) App->audio->IncreaseFXVolume();

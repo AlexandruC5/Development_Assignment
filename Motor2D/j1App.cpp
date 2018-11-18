@@ -104,6 +104,7 @@ bool j1App::Awake()
 		organization.create(app_config.child("organization").child_value());
 		save_game.create(app_config.child("save_file").child_value());
 		frame_rate = app_config.attribute("framerate_cap").as_uint();
+		vsync = config.child("vsync").attribute("value").as_bool();
 
 		load_game = save_game;
 	}
@@ -192,6 +193,8 @@ void j1App::PrepareUpdate()
 
 	// TODO 4: Calculate the dt: differential time since last frame
 	dt = frame_time.ReadMs()*0.001;
+	if (dt > (float)frame_rate / 1000)
+		dt = (float)frame_rate / 1000;
 	frame_time.Start();
 }
 
@@ -218,18 +221,30 @@ void j1App::FinishUpdate()
 	uint32 frames_on_last_update = prev_last_sec_frame_count;
 
 	static char title[256];
-	sprintf_s(title, 256, "Av.FPS: %.2f Last Frame Ms: %f Last sec frames: %i  Time since startup: %.3f Frame Count: %lu ",
-		avg_fps, last_frame_ms, frames_on_last_update, seconds_since_startup, frame_count);
+	sprintf_s(title, 256, "Av.FPS: %.2f Last Frame Ms: %f Last sec frames: %i Cap: %s Vsync: %s ",
+		avg_fps, last_frame_ms, frames_on_last_update, frame_cap ? "ON" : "OFF", vsync ? "ON":"OFF");
 	App->win->SetTitle(title);
 
 	BROFILER_CATEGORY("Wait", Profiler::Color::OldLace);
 
-	if (last_frame_ms < frame_rate)
+	PerfTimer wait_timer;
+	float waiting_time =  (1000 / frame_rate)-last_frame_ms;
+	if (waiting_time > (1000 / frame_rate))
 	{
-		PerfTimer wait_timer;
-		SDL_Delay(frame_rate - last_frame_ms);
-		//LOG("waited for: %.2f ms expected time: %f ms", wait_timer.ReadMs(), frame_rate - last_frame_ms);
+		waiting_time = (1000 / frame_rate);
 	}
+	else if(waiting_time < 0)
+	{
+		waiting_time = 0;
+	}
+	float windows_error = 0.5f;
+
+	if (frame_cap)
+	{
+		SDL_Delay(waiting_time + windows_error);
+	}
+		//LOG("waited for: %.2f ms expected time: %f ms", wait_timer.ReadMs(), frame_rate - last_frame_ms);
+	
 }
 
 // Call modules before each loop iteration
