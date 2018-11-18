@@ -24,11 +24,6 @@ j1FlyingEnemy::~j1FlyingEnemy()
 {
 }
 
-bool j1FlyingEnemy::Start()
-{
-	return true;
-}
-
 bool j1FlyingEnemy::PreUpdate()
 {
 	if (position.DistanceManhattan(App->entitymanager->player->position) < MINIMUM_DISTANCE)
@@ -85,6 +80,7 @@ bool j1FlyingEnemy::PreUpdate()
 	case JUMPING: JumpingUpdate();
 		break;
 	case DEAD:
+		//TODO Die animation
 		break;
 	default:
 		break;

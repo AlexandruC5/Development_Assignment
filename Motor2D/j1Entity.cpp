@@ -178,8 +178,17 @@ bool j1Entity::Save(pugi::xml_node &conf) const
 	return true;
 }
 
-void j1Entity::CheckDeath()
+void j1Entity::ResetEntity()
 {
+	state = IDLE;
+	velocity = { 0.0F, 0.0F };
+	target_speed = { 0.0F, 0.0F };
+	flipX = true;
+	if (collider)
+	{
+		collider->rect.x = position.x;
+		collider->rect.y = position.y + collider_offset;
+	}
 }
 
 void j1Entity::SetPosition(float x, float y)

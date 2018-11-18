@@ -36,8 +36,6 @@ public:
 	j1Enemy(EntityType type, pugi::xml_node, fPoint position, p2SString id);
 	~j1Enemy();
 
-	bool Awake();
-	bool Start();
 	bool Update(float dt);
 	bool PreUpdate();
 	bool Load(pugi::xml_node&);

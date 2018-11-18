@@ -71,13 +71,13 @@ public:
 	virtual bool Start();
 	virtual bool Update(float dt);
 	virtual bool PreUpdate();
-	bool CleanUp();
+	virtual bool CleanUp();
 	virtual bool Load(pugi::xml_node&);
 	virtual bool Save(pugi::xml_node&) const;
 	virtual void OnCollision(Collider* c1, Collider* c2);
 	virtual void Die();
 
-	virtual void CheckDeath();
+	virtual void ResetEntity();
 	virtual void SetPosition(float x, float y);
 };
 

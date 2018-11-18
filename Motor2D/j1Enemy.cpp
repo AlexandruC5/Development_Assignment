@@ -24,17 +24,6 @@ j1Enemy::j1Enemy(EntityType type, pugi::xml_node config, fPoint position, p2SStr
 j1Enemy::~j1Enemy()
 {}
 
-bool j1Enemy::Awake()
-{
-
-	return true;
-}
-
-bool j1Enemy::Start()
-{
-	
-	return true;
-}
 
 bool j1Enemy::Update(float dt)
 {
