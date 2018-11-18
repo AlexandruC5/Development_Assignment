@@ -41,7 +41,7 @@ protected:
 	float fall_speed = 0.0F;
 	fPoint target_speed = { 0.0F, 0.0F };
 
-	int collider_offset = 0;
+
 	bool flipX = true;
 	bool is_grounded = true;
 
@@ -60,10 +60,13 @@ protected:
 public:
 	fPoint position = { 0.0F, 0.0F };
 	fPoint velocity = { 0.0F, 0.0F };
+	fPoint pivot = { 0.0F, 0.0F };
+
 	Collider * collider;
 	EntityState state = IDLE;
 	float threshold = 0.0F;
 	p2SString id;
+	int collider_offset = 0;
 	
 	j1Entity(EntityType type, pugi::xml_node config, fPoint position, p2SString id);
 	~j1Entity();

@@ -167,8 +167,8 @@ void j1Enemy::Jump()
 
 bool j1Enemy::GetPath()
 {
-	iPoint origin = App->map->WorldToMap(position.x, position.y);
-	iPoint destination = App->map->WorldToMap(App->entitymanager->player->position.x, App->entitymanager->player->position.y);
+	iPoint origin = App->map->WorldToMap(pivot.x, pivot.y);
+	iPoint destination = App->map->WorldToMap(App->entitymanager->player->pivot.x, App->entitymanager->player->pivot.y);
 
  	App->pathfinding->CreatePath(origin, destination, 5, 5, jump_height);
 
@@ -178,16 +178,14 @@ bool j1Enemy::GetPath()
 	{
 		iPoint p = App->map->MapToWorld(tmp_array->At(i)->x, tmp_array->At(i)->y);
 		p.x += App->map->data.tile_width / 2;
-		p.y += App->map->data.tile_height / 2;
+		p.y += App->map->data.tile_height / 2 + App->entitymanager->player->collider_offset;
 		current_path.PushBack(p);
 	}
 	current_destination = current_path.Count() > 1 ? 1 : 0;
 	previous_destination = 0;
 	next_destination = current_path.Count() > 2 ? 2:-1;
 
-	moving_right = false;
-	moving_left = false;
-	jump = false;
+	ResetPathfindingVariables();
 
 	return true;
 }
@@ -202,9 +200,7 @@ void j1Enemy::PathfindingUpdate()
 	else
 	{
 		current_path.Clear();
-		moving_right = false;
-		moving_left = false;
-		jump = false;
+		ResetPathfindingVariables();
 	}
 }
 
@@ -241,26 +237,28 @@ void j1Enemy::ResetPathfindingVariables()
 
 void j1Enemy::PathfindX()
 {
-	reached_X = (current_path.At(previous_destination)->x <= current_path.At(current_destination)->x  && current_path.At(current_destination)->x <= position.x)
-		|| (current_path.At(previous_destination)->x >= current_path.At(current_destination)->x && current_path.At(current_destination)->x >= position.x);
+	reached_X = (current_path.At(previous_destination)->x <= current_path.At(current_destination)->x  && current_path.At(current_destination)->x <= pivot.x)
+		|| (current_path.At(previous_destination)->x >= current_path.At(current_destination)->x && current_path.At(current_destination)->x >= pivot.x);
+	if (abs(pivot.x - current_path.At(current_destination)->x) > 2.5F)
+		reached_X = false;
 
 	if (!reached_X)
 	{
-		if (position.x < current_path.At(current_destination)->x)
+		if (pivot.x < current_path.At(current_destination)->x)
 			moving_right = true;
-		else if (position.x > current_path.At(current_destination)->x)
+		else if (pivot.x > current_path.At(current_destination)->x)
 			moving_left = true;
 	}
 }
 
 void j1Enemy::PathfindY()
 {
-	reached_Y = (current_path.At(previous_destination)->y <= current_path.At(current_destination)->y && position.y >= current_path.At(current_destination)->y)
-		|| (current_path.At(previous_destination)->y >= current_path.At(current_destination)->y && position.y <= current_path.At(current_destination)->y);
+	reached_Y = (current_path.At(previous_destination)->y <= current_path.At(current_destination)->y && pivot.y >= current_path.At(current_destination)->y)
+		|| (current_path.At(previous_destination)->y >= current_path.At(current_destination)->y && pivot.y <= current_path.At(current_destination)->y);
 
 	if (!reached_Y)
 	{
-		if (position.y > current_path.At(current_destination)->y)
+		if (pivot.y > current_path.At(current_destination)->y)
 			jump = true;
 	}
 }

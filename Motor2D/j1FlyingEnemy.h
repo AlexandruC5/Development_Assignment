@@ -8,8 +8,6 @@ class j1FlyingEnemy : public j1Enemy
 {
 protected:
 	bool moving_down = false;
-	void StepX();
-	void StepY();
 	void JumpingUpdate();
 	void ResetPathfindingVariables();
 	void PathfindY();

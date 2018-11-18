@@ -74,24 +74,6 @@ bool j1FlyingEnemy::Save(pugi::xml_node &conf) const
 	return true;
 }
 
-void j1FlyingEnemy::StepX()
-{
-	if (fabs(velocity.x) < threshold)
-		velocity.x = 0.0F;
-
-	position.y += velocity.y;
-	collider->rect.y = position.y + collider_offset;
-}
-
-void j1FlyingEnemy::StepY()
-{
-	if (fabs(velocity.y) < threshold)
-		velocity.y = 0.0F;
-
-	position.x += velocity.x;
-	collider->rect.x = position.x;
-}
-
 void j1FlyingEnemy::JumpingUpdate()
 {
 	if (moving_left == moving_right)
@@ -134,14 +116,17 @@ void j1FlyingEnemy::ResetPathfindingVariables()
 
 void j1FlyingEnemy::PathfindY()
 {
-	reached_Y = (current_path.At(previous_destination)->y <= current_path.At(current_destination)->y && position.y >= current_path.At(current_destination)->y)
-		|| (current_path.At(previous_destination)->y >= current_path.At(current_destination)->y && position.y <= current_path.At(current_destination)->y);
+	reached_Y = (current_path.At(previous_destination)->y <= current_path.At(current_destination)->y && pivot.y >= current_path.At(current_destination)->y)
+		|| (current_path.At(previous_destination)->y >= current_path.At(current_destination)->y && pivot.y <= current_path.At(current_destination)->y);
+
+	if (abs(pivot.y - current_path.At(current_destination)->y) > 2.5F)
+		reached_Y = false;
 
 	if (!reached_Y)
 	{
-		if (position.y > current_path.At(current_destination)->y)
+		if (pivot.y > current_path.At(current_destination)->y)
 			jump = true;
-		else if (position.y < current_path.At(current_destination)->y)
+		else if (pivot.y < current_path.At(current_destination)->y)
 			moving_down = true;
 	}
 }

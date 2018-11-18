@@ -95,6 +95,7 @@ void j1Entity::StepX()
 	if (fabs(velocity.x) < threshold) velocity.x = 0.0F;
 	position.x += velocity.x;
 	collider->rect.x = position.x;
+	pivot.x = position.x + (collider->rect.w / 2);
 }
 
 void j1Entity::StepY()
@@ -116,6 +117,7 @@ void j1Entity::StepY()
 	if (fabs(velocity.y) < threshold) velocity.y = 0.0F;
 	position.y += velocity.y;
 	collider->rect.y = position.y + collider_offset;
+	pivot.y = position.y + (collider->rect.h / 2) + collider_offset;
 }
 
 bool j1Entity::CleanUp()
