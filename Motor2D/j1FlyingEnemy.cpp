@@ -14,6 +14,7 @@ j1FlyingEnemy::j1FlyingEnemy(EntityType type, pugi::xml_node config, fPoint posi
 {
 	state = JUMPING;
 	jump_height = -1;
+	ignore_platforms = true;
 }
 
 

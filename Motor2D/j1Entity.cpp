@@ -112,7 +112,7 @@ void j1Entity::StepY()
 		}
 		else
 		{
-			float distance = App->collision->DistanceToBottomCollider(collider);
+			float distance = App->collision->DistanceToBottomCollider(collider, ignore_platforms);
 			velocity.y = MIN(velocity.y, distance); //movement of the player is min between distance to collider or his velocity
 			is_grounded = (distance == 0) ? true : false;
 		}
