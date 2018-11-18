@@ -193,16 +193,10 @@ bool j1Enemy::GetPath()
 
 void j1Enemy::PathfindingUpdate()
 {
-	if (chase)
-	{
-		if (state!=JUMPING) GetPath();
-		if (App->entitymanager->draw_path) DrawPath();
-	}
-	else
-	{
-		current_path.Clear();
-		ResetPathfindingVariables();
-	}
+	if (chase && state != JUMPING)
+		GetPath();
+	if (App->entitymanager->draw_path)
+		DrawPath();
 }
 
 void j1Enemy::PathfindingPreupdate()

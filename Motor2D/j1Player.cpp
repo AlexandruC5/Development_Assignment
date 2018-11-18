@@ -80,6 +80,12 @@ bool j1Player::Update(float dt)
 			if (target_speed.y > fall_speed) target_speed.y = fall_speed; //limit falling speed
 		}
 		break;
+		case DEAD:
+		{
+			target_speed.y += gravity * dt;
+			if (target_speed.y > fall_speed) target_speed.y = fall_speed; //limit falling speed
+		}
+		break;
 		case CHARGE:
 		{
 			if (charge_value < max_charge)

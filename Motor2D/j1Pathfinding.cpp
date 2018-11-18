@@ -52,12 +52,10 @@ bool j1PathFinding::IsWalkable(const iPoint& pos) const
 
 bool j1PathFinding::HasGroundBelow(const iPoint& pos) const
 {
-	LOG("point y = %i", pos.y);
 	bool ret = false;
 
 	for (int i = pos.y; i < height; i++)
 	{
-		LOG("evaluation %i", i);
 		if (IsGround({ pos.x,i }))
 			return true;
 	}
@@ -343,8 +341,8 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination, i
 						{
 							// If it is a better path, Update the parent
 							// replace old node at open
-							//open.Find(child_node->data.pos)->data.g = child_node->data.g;
-							//open.Find(child_node->data.pos)->data.parent = child_node->data.parent;
+							open.Find(child_node->data.pos)->data.g = child_node->data.g;
+							open.Find(child_node->data.pos)->data.parent = child_node->data.parent;
 						}
 					}
 					else open.list.add(child_node->data);
