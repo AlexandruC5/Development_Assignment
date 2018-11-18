@@ -168,4 +168,6 @@ void j1Entity::Die()
 	state = DEAD;
 	velocity.x = 0.0F;
 	target_speed.x = 0.0F;
+	velocity.y = 0.0F;
+	target_speed.y = 0.0F;
 }
