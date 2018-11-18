@@ -121,7 +121,7 @@ private:
 	PerfTimer			ptimer;
 	uint64				frame_count = 0;
 	Timer				startup_time;
-	PerfTimer			frame_time;
+	Timer				frame_time;
 	Timer				last_sec_frame_time;
 	uint32				last_sec_frame_count = 0;
 	uint32				prev_last_sec_frame_count = 0;

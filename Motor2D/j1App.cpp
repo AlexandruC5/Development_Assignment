@@ -192,7 +192,7 @@ void j1App::PrepareUpdate()
 	last_sec_frame_count++;
 
 	// TODO 4: Calculate the dt: differential time since last frame
-	dt = frame_time.ReadMs()*0.001;
+	dt = frame_time.ReadSec();
 	if (dt > (float)frame_rate / 1000)
 		dt = (float)frame_rate / 1000;
 	frame_time.Start();
@@ -208,7 +208,7 @@ void j1App::FinishUpdate()
 	if(want_to_load == true)
 		LoadGameNow();
 
-	if (last_sec_frame_time.Read() >= 1000)
+	if (last_sec_frame_time.Read() > 1000)
 	{
 		last_sec_frame_time.Start();
 		prev_last_sec_frame_count = last_sec_frame_count;
@@ -217,7 +217,7 @@ void j1App::FinishUpdate()
 
 	float avg_fps = float(frame_count) / startup_time.ReadSec();
 	float seconds_since_startup = startup_time.ReadSec();
-	double last_frame_ms = frame_time.ReadMs();
+	double last_frame_ms = frame_time.ReadSec();
 	uint32 frames_on_last_update = prev_last_sec_frame_count;
 
 	static char title[256];
@@ -237,11 +237,10 @@ void j1App::FinishUpdate()
 	{
 		waiting_time = 0;
 	}
-	float windows_error = 0.5f;
 
 	if (frame_cap)
 	{
-		SDL_Delay(waiting_time + windows_error);
+		SDL_Delay(waiting_time);
 	}
 		//LOG("waited for: %.2f ms expected time: %f ms", wait_timer.ReadMs(), frame_rate - last_frame_ms);
 	
