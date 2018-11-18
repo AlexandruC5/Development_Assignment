@@ -8,6 +8,7 @@
 #include "j1Map.h"
 #include "j1Enemy.h"
 #include "j1EntityManager.h"
+#include "Brofiler/Brofiler.h"
 
 
 j1Enemy::j1Enemy(EntityType type, pugi::xml_node config, fPoint position, p2SString id) : j1Entity(type, config, position, id)
@@ -26,6 +27,7 @@ j1Enemy::~j1Enemy()
 
 bool j1Enemy::Update(float dt)
 {
+	BROFILER_CATEGORY("Update_Enemy", Profiler::Color::LightSalmon);
 	PathfindingUpdate();
 
 	if (state == JUMPING)

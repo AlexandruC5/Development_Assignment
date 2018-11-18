@@ -14,6 +14,7 @@
 #include "j1Pathfinding.h"
 #include "j1Collision.h"
 #include "j1Enemy.h"
+#include "Brofiler/Brofiler.h"
 
 #define RIGHT_CAMERA_LIMIT  (-(App->render->camera.position.x - App->render->camera.body.w / 2))
 #define LEFT_CAMERA_LIMIT  (-(App->render->camera.position.x - App->render->camera.body.w / 6))
@@ -36,6 +37,7 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 // Called before the first frame
 bool j1Scene::Start()
 {
+	BROFILER_CATEGORY("StartScene", Profiler::Color::Plum);
 	App->swap_scene->current_scene = this;
 	App->entitymanager->CleanUp();
 	App->map->Load(map_file.GetString());
