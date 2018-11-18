@@ -46,7 +46,6 @@ bool j1EntityManager::Update(float dt)
 
 bool j1EntityManager::PreUpdate()
 {
-	BROFILER_CATEGORY("PreUpdate_Entity", Profiler::Color::MediumOrchid);
 	for (p2List_item<j1Entity*>* entity = entities.start; entity; entity = entity->next)
 	{
 		entity->data->PreUpdate();

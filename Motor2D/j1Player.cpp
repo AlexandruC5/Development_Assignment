@@ -31,7 +31,6 @@ j1Player::~j1Player()
 
 bool j1Player::PreUpdate() 
 {
-	BROFILER_CATEGORY("Player_Entity", Profiler::Color::MediumOrchid);
 	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
 	{
 		if (state != GOD) state = GOD;
