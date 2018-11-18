@@ -3,7 +3,7 @@
 #include "j1Animation.h"
 #include "p2DynArray.h"
 
-#define POSITION_ERROR 3.0F
+#define POSITION_ERROR_X 10.0F
 
 class j1Enemy : public j1Entity
 {

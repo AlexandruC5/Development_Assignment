@@ -1,6 +1,8 @@
 #pragma once
 #include "j1Enemy.h"
 
+#define POSITION_ERROR_Y 5.0F
+
 class j1FlyingEnemy : public j1Enemy
 {
 protected:

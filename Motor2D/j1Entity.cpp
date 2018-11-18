@@ -30,42 +30,6 @@ j1Entity::j1Entity(EntityType type, pugi::xml_node config, fPoint position, p2SS
 j1Entity::~j1Entity()
 {}
 
-bool j1Entity::Awake()
-{
-	return false;
-}
-
-bool j1Entity::Start()
-{
-	return false;
-}
-
-bool j1Entity::Update(float dt)
-{
-	return false;
-}
-
-bool j1Entity::PreUpdate()
-{
-	return false;
-}
-
-void j1Entity::IdleUpdate()
-{
-}
-
-void j1Entity::MovingUpdate()
-{
-}
-
-void j1Entity::JumpingUpdate()
-{
-}
-
-void j1Entity::Jump()
-{
-}
-
 void j1Entity::LoadAnimations(pugi::xml_node config)
 {
 	animations = new Animation[config.child("animations").attribute("count").as_int(1)];
@@ -117,7 +81,7 @@ void j1Entity::StepY()
 	}
 	position.y += velocity.y;
 	collider->rect.y = position.y + collider_offset;
-	pivot.y = position.y + (collider->rect.h / 2) + collider_offset;
+	pivot.y = position.y + (collider->rect.h / 2);
 }
 
 bool j1Entity::CleanUp()
@@ -204,9 +168,4 @@ void j1Entity::Die()
 	state = DEAD;
 	velocity.x = 0.0F;
 	target_speed.x = 0.0F;
-}
-
-void j1Entity::OnCollision(Collider* c1, Collider* c2)
-{
-
 }

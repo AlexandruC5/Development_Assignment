@@ -117,7 +117,7 @@ void j1FlyingEnemy::PathfindY()
 	reached_Y = (current_path.At(previous_destination)->y <= current_path.At(current_destination)->y && pivot.y >= current_path.At(current_destination)->y)
 		|| (current_path.At(previous_destination)->y >= current_path.At(current_destination)->y && pivot.y <= current_path.At(current_destination)->y);
 
-	if (abs(pivot.y - current_path.At(current_destination)->y) > POSITION_ERROR)
+	if (abs(pivot.y - current_path.At(current_destination)->y) > POSITION_ERROR_Y)
 		reached_Y = false;
 
 	if (!reached_Y)
