@@ -5,6 +5,7 @@
 #include "p2Log.h"
 #include "j1Input.h"
 #include "j1EntityManager.h"
+#include "Brofiler/Brofiler.h"
 
 j1EntityManager::j1EntityManager() : j1Module()
 {
@@ -45,6 +46,7 @@ bool j1EntityManager::Update(float dt)
 
 bool j1EntityManager::PreUpdate()
 {
+	BROFILER_CATEGORY("PreUpdate_Entity", Profiler::Color::MediumOrchid);
 	for (p2List_item<j1Entity*>* entity = entities.start; entity; entity = entity->next)
 	{
 		entity->data->PreUpdate();
@@ -85,6 +87,7 @@ bool j1EntityManager::Save(pugi::xml_node &file) const
 
 bool j1EntityManager::CreateEntity(EntityType type, fPoint position)
 {
+	BROFILER_CATEGORY("Create_Entity", Profiler::Color::MediumOrchid);
 	char* count = (char*)malloc(sizeof(char) * 2);
 	_itoa_s(id_count++, count, 2, 10);
 	p2SString id;
