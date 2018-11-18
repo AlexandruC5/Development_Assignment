@@ -104,7 +104,7 @@ bool j1App::Awake()
 		organization.create(app_config.child("organization").child_value());
 		save_game.create(app_config.child("save_file").child_value());
 		frame_rate = app_config.attribute("framerate_cap").as_uint();
-		vsync = config.child("vsync").attribute("value").as_bool();
+		vsync = config.child("renderer").child("vsync").attribute("value").as_bool();
 
 		load_game = save_game;
 	}
