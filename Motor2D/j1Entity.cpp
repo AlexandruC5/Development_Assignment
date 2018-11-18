@@ -16,7 +16,6 @@ j1Entity::j1Entity(EntityType type, pugi::xml_node config, fPoint position, p2SS
 	movement_speed = config.child("movement_speed").attribute("value").as_float();
 	jump_speed = config.child("jump_speed").attribute("value").as_float();
 	acceleration = config.child("acceleration").attribute("value").as_float();
-	threshold = config.child("threshold").attribute("value").as_float();
 	gravity = config.child("gravity").attribute("value").as_float();
 	fall_speed = config.child("fall_speed").attribute("value").as_float();
 
@@ -95,7 +94,6 @@ void j1Entity::StepX()
 		if (velocity.x > 0) velocity.x = MIN(velocity.x, App->collision->DistanceToRightCollider(collider)); //movement of the player is min between distance to collider or his velocity
 		else if (velocity.x < 0) velocity.x = MAX(velocity.x, App->collision->DistanceToLeftCollider(collider)); //movement of the player is max between distance to collider or his velocity
 	}
-	if (fabs(velocity.x) < threshold) velocity.x = 0.0F;
 	position.x += velocity.x;
 	collider->rect.x = position.x;
 	pivot.x = position.x + (collider->rect.w / 2);
@@ -117,7 +115,6 @@ void j1Entity::StepY()
 			is_grounded = (distance == 0) ? true : false;
 		}
 	}
-	if (fabs(velocity.y) < threshold) velocity.y = 0.0F;
 	position.y += velocity.y;
 	collider->rect.y = position.y + collider_offset;
 	pivot.y = position.y + (collider->rect.h / 2) + collider_offset;

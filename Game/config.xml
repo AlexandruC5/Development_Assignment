@@ -1,6 +1,6 @@
 <!-- Config file for the game -->
 <config>
-  <app framerate_cap="60">
+  <app framerate_cap="30">
     <title>Salty the Slime</title>
     <organization>UPC</organization>
     <save_file>save_game.xml</save_file>
@@ -17,7 +17,6 @@
       <movement_speed value="600.0F"/>
       <jump_speed value="1500.0F"/>
       <fall_speed value="1500.0F"/>
-      <threshold value="0.01FF"/>
       <acceleration value="0.8F"/>
       <gravity value="2200.0F"/>
       <charged_jump time="4.0F" max_charge="1000.0F" charge_increment="300.0F"/>
@@ -63,7 +62,6 @@
       <movement_speed value="400.0F"/>
       <jump_speed value="1400.0F"/>
       <fall_speed value="1400.0F"/>
-      <threshold value="0.01F"/>
       <acceleration value="0.8F"/>
       <gravity value="2200.0F"/>
       <collider width="39" height="37" offset="0"/>
@@ -91,7 +89,6 @@
       <sprite>dead_bat_spritesheet.png</sprite>
       <folder>textures</folder>
       <movement_speed value="400.0F"/>
-      <threshold value="0.1F"/>
       <acceleration value="0.01F"/>
       <collider width="42" height="30" offset="0"/>
       <chase_distance value="700.0F"/>

@@ -91,9 +91,7 @@ bool j1Scene::Update(float dt)
 	}			
 
 	
-	App->render->camera.velocity = ((App->render->camera.target_speed * 0.8F) + (App->render->camera.velocity * (1 - 0.8F)));
-	if (fabs(App->render->camera.velocity.y) < 0.001F) App->render->camera.velocity.y = 0.0F;
-	if (fabs(App->render->camera.velocity.x) < 0.001F) App->render->camera.velocity.x = 0.0F;
+	App->render->camera.velocity = ((App->render->camera.target_speed * 0.4F) + (App->render->camera.velocity * (1 - 0.4F)));
 
 	App->render->camera.position.y += App->render->camera.velocity.y;
 	App->render->camera.position.x += App->render->camera.velocity.x;

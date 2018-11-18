@@ -65,7 +65,6 @@ public:
 
 	Collider * collider;
 	EntityState state = IDLE;
-	float threshold = 0.0F;
 	p2SString id;
 	int collider_offset = 0;
 	
