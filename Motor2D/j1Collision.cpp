@@ -227,7 +227,7 @@ float j1Collision::DistanceToTopCollider(Collider* coll) const
 
 	for (uint i = 0; i < max_colliders; i++)
 	{
-		if (colliders[i] != nullptr && colliders[i] != coll && (colliders[i]->type == COLLIDER_PLATFORM || colliders[i]->type == COLLIDER_FLOOR))
+		if (colliders[i] != nullptr && colliders[i] != coll && colliders[i]->type == COLLIDER_FLOOR)
 		{
 			if (colliders[i]->rect.y <= coll->rect.y)
 			{
