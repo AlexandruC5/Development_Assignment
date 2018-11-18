@@ -58,8 +58,8 @@ bool j1Enemy::Update(float dt)
 	}
 
 	velocity = (target_speed * acceleration + velocity * (1 - acceleration))*dt;
-	StepY(dt);
-	StepX(dt);
+	StepY();
+	StepX();
 	CheckDeath();
 
 	animation_frame = animations[state].GetCurrentFrame(dt);
@@ -154,42 +154,6 @@ bool j1Enemy::Save(pugi::xml_node &conf) const
 	conf.append_child("movement_controls").append_attribute("moving_left") = moving_left;
 	conf.append_child("movement_controls").append_attribute("jump") = jump;
 	return true;
-}
-
-void j1Enemy::StepX(float dt)
-{
-	if (velocity.x > 0) 
-		velocity.x = MIN(velocity.x, App->collision->DistanceToRightCollider(collider)); //movement of the player is min between distance to collider or his velocity
-	else if (velocity.x < 0)
-		velocity.x = MAX(velocity.x, App->collision->DistanceToLeftCollider(collider)); //movement of the player is max between distance to collider or his velocity
-
-	if (fabs(velocity.x) < threshold) 
-		velocity.x = 0.0F;
-
-	position.x += velocity.x;
-	collider->rect.x = position.x;
-}
-
-void j1Enemy::StepY(float dt)
-{
-	if (velocity.y < 0)
-	{
-		velocity.y = MAX(velocity.y, App->collision->DistanceToTopCollider(collider)); //movement of the player is max between distance to collider or his velocity
-		if (velocity.y == 0) 
-			target_speed.y = 0.0F;
-	}
-	else
-	{
-		float distance = App->collision->DistanceToBottomCollider(collider);
-		velocity.y = MIN(velocity.y, distance); //movement of the player is min between distance to collider or his velocity
-		is_grounded = (distance == 0) ? true : false;
-	}
-
-	if (fabs(velocity.y) < threshold)
-		velocity.y = 0.0F;
-
-	position.y += velocity.y;
-	collider->rect.y = position.y + collider_offset;
 }
 
 void j1Enemy::IdleUpdate()

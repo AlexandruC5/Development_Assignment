@@ -49,8 +49,8 @@ protected:
 	SDL_Rect animation_frame;
 	unsigned int jump_fx;
 
-	virtual void StepX(float dt);
-	virtual void StepY(float dt);
+	virtual void StepX();
+	virtual void StepY();
 	virtual void IdleUpdate();
 	virtual void MovingUpdate();
 	virtual void JumpingUpdate();

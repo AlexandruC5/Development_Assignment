@@ -8,8 +8,8 @@ class j1FlyingEnemy : public j1Enemy
 {
 protected:
 	bool moving_down = false;
-	void StepX(float dt);
-	void StepY(float dt);
+	void StepX();
+	void StepY();
 	void JumpingUpdate();
 
 public:

@@ -85,12 +85,37 @@ void j1Entity::LoadAnimations(pugi::xml_node config)
 	animation_frame = { 0, 0, config.child("collider").attribute("width").as_int(), config.child("collider").attribute("height").as_int() };
 }
 
-void j1Entity::StepX(float dt)
+void j1Entity::StepX()
 {
+	if (state != GOD)
+	{
+		if (velocity.x > 0) velocity.x = MIN(velocity.x, App->collision->DistanceToRightCollider(collider)); //movement of the player is min between distance to collider or his velocity
+		else if (velocity.x < 0) velocity.x = MAX(velocity.x, App->collision->DistanceToLeftCollider(collider)); //movement of the player is max between distance to collider or his velocity
+	}
+	if (fabs(velocity.x) < threshold) velocity.x = 0.0F;
+	position.x += velocity.x;
+	collider->rect.x = position.x;
 }
 
-void j1Entity::StepY(float dt)
+void j1Entity::StepY()
 {
+	if (state != GOD)
+	{
+		if (velocity.y < 0)
+		{
+			velocity.y = MAX(velocity.y, App->collision->DistanceToTopCollider(collider)); //movement of the player is max between distance to collider or his velocity
+			if (velocity.y == 0) target_speed.y = 0.0F;
+		}
+		else
+		{
+			float distance = App->collision->DistanceToBottomCollider(collider);
+			velocity.y = MIN(velocity.y, distance); //movement of the player is min between distance to collider or his velocity
+			is_grounded = (distance == 0) ? true : false;
+		}
+	}
+	if (fabs(velocity.y) < threshold) velocity.y = 0.0F;
+	position.y += velocity.y;
+	collider->rect.y = position.y + collider_offset;
 }
 
 bool j1Entity::CleanUp()

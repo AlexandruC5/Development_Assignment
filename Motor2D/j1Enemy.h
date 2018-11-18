@@ -9,8 +9,6 @@
 class j1Enemy : public j1Entity
 {
 protected:
-	void StepX(float dt);
-	void StepY(float dt);
 	void IdleUpdate();
 	void MovingUpdate();
 	void JumpingUpdate();

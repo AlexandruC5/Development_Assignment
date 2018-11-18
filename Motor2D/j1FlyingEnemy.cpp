@@ -109,8 +109,8 @@ bool j1FlyingEnemy::Update(float dt)
 	}
 
 	velocity = (target_speed * acceleration + velocity * (1 - acceleration))*dt;
-	StepY(dt);
-	StepX(dt);
+	StepY();
+	StepX();
 
 	animation_frame = animations[IDLE].GetCurrentFrame(dt);
 	App->render->Blit(sprite, position.x, position.y, &animation_frame, 1.0f, flipX);
@@ -131,7 +131,7 @@ bool j1FlyingEnemy::Save(pugi::xml_node &conf) const
 	return true;
 }
 
-void j1FlyingEnemy::StepX(float dt)
+void j1FlyingEnemy::StepX()
 {
 	if (fabs(velocity.x) < threshold)
 		velocity.x = 0.0F;
@@ -140,7 +140,7 @@ void j1FlyingEnemy::StepX(float dt)
 	collider->rect.y = position.y + collider_offset;
 }
 
-void j1FlyingEnemy::StepY(float dt)
+void j1FlyingEnemy::StepY()
 {
 	if (fabs(velocity.y) < threshold)
 		velocity.y = 0.0F;

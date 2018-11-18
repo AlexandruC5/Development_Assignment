@@ -19,8 +19,6 @@ private:
 	float max_charge = 0.0F;
 	float charge_increment = 0.0F;
 
-	void StepX(float dt);
-	void StepY(float dt);
 	void IdleUpdate();
 	void MovingUpdate();
 	void JumpingUpdate();
