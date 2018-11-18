@@ -30,19 +30,15 @@ j1Player::j1Player(EntityType type, pugi::xml_node config, fPoint position, p2SS
 j1Player::~j1Player()
 {}
 
-bool j1Player::Awake()
-{
-	return true;
-}
-
-bool j1Player::Start()
-{
-	return true;
-}
-
 bool j1Player::PreUpdate() 
 {
-	
+	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
+	{
+		if (state != GOD) state = GOD;
+		else state = IDLE;
+	}
+
+
 	switch (state) {
 	case IDLE: 
 		IdleUpdate();
@@ -75,17 +71,23 @@ bool j1Player::PreUpdate()
 bool j1Player::Update(float dt)
 {
 	CheckDeath();
-	if (state == JUMPING)
+
+	switch (state)
 	{
-		target_speed.y += gravity * dt;
-		if (target_speed.y > fall_speed) target_speed.y = fall_speed; //limit falling speed
+		case JUMPING:
+		{
+			target_speed.y += gravity * dt;
+			if (target_speed.y > fall_speed) target_speed.y = fall_speed; //limit falling speed
+		}
+		break;
+		case CHARGE:
+		{
+			if (charge_value < max_charge)
+				charge_value += charge_increment * dt;
+		}
+		break;
 	}
-	else if(state == CHARGE)
-	{
-		if (charge_value < max_charge)
-			charge_value += charge_increment*dt;
-	}
-	else if (charge)
+	if (charge)
 	{
 		if (charge_value < charged_time)
 			charge_value += charge_increment * dt;
@@ -93,14 +95,8 @@ bool j1Player::Update(float dt)
 
 	velocity = (target_speed * acceleration + velocity * (1 - acceleration))*dt;
 
-	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
-	{
-		if(state != GOD) state = GOD;
-		else state = IDLE;
-	}
-
-	StepY(dt);
-	StepX(dt);
+	StepY();
+	StepX();
 
 	animation_frame = animations[state == GOD? (int)JUMPING:state].GetCurrentFrame(dt);
 	App->render->Blit(sprite, position.x, position.y, &animation_frame, 1.0f, flipX);	
@@ -239,51 +235,6 @@ void j1Player::CheckDeath()
 	}
 }
 
-void j1Player::StepX(float dt)
-{
-	if (state != GOD)
-	{
-		if (velocity.x > 0) velocity.x = MIN(velocity.x, App->collision->DistanceToRightCollider(collider)); //movement of the player is min between distance to collider or his velocity
-		else if (velocity.x < 0) velocity.x = MAX(velocity.x, App->collision->DistanceToLeftCollider(collider)); //movement of the player is max between distance to collider or his velocity
-	}
-	if (fabs(velocity.x) < threshold) velocity.x = 0.0F;
-	position.x += velocity.x;
-	collider->rect.x = position.x;
-}
-
-void j1Player::StepY(float dt)
-{
-	if (state != GOD) 
-	{
-		if (velocity.y < 0) 
-		{
-			velocity.y = MAX(velocity.y, App->collision->DistanceToTopCollider(collider)); //movement of the player is max between distance to collider or his velocity
-			if (velocity.y == 0) target_speed.y = 0.0F;
-		}
-		else
-		{
-			float distance = App->collision->DistanceToBottomCollider(collider);
-			velocity.y = MIN(velocity.y, distance); //movement of the player is min between distance to collider or his velocity
-			is_grounded = (distance == 0) ? true : false;
-		}
-	}
-	if (fabs(velocity.y) < threshold) velocity.y = 0.0F;
-	position.y += velocity.y;
-	collider->rect.y = position.y + collider_offset;
-}
-
-void j1Player::ResetPlayer()
-{
-	state = IDLE;
-	velocity = { 0.0F, 0.0F };
-	target_speed = { 0.0F, 0.0F };
-	flipX = true;
-	if (collider)
-	{
-		collider->rect.x = position.x;
-		collider->rect.y = position.y + collider_offset;
-	}
-}
 
 void j1Player::GodUpdate()
 {

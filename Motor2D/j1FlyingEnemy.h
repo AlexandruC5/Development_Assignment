@@ -8,15 +8,14 @@ class j1FlyingEnemy : public j1Enemy
 {
 protected:
 	bool moving_down = false;
-	void StepX(float dt);
-	void StepY(float dt);
 	void JumpingUpdate();
+	void ResetPathfindingVariables();
+	void PathfindY();
 
 public:
 	j1FlyingEnemy(EntityType type, pugi::xml_node, fPoint position, p2SString id);
 	~j1FlyingEnemy();
 
-	bool Start();
 	bool PreUpdate();
 	bool Update(float dt);
 	bool Load(pugi::xml_node&);

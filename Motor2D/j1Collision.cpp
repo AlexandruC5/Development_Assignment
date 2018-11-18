@@ -155,7 +155,7 @@ float j1Collision::DistanceToRightCollider(Collider* coll) const
 
 	for (uint i = 0; i < max_colliders; i++) 
 	{
-		if (colliders[i] != nullptr && colliders[i] != coll && colliders[i]->type != COLLIDER_TRIGGER && colliders[i]->type != COLLIDER_PLATFORM && colliders[i]->type != COLLIDER_ENEMY) //check for valid collider
+		if (colliders[i] != nullptr && colliders[i] != coll && colliders[i]->type == COLLIDER_FLOOR) //check for valid collider
 		{
 			if (colliders[i]->rect.x > coll->rect.x) //check for right side of received collider
 			{
@@ -179,7 +179,7 @@ float j1Collision::DistanceToLeftCollider(Collider* coll) const
 
 	for (uint i = 0; i < max_colliders; i++)
 	{
-		if (colliders[i] != nullptr && colliders[i] != coll && colliders[i]->type != COLLIDER_TRIGGER && colliders[i]->type != COLLIDER_PLATFORM && colliders[i]->type != COLLIDER_ENEMY)
+		if (colliders[i] != nullptr && colliders[i] != coll && colliders[i]->type == COLLIDER_FLOOR)
 		{
 			if (colliders[i]->rect.x < coll->rect.x)
 			{
@@ -203,7 +203,7 @@ float j1Collision::DistanceToBottomCollider(Collider* coll) const
 
 	for (uint i = 0; i < max_colliders; i++)
 	{
-		if (colliders[i] != nullptr && colliders[i] != coll && colliders[i]->type != COLLIDER_TRIGGER && colliders[i]->type != COLLIDER_ENEMY)
+		if (colliders[i] != nullptr && colliders[i] != coll && (colliders[i]->type == COLLIDER_PLATFORM || colliders[i]->type == COLLIDER_FLOOR))
 		{
 			if (colliders[i]->rect.y >= coll->rect.y + coll->rect.h)
 			{
@@ -227,7 +227,7 @@ float j1Collision::DistanceToTopCollider(Collider* coll) const
 
 	for (uint i = 0; i < max_colliders; i++)
 	{
-		if (colliders[i] != nullptr && colliders[i] != coll && colliders[i]->type != COLLIDER_TRIGGER && colliders[i]->type != COLLIDER_PLATFORM && colliders[i]->type != COLLIDER_ENEMY)
+		if (colliders[i] != nullptr && colliders[i] != coll && colliders[i]->type == COLLIDER_FLOOR)
 		{
 			if (colliders[i]->rect.y <= coll->rect.y)
 			{

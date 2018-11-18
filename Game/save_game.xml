@@ -11,26 +11,26 @@
 	</swap_scene>
 	<map>
 		<background_1 x="0" />
-		<background_2 x="1925" />
+		<background_2 x="-1925" />
 	</map>
 	<entity_manager>
 		<player_0>
-			<position x="250.828537" y="2091" />
+			<position x="75.0254669" y="2091.82837" />
 			<velocity x="0" y="0" />
 			<target_speed x="0" y="0" />
 			<state value="0" />
 			<is_grounded value="true" />
-			<flipX value="true" />
+			<flipX value="false" />
 		</player_0>
 		<enemy_1>
-			<position x="1583.32996" y="2147.8501" />
-			<velocity x="0" y="0" />
-			<target_speed x="0" y="0" />
-			<state value="0" />
-			<is_grounded value="true" />
+			<position x="295.709717" y="1914.09644" />
+			<velocity x="-5.1222086" y="4.49298859" />
+			<target_speed x="-400" y="350.975586" />
+			<state value="2" />
+			<is_grounded value="false" />
 			<flipX value="true" />
-			<state value="0" />
-			<chase value="false" />
+			<state value="2" />
+			<chase value="true" />
 			<movement_controls moving_right="false" />
 			<movement_controls moving_left="false" />
 			<movement_controls jump="false" />
@@ -66,7 +66,7 @@
 			<velocity x="0" y="0" />
 			<target_speed x="0" y="0" />
 			<state value="2" />
-			<is_grounded value="true" />
+			<is_grounded value="false" />
 			<flipX value="true" />
 			<state value="2" />
 			<chase value="false" />
@@ -80,7 +80,7 @@
 			<velocity x="0" y="0" />
 			<target_speed x="0" y="0" />
 			<state value="2" />
-			<is_grounded value="true" />
+			<is_grounded value="false" />
 			<flipX value="true" />
 			<state value="2" />
 			<chase value="false" />
@@ -94,7 +94,7 @@
 			<velocity x="0" y="0" />
 			<target_speed x="0" y="0" />
 			<state value="2" />
-			<is_grounded value="true" />
+			<is_grounded value="false" />
 			<flipX value="true" />
 			<state value="2" />
 			<chase value="false" />

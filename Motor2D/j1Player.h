@@ -10,17 +10,14 @@
 class j1Player : public j1Entity
 {
 private:
-	bool charge = false;
-
 	//charged jump variables
+	bool charge = false;
 	float charge_value = 0.0F;
 	float charged_time = 0.0F;
 	float boost_x = 0.0F;
 	float max_charge = 0.0F;
 	float charge_increment = 0.0F;
 
-	void StepX(float dt);
-	void StepY(float dt);
 	void IdleUpdate();
 	void MovingUpdate();
 	void JumpingUpdate();
@@ -32,14 +29,11 @@ private:
 public:
 	j1Player(EntityType type, pugi::xml_node, fPoint position, p2SString id);
 	~j1Player();
-	bool Awake();
-	bool Start();
+
 	bool Update(float dt);
 	bool PreUpdate();
-	bool CleanUp();
 
 	void CheckDeath();
-	void ResetPlayer();
 	void OnCollision(Collider* c1, Collider* c2);
 };
 

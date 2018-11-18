@@ -41,7 +41,7 @@ protected:
 	float fall_speed = 0.0F;
 	fPoint target_speed = { 0.0F, 0.0F };
 
-	int collider_offset = 0;
+
 	bool flipX = true;
 	bool is_grounded = true;
 
@@ -49,8 +49,8 @@ protected:
 	SDL_Rect animation_frame;
 	unsigned int jump_fx;
 
-	virtual void StepX(float dt);
-	virtual void StepY(float dt);
+	virtual void StepX();
+	virtual void StepY();
 	virtual void IdleUpdate();
 	virtual void MovingUpdate();
 	virtual void JumpingUpdate();
@@ -60,10 +60,13 @@ protected:
 public:
 	fPoint position = { 0.0F, 0.0F };
 	fPoint velocity = { 0.0F, 0.0F };
+	fPoint pivot = { 0.0F, 0.0F };
+
 	Collider * collider;
 	EntityState state = IDLE;
 	float threshold = 0.0F;
 	p2SString id;
+	int collider_offset = 0;
 	
 	j1Entity(EntityType type, pugi::xml_node config, fPoint position, p2SString id);
 	~j1Entity();
@@ -71,13 +74,13 @@ public:
 	virtual bool Start();
 	virtual bool Update(float dt);
 	virtual bool PreUpdate();
-	bool CleanUp();
+	virtual bool CleanUp();
 	virtual bool Load(pugi::xml_node&);
 	virtual bool Save(pugi::xml_node&) const;
 	virtual void OnCollision(Collider* c1, Collider* c2);
 	virtual void Die();
 
-	virtual void CheckDeath();
+	virtual void ResetEntity();
 	virtual void SetPosition(float x, float y);
 };
 

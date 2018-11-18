@@ -24,32 +24,10 @@ j1Enemy::j1Enemy(EntityType type, pugi::xml_node config, fPoint position, p2SStr
 j1Enemy::~j1Enemy()
 {}
 
-bool j1Enemy::Awake()
-{
-
-	return true;
-}
-
-bool j1Enemy::Start()
-{
-	
-	return true;
-}
 
 bool j1Enemy::Update(float dt)
 {
-	if (chase) 
-	{
-		GetPath();
-		if(App->entitymanager->draw_path) DrawPath();
-	}
-	else
-	{
-		current_path.Clear();
-		moving_right = false;
-		moving_left = false;
-		jump = false;
-	}
+	PathfindingUpdate();
 
 	if (state == JUMPING)
 	{
@@ -58,9 +36,8 @@ bool j1Enemy::Update(float dt)
 	}
 
 	velocity = (target_speed * acceleration + velocity * (1 - acceleration))*dt;
-	StepY(dt);
-	StepX(dt);
-	CheckDeath();
+	StepY();
+	StepX();
 
 	animation_frame = animations[state].GetCurrentFrame(dt);
 	App->render->Blit(sprite, position.x, position.y, &animation_frame, 1.0f, flipX);
@@ -75,46 +52,7 @@ bool j1Enemy::PreUpdate()
 	else 
 		chase = false;
 
-	if (current_path.Count() > 0)
-	{
-		moving_right = false;
-		moving_left = false;
-		jump = false;
-
-		reached_X = (current_path.At(previous_destination)->x <= current_path.At(current_destination)->x  && current_path.At(current_destination)->x <= position.x)
-			|| (current_path.At(previous_destination)->x >= current_path.At(current_destination)->x && current_path.At(current_destination)->x >= position.x);
-
-		reached_Y = (current_path.At(previous_destination)->y <= current_path.At(current_destination)->y && position.y >= current_path.At(current_destination)->y)
-			|| (current_path.At(previous_destination)->y >= current_path.At(current_destination)->y && position.y <= current_path.At(current_destination)->y);
-
-
-		if (!reached_X)
-		{
-			if (position.x < current_path.At(current_destination)->x)
-				moving_right = true;
-			else if (position.x > current_path.At(current_destination)->x)
-				moving_left = true;
-		}
-
-		if (!reached_Y)
-		{
-			if (position.y > current_path.At(current_destination)->y)
-				jump = true;
-		}
-
-		if (reached_X && reached_Y)
-		{
-			previous_destination = current_destination;
-			current_destination++;
-			next_destination = current_destination + 1;
-
-			if (next_destination >= current_path.Count())
-				next_destination = -1;
-
-			if (current_destination >= current_path.Count())
-				current_path.Clear();
-		}
-	}
+	PathfindingPreupdate();
 
 	switch (state) {
 	case IDLE: IdleUpdate();
@@ -154,42 +92,6 @@ bool j1Enemy::Save(pugi::xml_node &conf) const
 	conf.append_child("movement_controls").append_attribute("moving_left") = moving_left;
 	conf.append_child("movement_controls").append_attribute("jump") = jump;
 	return true;
-}
-
-void j1Enemy::StepX(float dt)
-{
-	if (velocity.x > 0) 
-		velocity.x = MIN(velocity.x, App->collision->DistanceToRightCollider(collider)); //movement of the player is min between distance to collider or his velocity
-	else if (velocity.x < 0)
-		velocity.x = MAX(velocity.x, App->collision->DistanceToLeftCollider(collider)); //movement of the player is max between distance to collider or his velocity
-
-	if (fabs(velocity.x) < threshold) 
-		velocity.x = 0.0F;
-
-	position.x += velocity.x;
-	collider->rect.x = position.x;
-}
-
-void j1Enemy::StepY(float dt)
-{
-	if (velocity.y < 0)
-	{
-		velocity.y = MAX(velocity.y, App->collision->DistanceToTopCollider(collider)); //movement of the player is max between distance to collider or his velocity
-		if (velocity.y == 0) 
-			target_speed.y = 0.0F;
-	}
-	else
-	{
-		float distance = App->collision->DistanceToBottomCollider(collider);
-		velocity.y = MIN(velocity.y, distance); //movement of the player is min between distance to collider or his velocity
-		is_grounded = (distance == 0) ? true : false;
-	}
-
-	if (fabs(velocity.y) < threshold)
-		velocity.y = 0.0F;
-
-	position.y += velocity.y;
-	collider->rect.y = position.y + collider_offset;
 }
 
 void j1Enemy::IdleUpdate()
@@ -265,8 +167,8 @@ void j1Enemy::Jump()
 
 bool j1Enemy::GetPath()
 {
-	iPoint origin = App->map->WorldToMap(position.x, position.y);
-	iPoint destination = App->map->WorldToMap(App->entitymanager->player->position.x, App->entitymanager->player->position.y);
+	iPoint origin = App->map->WorldToMap(pivot.x, pivot.y);
+	iPoint destination = App->map->WorldToMap(App->entitymanager->player->pivot.x, App->entitymanager->player->pivot.y);
 
  	App->pathfinding->CreatePath(origin, destination, 5, 5, jump_height);
 
@@ -276,18 +178,89 @@ bool j1Enemy::GetPath()
 	{
 		iPoint p = App->map->MapToWorld(tmp_array->At(i)->x, tmp_array->At(i)->y);
 		p.x += App->map->data.tile_width / 2;
-		p.y += App->map->data.tile_height / 2;
+		p.y += App->map->data.tile_height / 2 + App->entitymanager->player->collider_offset;
 		current_path.PushBack(p);
 	}
 	current_destination = current_path.Count() > 1 ? 1 : 0;
 	previous_destination = 0;
 	next_destination = current_path.Count() > 2 ? 2:-1;
 
+	ResetPathfindingVariables();
+
+	return true;
+}
+
+void j1Enemy::PathfindingUpdate()
+{
+	if (chase)
+	{
+		GetPath();
+		if (App->entitymanager->draw_path) DrawPath();
+	}
+	else
+	{
+		current_path.Clear();
+		ResetPathfindingVariables();
+	}
+}
+
+void j1Enemy::PathfindingPreupdate()
+{
+	if (current_path.Count() > 0)
+	{
+		ResetPathfindingVariables();
+		
+		PathfindX();
+		PathfindY();
+
+		if (reached_X && reached_Y)
+		{
+			previous_destination = current_destination;
+			current_destination++;
+			next_destination = current_destination + 1;
+
+			if (next_destination >= current_path.Count())
+				next_destination = -1;
+
+			if (current_destination >= current_path.Count())
+				current_path.Clear();
+		}
+	}
+}
+
+void j1Enemy::ResetPathfindingVariables()
+{
 	moving_right = false;
 	moving_left = false;
 	jump = false;
+}
 
-	return true;
+void j1Enemy::PathfindX()
+{
+	reached_X = (current_path.At(previous_destination)->x <= current_path.At(current_destination)->x  && current_path.At(current_destination)->x <= pivot.x)
+		|| (current_path.At(previous_destination)->x >= current_path.At(current_destination)->x && current_path.At(current_destination)->x >= pivot.x);
+	if (abs(pivot.x - current_path.At(current_destination)->x) > 2.5F)
+		reached_X = false;
+
+	if (!reached_X)
+	{
+		if (pivot.x < current_path.At(current_destination)->x)
+			moving_right = true;
+		else if (pivot.x > current_path.At(current_destination)->x)
+			moving_left = true;
+	}
+}
+
+void j1Enemy::PathfindY()
+{
+	reached_Y = (current_path.At(previous_destination)->y <= current_path.At(current_destination)->y && pivot.y >= current_path.At(current_destination)->y)
+		|| (current_path.At(previous_destination)->y >= current_path.At(current_destination)->y && pivot.y <= current_path.At(current_destination)->y);
+
+	if (!reached_Y)
+	{
+		if (pivot.y > current_path.At(current_destination)->y)
+			jump = true;
+	}
 }
 
 void j1Enemy::DrawPath()

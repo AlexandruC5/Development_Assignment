@@ -24,67 +24,21 @@ j1FlyingEnemy::~j1FlyingEnemy()
 {
 }
 
-bool j1FlyingEnemy::Start()
-{
-	return true;
-}
-
 bool j1FlyingEnemy::PreUpdate()
 {
+	//Check start chase
 	if (position.DistanceManhattan(App->entitymanager->player->position) < MINIMUM_DISTANCE)
 		chase = true;
 	else
 		chase = false;
 
-	if (current_path.Count() > 0)
-	{
-		moving_right = false;
-		moving_left = false;
-		jump = false;
-		moving_down = false;
-
-		reached_X = (current_path.At(previous_destination)->x <= current_path.At(current_destination)->x  && current_path.At(current_destination)->x <= position.x)
-			|| (current_path.At(previous_destination)->x >= current_path.At(current_destination)->x && current_path.At(current_destination)->x >= position.x);
-
-		reached_Y = (current_path.At(previous_destination)->y <= current_path.At(current_destination)->y && position.y >= current_path.At(current_destination)->y)
-			|| (current_path.At(previous_destination)->y >= current_path.At(current_destination)->y && position.y <= current_path.At(current_destination)->y);
-
-
-		if (!reached_X)
-		{
-			if (position.x < current_path.At(current_destination)->x)
-				moving_right = true;
-			else if (position.x > current_path.At(current_destination)->x)
-				moving_left = true;
-		}
-
-		if (!reached_Y)
-		{
-			if (position.y > current_path.At(current_destination)->y)
-				jump = true;
-			else if (position.y < current_path.At(current_destination)->y)
-				moving_down = true;
-		}
-
-
-		if (reached_X && reached_Y)
-		{
-			previous_destination = current_destination;
-			current_destination++;
-			next_destination = current_destination + 1;
-
-			if (next_destination >= current_path.Count())
-				next_destination = -1;
-
-			if (current_destination >= current_path.Count())
-				current_path.Clear();
-		}
-	}
+	PathfindingPreupdate();
 
 	switch (state) {
 	case JUMPING: JumpingUpdate();
 		break;
 	case DEAD:
+		//TODO Die animation
 		break;
 	default:
 		break;
@@ -95,22 +49,11 @@ bool j1FlyingEnemy::PreUpdate()
 
 bool j1FlyingEnemy::Update(float dt)
 {
-	if (chase)
-	{
-		GetPath();
-		if (App->entitymanager->draw_path) DrawPath();
-	}
-	else
-	{
-		current_path.Clear();
-		moving_right = false;
-		moving_left = false;
-		jump = false;
-	}
+	PathfindingUpdate();
 
 	velocity = (target_speed * acceleration + velocity * (1 - acceleration))*dt;
-	StepY(dt);
-	StepX(dt);
+	StepY();
+	StepX();
 
 	animation_frame = animations[IDLE].GetCurrentFrame(dt);
 	App->render->Blit(sprite, position.x, position.y, &animation_frame, 1.0f, flipX);
@@ -129,24 +72,6 @@ bool j1FlyingEnemy::Save(pugi::xml_node &conf) const
 	j1Enemy::Save(conf);
 	conf.append_child("movement_controls").append_attribute("moving_down") = moving_down;
 	return true;
-}
-
-void j1FlyingEnemy::StepX(float dt)
-{
-	if (fabs(velocity.x) < threshold)
-		velocity.x = 0.0F;
-
-	position.y += velocity.y;
-	collider->rect.y = position.y + collider_offset;
-}
-
-void j1FlyingEnemy::StepY(float dt)
-{
-	if (fabs(velocity.y) < threshold)
-		velocity.y = 0.0F;
-
-	position.x += velocity.x;
-	collider->rect.x = position.x;
 }
 
 void j1FlyingEnemy::JumpingUpdate()
@@ -179,5 +104,30 @@ void j1FlyingEnemy::JumpingUpdate()
 		target_speed.y = movement_speed;
 	}
 
+}
+
+void j1FlyingEnemy::ResetPathfindingVariables()
+{
+	moving_right = false;
+	moving_left = false;
+	jump = false;
+	moving_down = false;
+}
+
+void j1FlyingEnemy::PathfindY()
+{
+	reached_Y = (current_path.At(previous_destination)->y <= current_path.At(current_destination)->y && pivot.y >= current_path.At(current_destination)->y)
+		|| (current_path.At(previous_destination)->y >= current_path.At(current_destination)->y && pivot.y <= current_path.At(current_destination)->y);
+
+	if (abs(pivot.y - current_path.At(current_destination)->y) > 2.5F)
+		reached_Y = false;
+
+	if (!reached_Y)
+	{
+		if (pivot.y > current_path.At(current_destination)->y)
+			jump = true;
+		else if (pivot.y < current_path.At(current_destination)->y)
+			moving_down = true;
+	}
 }
 

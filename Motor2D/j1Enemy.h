@@ -9,8 +9,6 @@
 class j1Enemy : public j1Entity
 {
 protected:
-	void StepX(float dt);
-	void StepY(float dt);
 	void IdleUpdate();
 	void MovingUpdate();
 	void JumpingUpdate();
@@ -32,14 +30,17 @@ protected:
 	bool chase = false;
 
 	bool GetPath();
+	void PathfindingUpdate();
+	void PathfindingPreupdate();
+	virtual void ResetPathfindingVariables();
+	virtual void PathfindX();
+	virtual void PathfindY();
 
 public:
 	p2DynArray<iPoint> current_path;
 	j1Enemy(EntityType type, pugi::xml_node, fPoint position, p2SString id);
 	~j1Enemy();
 
-	bool Awake();
-	bool Start();
 	bool Update(float dt);
 	bool PreUpdate();
 	bool Load(pugi::xml_node&);
