@@ -104,7 +104,7 @@ bool j1Player::Update(float dt)
 	StepX();
 
 	animation_frame = animations[state == GOD? (int)JUMPING:state].GetCurrentFrame(dt);
-	App->render->Blit(sprite, position.x, position.y, &animation_frame, 1.0f, flipX);	
+	App->render->Blit(sprite, position.x, position.y, &animation_frame, 1.0f, flipX, false, 0,0,0,scale);
 	return true;
 }
 
@@ -270,7 +270,21 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 {
 	if (c2->type == COLLIDER_ENEMY && state != GOD)
 	{
-		Die();
+		if (c2->rect.h < this->animation_frame.h && c2->rect.w < this->animation_frame.w)
+		{
+			if (grow) {
+				scale += 0.2f;
+				this->collider->rect.h += 0.2f;
+				this->collider->rect.w += 0.2f;
+				Jump(10);
+				grow = false;
+			}
+
+		}
+		else
+		{
+			Die();
+		}
 	}
 }
 

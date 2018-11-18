@@ -8,6 +8,8 @@
 class j1Player : public j1Entity
 {
 private:
+	bool grow = true;
+	float scale = 1;
 	//charged jump variables
 	bool charge = false;
 	float charge_value = 0.0F;
@@ -15,6 +17,7 @@ private:
 	float boost_x = 0.0F;
 	float max_charge = 0.0F;
 	float charge_increment = 0.0F;
+	
 
 	void IdleUpdate();
 	void MovingUpdate();

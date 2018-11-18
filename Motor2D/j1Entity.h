@@ -59,6 +59,7 @@ protected:
 	virtual void LoadAnimations(pugi::xml_node conf);
 
 public:
+	
 	fPoint position = { 0.0F, 0.0F };
 	fPoint velocity = { 0.0F, 0.0F };
 	fPoint pivot = { 0.0F, 0.0F };
