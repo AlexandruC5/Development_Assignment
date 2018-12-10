@@ -53,6 +53,8 @@ bool j1Scene::Start()
 	App->map->Load(levels.At((int)current_scene)->data.map_path.GetString());
 	App->entitymanager->player->ResetEntity();
 
+	App->gui->CreateButton({ 50,50 });
+
 	//pathfinding
 	int w, h;
 	uchar* data = NULL;

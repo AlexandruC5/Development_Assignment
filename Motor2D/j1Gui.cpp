@@ -303,10 +303,10 @@ void j1UIButton::OnMouseExit()
 
 j1UIButton::j1UIButton(iPoint position)
 {
-	rect_box = { position.x, position.y, 229,69 };
+	rect_box = { position.x, position.y, 162,89 };
 	anim = new SDL_Rect[3];
-	anim[0] = { 0,113,229,69 };
-	anim[1] = { 411,169,229,69 };
-	anim[2] = { 642,169,229,69 };
+	anim[0] = { 1630,50,182,89 };
+	anim[1] = { 1822,50,182,89 };
+	anim[2] = { 2014,50,182,89 };
 	rect_sprite = anim[0];
 }
