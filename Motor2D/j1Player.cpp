@@ -277,5 +277,5 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 void j1Player::Die()
 {
 	j1Entity::Die();
-	App->swap_scene->Reload();
+	App->swap_scene->FadeToBlack();
 }

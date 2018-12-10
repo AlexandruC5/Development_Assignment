@@ -9,8 +9,6 @@
 #include "j1Textures.h"
 #include "j1Audio.h"
 #include "j1Scene.h"
-#include "j1SceneForest.h"
-#include "j1SceneDesert.h"
 #include "j1Collision.h"
 #include "j1Map.h"
 #include "j1SwapScene.h"
@@ -33,8 +31,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	render = new j1Render();
 	tex = new j1Textures();
 	audio = new j1Audio();
-	scene_forest = new j1SceneForest();
-	scene_desert = new j1SceneDesert();
+	scene = new j1Scene();
 	map = new j1Map();
 	swap_scene = new j1SwapScene();
 	collision = new j1Collision();
@@ -47,8 +44,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(win, true);
 	AddModule(tex, true);
 	AddModule(audio, true);
-	AddModule(scene_forest, true);
-	AddModule(scene_desert, false);
+	AddModule(scene, true);
 	AddModule(swap_scene, true);
 	AddModule(map, true);
 	AddModule(entitymanager, true);

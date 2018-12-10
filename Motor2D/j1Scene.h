@@ -5,6 +5,17 @@
 
 struct SDL_Texture;
 
+struct Level {
+	p2SString map_path = "";
+	p2SString sound_path = "";
+};
+
+enum Scene{
+	FOREST,
+	DESERT,
+	NONE,
+};
+
 class j1Scene : public j1Module
 {
 public:
@@ -32,13 +43,14 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-protected:
-	p2SString music_file = "";
-	p2SString map_file = "";
-	p2SString background_file = "";
+	bool OnCollision(Collider* c1, Collider* c2);
 
-private:
-	SDL_Texture* debug_tex;
+	bool Load(pugi::xml_node &node);
+	bool Save(pugi::xml_node &node) const;
+
+	p2List<Level> levels;
+
+	Scene current_scene = FOREST;
 };
 
 #endif // __j1SCENE_H__

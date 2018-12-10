@@ -4,28 +4,27 @@
 	<window />
 	<textures />
 	<audio />
-	<scene_forest />
-	<scene_desert />
-	<swap_scene>
-		<scene value="scene_forest" />
-	</swap_scene>
+	<scene>
+		<current_scene value="0" />
+	</scene>
+	<swap_scene />
 	<map>
 		<background_1 x="0" />
 		<background_2 x="-1925" />
 	</map>
 	<entity_manager>
 		<player_0>
-			<position x="75.0254669" y="2091.82837" />
-			<velocity x="0" y="0" />
-			<target_speed x="0" y="0" />
-			<state value="0" />
-			<is_grounded value="true" />
+			<position x="80.1045456" y="1505.74231" />
+			<velocity x="-5.49231981e-24" y="14.4410858" />
+			<target_speed x="0" y="598.5" />
+			<state value="2" />
+			<is_grounded value="false" />
 			<flipX value="false" />
 		</player_0>
 		<enemy_1>
-			<position x="295.709717" y="1914.09644" />
-			<velocity x="-5.1222086" y="4.49298859" />
-			<target_speed x="-400" y="350.975586" />
+			<position x="549.928528" y="1607.97229" />
+			<velocity x="-1.26139347e-28" y="-14.6896992" />
+			<target_speed x="0" y="-608" />
 			<state value="2" />
 			<is_grounded value="false" />
 			<flipX value="true" />
@@ -36,7 +35,7 @@
 			<movement_controls jump="false" />
 		</enemy_1>
 		<enemy_2>
-			<position x="3146.12012" y="1509.18542" />
+			<position x="3146.12012" y="1509.1853" />
 			<velocity x="0" y="0" />
 			<target_speed x="0" y="0" />
 			<state value="0" />
@@ -49,7 +48,7 @@
 			<movement_controls jump="false" />
 		</enemy_2>
 		<enemy_3>
-			<position x="7154.12012" y="2149.18579" />
+			<position x="7154.12012" y="2149.18555" />
 			<velocity x="0" y="0" />
 			<target_speed x="0" y="0" />
 			<state value="0" />
@@ -65,10 +64,10 @@
 			<position x="2158.12012" y="851.333008" />
 			<velocity x="0" y="0" />
 			<target_speed x="0" y="0" />
-			<state value="2" />
+			<state value="1" />
 			<is_grounded value="false" />
 			<flipX value="true" />
-			<state value="2" />
+			<state value="1" />
 			<chase value="false" />
 			<movement_controls moving_right="false" />
 			<movement_controls moving_left="false" />
@@ -79,10 +78,10 @@
 			<position x="4290.12012" y="967.333008" />
 			<velocity x="0" y="0" />
 			<target_speed x="0" y="0" />
-			<state value="2" />
+			<state value="1" />
 			<is_grounded value="false" />
 			<flipX value="true" />
-			<state value="2" />
+			<state value="1" />
 			<chase value="false" />
 			<movement_controls moving_right="false" />
 			<movement_controls moving_left="false" />
@@ -93,10 +92,10 @@
 			<position x="7806.12012" y="1071.32996" />
 			<velocity x="0" y="0" />
 			<target_speed x="0" y="0" />
-			<state value="2" />
+			<state value="1" />
 			<is_grounded value="false" />
 			<flipX value="true" />
-			<state value="2" />
+			<state value="1" />
 			<chase value="false" />
 			<movement_controls moving_right="false" />
 			<movement_controls moving_left="false" />
@@ -107,6 +106,6 @@
 	<collision />
 	<pathfinding />
 	<renderer>
-		<camera x="0" y="-1584" />
+		<camera x="0" y="-1341.92737" />
 	</renderer>
 </game_state>

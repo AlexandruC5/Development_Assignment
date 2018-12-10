@@ -6,6 +6,7 @@
 #include "j1Collision.h"
 #include <math.h>
 #include "j1Map.h"
+#include "j1Scene.h"
 #include "j1EntityManager.h"
 #include "j1SwapScene.h"
 #include "j1Window.h"
@@ -428,7 +429,7 @@ bool j1Map::LoadUtilsLayer(pugi::xml_node & node)
 	temp_trigger.y = end_trigger.attribute("y").as_int();
 	temp_trigger.w = end_trigger.attribute("width").as_int();
 	temp_trigger.h = end_trigger.attribute("height").as_int();
-	data.colliders.add(App->collision->AddCollider(temp_trigger, COLLIDER_TRIGGER, (j1Module*)App->swap_scene->current_scene));
+	data.colliders.add(App->collision->AddCollider(temp_trigger, COLLIDER_TRIGGER, App->scene));
 
 	App->render->camera.position.y = -(App->map->data.height * App->map->data.tile_height - App->render->camera.body.h);
 	App->render->camera.position.x = 0;

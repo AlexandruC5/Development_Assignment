@@ -119,15 +119,14 @@
     <path>data.zip</path>
   </file_system>
 
-  <scene_forest>
-    <map_file>lvl_1.tmx</map_file>
-    <music>music_forest.ogg</music>
-  </scene_forest>
-  
-  <scene_desert>
-    <map_file>lvl_2.tmx</map_file>
-    <music>music_desert.ogg</music>
-  </scene_desert>
+  <scene>
+    <start_scene value="0"/>
+    <levels>
+      <level music="music_forest.ogg">lvl_1.tmx</level>
+      <level music="music_desert.ogg">lvl_2.tmx</level>
+    </levels>
+  </scene>
+ 
 
   <collision>
     <max_colliders value="200"/>

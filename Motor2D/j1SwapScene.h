@@ -12,13 +12,9 @@ public:
 
 	bool Start();
 	bool PostUpdate();
-	bool FadeToBlack(j1Scene* scene_off, j1Scene* scene_on, float time = 2.0f);
+	bool FadeToBlack(float time = 2.0f);
 	bool CleanUp();
-	bool Load(pugi::xml_node&);
-	bool Save(pugi::xml_node&) const;
-	void Reload();
 
-	j1Scene* current_scene = nullptr;
 private:
 
 	enum fade_step
@@ -31,8 +27,6 @@ private:
 	uint start_time = 0;
 	uint total_time = 0;
 	SDL_Rect screen;
-	j1Scene* scene_enable = nullptr;
-	j1Scene* scene_disable = nullptr;
 };
 
 #endif

@@ -5,7 +5,6 @@
 #include "j1Textures.h"
 #include "j1Render.h"
 #include "j1Window.h"
-#include "j1SceneForest.h"
 #include "j1SwapScene.h"
 #include "j1Map.h"
 #include "j1Audio.h"
@@ -22,7 +21,9 @@
 #define BOTTOM_CAMERA_LIMIT (-(App->render->camera.position.y - App->render->camera.body.h / 2))
 
 j1Scene::j1Scene() : j1Module()
-{}
+{
+	name = "scene";
+}
 
 // Destructor
 j1Scene::~j1Scene()
@@ -31,6 +32,15 @@ j1Scene::~j1Scene()
 // Called before render is available
 bool j1Scene::Awake(pugi::xml_node& conf)
 {
+	pugi::xml_node level;
+	for (level = conf.child("levels").child("level"); level; level = level.next_sibling("level"))
+	{
+		Level lvl;
+		lvl.map_path = level.child_value();
+		lvl.sound_path = level.attribute("music").as_string();
+		levels.add(lvl);
+	}
+	current_scene = (Scene) conf.child("start_scene").attribute("value").as_int();
 	return true;
 }
 
@@ -38,9 +48,8 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 bool j1Scene::Start()
 {
 	BROFILER_CATEGORY("StartScene", Profiler::Color::Plum);
-	App->swap_scene->current_scene = this;
 	App->entitymanager->CleanUp();
-	App->map->Load(map_file.GetString());
+	App->map->Load(levels.At((int)current_scene)->data.map_path.GetString());
 	App->entitymanager->player->ResetEntity();
 
 	//pathfinding
@@ -51,7 +60,7 @@ bool j1Scene::Start()
 
 	RELEASE_ARRAY(data);
 
-	App->audio->PlayMusic(music_file.GetString());
+	App->audio->PlayMusic(levels.At((int)current_scene)->data.sound_path.GetString());
 	return true;
 }
 
@@ -66,9 +75,12 @@ bool j1Scene::Update(float dt)
 {
 	//Debug Functionalities
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
-		App->swap_scene->FadeToBlack(App->swap_scene->current_scene, App->scene_forest);
+	{
+		current_scene = FOREST;
+		App->swap_scene->FadeToBlack();
+	}
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
-		App->swap_scene->Reload();
+		App->swap_scene->FadeToBlack();
 	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
 		App->LoadGame();
 	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
@@ -164,5 +176,44 @@ bool j1Scene::CleanUp()
 {
 	LOG("Freeing scene");
 	App->map->CleanUp();
+	return true;
+}
+
+bool j1Scene::OnCollision(Collider * c1, Collider * c2)
+{
+	App->entitymanager->player->state = WIN;
+
+	switch (current_scene)
+	{
+		case FOREST:
+			current_scene = DESERT;
+		break;
+		case DESERT:
+			current_scene = FOREST;
+		break;
+	}
+	App->swap_scene->FadeToBlack();
+
+	return true;
+}
+
+bool j1Scene::Load(pugi::xml_node &node)
+{
+	Scene saved_scene = (Scene) node.child("current_scene").attribute("value").as_int();
+	if (saved_scene != current_scene)
+	{
+		current_scene = saved_scene;
+		App->swap_scene->FadeToBlack(0.0F);
+	}
+
+	return true;
+}
+
+bool j1Scene::Save(pugi::xml_node &node) const
+{
+	pugi::xml_node scene_node;
+	scene_node = node.append_child("current_scene");
+	scene_node.append_attribute("value") = (int) current_scene;
+
 	return true;
 }

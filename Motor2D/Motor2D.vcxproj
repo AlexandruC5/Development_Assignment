@@ -88,7 +88,6 @@
     <ClCompile Include="j1Map.cpp" />
     <ClCompile Include="j1Pathfinding.cpp" />
     <ClCompile Include="j1Scene.cpp" />
-    <ClCompile Include="j1SceneForest.cpp" />
     <ClCompile Include="j1SwapScene.cpp" />
     <ClCompile Include="p2Log.cpp" />
     <ClCompile Include="j1Render.cpp" />
@@ -97,7 +96,6 @@
     <ClCompile Include="j1Player.cpp" />
     <ClCompile Include="PerfTimer.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
-    <ClCompile Include="j1SceneDesert.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -110,7 +108,6 @@
     <ClInclude Include="j1Map.h" />
     <ClInclude Include="j1Pathfinding.h" />
     <ClInclude Include="j1Scene.h" />
-    <ClInclude Include="j1SceneForest.h" />
     <ClInclude Include="j1SwapScene.h" />
     <ClInclude Include="p2DynArray.h" />
     <ClInclude Include="j1Audio.h" />
@@ -129,7 +126,6 @@
     <ClInclude Include="PerfTimer.h" />
     <ClInclude Include="PugiXml\src\pugiconfig.hpp" />
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
-    <ClInclude Include="j1SceneDesert.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
