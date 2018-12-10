@@ -53,6 +53,15 @@ bool j1EntityManager::PreUpdate()
 	return true;
 }
 
+bool j1EntityManager::PostUpdate()
+{
+	for (p2List_item<j1Entity*>* entity = entities.start; entity; entity = entity->next)
+	{
+		entity->data->PostUpdate();
+	}
+	return true;
+}
+
 bool j1EntityManager::CleanUp()
 {
 	for (p2List_item<j1Entity*>* entity = entities.start; entity; entity = entity->next)

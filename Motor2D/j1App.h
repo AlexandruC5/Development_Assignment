@@ -20,6 +20,8 @@ class j1Collision;
 class j1SwapScene;
 class j1Enemy;
 class j1PathFinding;
+class j1Gui;
+class j1Fonts;
 class j1EntityManager;
 
 class j1App
@@ -95,6 +97,8 @@ public:
 	j1SwapScene*		swap_scene;
 	j1PathFinding*		pathfinding;
 	j1EntityManager*	entitymanager;
+	j1Gui*				gui;
+	j1Fonts*			fonts;
 	bool				frame_cap = true;
 
 private:

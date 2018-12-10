@@ -12,6 +12,7 @@
 #include "j1EntityManager.h"
 #include "j1Pathfinding.h"
 #include "j1Collision.h"
+#include "j1Gui.h"
 #include "j1Enemy.h"
 #include "Brofiler/Brofiler.h"
 
@@ -122,6 +123,7 @@ bool j1Scene::Update(float dt)
 	else if (-(App->render->camera.position.x - App->render->camera.body.w) > App->map->data.width*App->map->data.tile_width)
 		App->render->camera.position.x = -(App->map->data.width * App->map->data.tile_width - App->render->camera.body.w);
 
+
 	App->map->Draw();
 
 	return true;
@@ -163,7 +165,6 @@ bool j1Scene::PostUpdate()
 		}
 
 	}
-
 
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
@@ -214,6 +215,25 @@ bool j1Scene::Save(pugi::xml_node &node) const
 	pugi::xml_node scene_node;
 	scene_node = node.append_child("current_scene");
 	scene_node.append_attribute("value") = (int) current_scene;
+
+	return true;
+}
+
+bool j1Scene::GUIEvent(j1UIElement * element, GUI_Event gui_event)
+{
+	switch (gui_event)
+	{
+		case MOUSE_OVER:
+		{
+		
+		}
+		break;
+		case MOUSE_EXIT:
+		{
+		
+		}
+		break;
+	}
 
 	return true;
 }

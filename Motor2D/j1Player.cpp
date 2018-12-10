@@ -104,7 +104,7 @@ bool j1Player::Update(float dt)
 	StepX();
 
 	animation_frame = animations[state == GOD? (int)JUMPING:state].GetCurrentFrame(dt);
-	App->render->Blit(sprite, position.x, position.y, &animation_frame, 1.0f, flipX);	
+
 	return true;
 }
 

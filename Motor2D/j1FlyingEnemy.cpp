@@ -54,7 +54,6 @@ bool j1FlyingEnemy::Update(float dt)
 	StepX();
 
 	animation_frame = animations[IDLE].GetCurrentFrame(dt);
-	App->render->Blit(sprite, position.x, position.y, &animation_frame, 1.0f, flipX);
 	return true;
 }
 

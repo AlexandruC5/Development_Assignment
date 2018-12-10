@@ -4,6 +4,8 @@
 #include "j1Module.h"
 
 struct SDL_Texture;
+struct j1UIElement;
+enum GUI_Event;
 
 struct Level {
 	p2SString map_path = "";
@@ -47,6 +49,8 @@ public:
 
 	bool Load(pugi::xml_node &node);
 	bool Save(pugi::xml_node &node) const;
+
+	bool GUIEvent(j1UIElement* element, GUI_Event gui_event);
 
 	p2List<Level> levels;
 

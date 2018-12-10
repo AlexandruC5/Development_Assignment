@@ -10,6 +10,10 @@
     <vsync value="false"/>
   </renderer>
 
+  <gui>
+    <atlas file="gui/atlas.png"/>
+  </gui>
+
   <entity_manager>
     <player>
       <sprite>player_spritesheet.png</sprite>
