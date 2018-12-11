@@ -47,7 +47,7 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 
 
 	main_menu_panel = App->gui->CreateImage({ 50,50 }, { 551,711,380,539 });
-	main_menu_panel->scale_Y = 1.17F;
+	//App->gui->ScaleElement(main_menu_panel, 0.0F, 0.17F);
 	main_menu_button_play = App->gui->CreateButton({ 100, 75 }, main_menu_panel);
 	main_menu_button_continue = App->gui->CreateButton({ 100, 175 }, main_menu_panel);
 	main_menu_button_settings = App->gui->CreateButton({ 100, 275 }, main_menu_panel);
@@ -126,7 +126,12 @@ bool j1Scene::Update(float dt)
 	{
 		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) App->audio->DecreaseFXVolume();
 		else App->audio->DecreaseMusicVolume();
-	}			
+	}		
+
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
+		App->gui->ScaleElement(main_menu_panel, -0.5F, -0.5F, 0.2F);
+	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
+		App->gui->ScaleElement(main_menu_panel, 0.5F, 0.5F, 0.2F);
 
 	
 	App->render->camera.velocity = ((App->render->camera.target_speed * 0.4F) + (App->render->camera.velocity * (1 - 0.4F)));

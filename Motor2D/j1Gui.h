@@ -2,10 +2,12 @@
 #define __j1GUI_H__
 
 #include "j1Module.h"
+#include "Timer.h"
 
 #define CURSOR_WIDTH 2
 
 class _TTF_Font;
+class Timer;
 
 enum GUI_Event {
 	LEFT_CLICK_DOWN,
@@ -20,14 +22,14 @@ class j1UIElement
 protected:
 	SDL_Rect rect_box;
 	SDL_Rect rect_sprite;
-
+	float scale_X = 1.0F;
+	float scale_Y = 1.0F;
 
 public:
 	bool hovered = false;
 	bool interactable = false;
 	bool dragable = false;
-	float scale_X = 1.0F;
-	float scale_Y = 1.0F;
+
 
 	j1UIElement(j1UIElement* parent = nullptr);
 	~j1UIElement();
@@ -40,6 +42,8 @@ public:
 	iPoint GetScreenPos();
 	iPoint GetLocalPos();
 	void SetLocalPos(int x, int y);
+	void GetScale(float& scaleX, float &scaleY);
+	void SetScale(float scaleX, float scaleY);
 
 	virtual void OnMouseClick() {};
 	virtual void OnMouseHover() {};
@@ -113,7 +117,8 @@ public:
 	j1UIButton* CreateButton(iPoint pos, j1UIElement* parent = nullptr);
 
 	j1UIElement* GetElementUnderMouse();
-	
+	void ScaleElement(j1UIElement* element, float scaleX, float scaleY, float time = 0.0F);
+
 
 	SDL_Texture* GetAtlas() const;
 
@@ -121,6 +126,13 @@ private:
 	p2List<j1UIElement*> elements;
 	SDL_Texture* atlas;
 	p2SString atlas_file_name;
+
+	//scaling
+	j1UIElement* scaling_element = nullptr;
+	uint scale_time = 0;
+	Timer scale_timer;
+	float scale_increment_x, scale_increment_y;
+	void DoScale(j1UIElement* element, float scaleX, float scaleY);
 };
 
 #endif // __j1GUI_H__

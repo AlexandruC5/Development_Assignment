@@ -100,6 +100,7 @@ public:
 	j1Gui*				gui;
 	j1Fonts*			fonts;
 	bool				frame_cap = true;
+	double				frame_rate;
 
 private:
 
@@ -110,7 +111,6 @@ private:
 
 	p2SString			title;
 	p2SString			organization;
-	double				frame_rate;
 	bool				vsync;
 	pugi::xml_document	config_file;
 

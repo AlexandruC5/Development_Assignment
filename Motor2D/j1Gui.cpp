@@ -63,9 +63,55 @@ j1UIElement* j1Gui::GetElementUnderMouse()
 	return nullptr;
 }
 
+void j1Gui::ScaleElement(j1UIElement* element, float scaleX, float scaleY, float time)
+{
+	if (time != 0.0F)
+	{
+		scale_timer.Start();
+		scaling_element = element;
+		scale_time = (uint32)(time * 0.5F * 1000.0F);
+		scale_increment_x = (scaleX / time) / App->frame_rate;
+		scale_increment_y = (scaleY / time) / App->frame_rate;
+	}
+	else
+	{
+		DoScale(element, scaleX, scaleY);
+	}
+}
+
+void j1Gui::DoScale(j1UIElement* element, float scaleX, float scaleY)
+{
+	float scale_x, scale_y;
+	element->GetScale(scale_x, scale_y);
+	scale_x += scaleX;
+	scale_y += scaleY;
+	element->SetScale(scale_x, scale_y);
+
+	for (p2List_item<j1UIElement*>* child_item = elements.start; child_item != NULL; child_item = child_item->next)
+	{
+		if (child_item->data->parent && child_item->data->parent == element)
+		{
+			DoScale(child_item->data, scaleX, scaleY);
+		}
+	}
+}
+
 // Update all guis
 bool j1Gui::PreUpdate()
 {
+	//scale stuff
+	if (scaling_element != nullptr)
+	{
+		Uint32 now = scale_timer.Read();
+
+		if (now < scale_time)
+			DoScale(scaling_element, scale_increment_x, scale_increment_y);
+		else if (now >= scale_time)
+			scaling_element = nullptr;
+	}
+
+
+
 	j1UIElement* selected_element = GetElementUnderMouse();
 
 	for (p2List_item<j1UIElement*>* item = elements.start; item != NULL; item = item->next)
@@ -224,6 +270,18 @@ void j1UIElement::SetLocalPos(int x, int y)
 	rect_box.y = y;
 }
 
+void j1UIElement::GetScale(float& scaleX, float &scaleY)
+{
+	scaleX = scale_X;
+	scaleY = scale_Y;
+}
+
+void j1UIElement::SetScale(float scaleX, float scaleY)
+{
+	scale_X = scaleX;
+	scale_Y = scaleY;
+}
+
 j1UIImage::j1UIImage(iPoint pos, SDL_Rect rect)
 {
 	rect_box = { pos.x,pos.y,rect.w,rect.h };
@@ -258,7 +316,7 @@ bool j1UILabel::UIBlit()
 {
 	iPoint screen_pos = GetScreenPos();
 	SDL_Texture* texture = App->fonts->Print(text.GetString(), color, font);
-	App->render->Blit(texture, screen_pos.x, screen_pos.y, nullptr, 0.0F);
+	App->render->Blit(texture, screen_pos.x, screen_pos.y, nullptr, 0.0F, false, false, 0.0, INT_MAX, INT_MAX, scale_X, scale_Y);
 	SDL_DestroyTexture(texture);
 	return true;
 }
@@ -277,7 +335,7 @@ j1UIButton::~j1UIButton()
 bool j1UIButton::UIBlit()
 {
 	iPoint screen_pos = GetScreenPos();
-	App->render->Blit(App->gui->GetAtlas(), screen_pos.x, screen_pos.y, &rect_sprite, 0.0F);
+	App->render->Blit(App->gui->GetAtlas(), screen_pos.x, screen_pos.y, &rect_sprite, 0.0F, false, false, 0.0, INT_MAX,INT_MAX, scale_X, scale_Y);
 	return true;
 }
 
