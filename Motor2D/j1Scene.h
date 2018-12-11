@@ -66,6 +66,15 @@ private:
 	j1UIElement* main_menu_button_credits_text;
 	j1UIElement* main_menu_button_exit_text;
 
+
+	j1UIElement* pause_menu_panel;
+	j1UIElement* pause_menu_button_resume;
+	j1UIElement* pause_menu_button_main_menu;
+	
+	j1UIElement* pause_menu_button_resume_text;
+	j1UIElement* pause_menu_button_main_menu_text;
+	j1UIElement* pause_menu_button_main_menu_text2;
+
 };
 
 #endif // __j1SCENE_H__

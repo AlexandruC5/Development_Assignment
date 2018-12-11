@@ -60,6 +60,15 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	main_menu_button_credits_text = App->gui->CreateLabel({ 35,22 }, "fonts/open_sans/OpenSans-Bold.ttf", 28, "CREDITS", { 255,255,255 }, main_menu_button_credits);
 	main_menu_button_exit_text = App->gui->CreateLabel({ 60,22 }, "fonts/open_sans/OpenSans-Bold.ttf", 28, "EXIT", { 255,255,255 }, main_menu_button_exit);
 
+
+	pause_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 });
+	pause_menu_panel->scale_Y = 0.9F;
+	pause_menu_button_resume = App->gui->CreateButton({ 100, 75 }, pause_menu_panel);
+	pause_menu_button_main_menu = App->gui->CreateButton({ 100, 175 }, pause_menu_panel);
+	pause_menu_button_resume_text = App->gui->CreateLabel({ 48,26 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "RESUME", { 255,255,255 }, pause_menu_button_resume);
+	pause_menu_button_main_menu_text = App->gui->CreateLabel({ 60,14 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MAIN", { 255,255,255 }, pause_menu_button_main_menu);
+	pause_menu_button_main_menu_text = App->gui->CreateLabel({ 56,36 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MENU", { 255,255,255 }, pause_menu_button_main_menu);
+
 	return true;
 }
 
