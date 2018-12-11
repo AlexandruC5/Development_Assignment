@@ -124,10 +124,10 @@
   </file_system>
 
   <scene>
-    <start_scene value="0"/>
+    <start_level value="1"/>
     <levels>
-      <level music="music_forest.ogg">lvl_1.tmx</level>
-      <level music="music_desert.ogg">lvl_2.tmx</level>
+      <level music="music_forest.ogg" next_level="2">lvl_1.tmx</level>
+      <level music="music_desert.ogg" next_level="1">lvl_2.tmx</level>
     </levels>
   </scene>
  

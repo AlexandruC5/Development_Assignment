@@ -44,12 +44,12 @@ j1UIElement* j1Gui::GetElementUnderMouse()
 
 	for (p2List_item<j1UIElement*>* item = elements.start; item != NULL; item = item->next)
 	{
-		if (item->data->IsInside(x, y))
+		if (item->data->IsInside(x, y) && item->data->interactable)
 		{
 			bool inside_child = false;
 			for (p2List_item<j1UIElement*>* child_item = elements.start; child_item != NULL; child_item = child_item->next)
 			{
-				if (child_item->data->parent && child_item->data->parent == item->data && child_item->data->IsInside(x, y))
+				if (child_item->data->parent && child_item->data->parent == item->data && child_item->data->IsInside(x, y) && child_item->data->interactable)
 				{
 					inside_child = true;
 					break;
@@ -87,7 +87,7 @@ bool j1Gui::PreUpdate()
 					App->scene->GUIEvent(current_element, LEFT_CLICK_DOWN);
 
 					//drag
-					if (current_element->interactable)
+					if (current_element->dragable)
 					{
 						iPoint pos = current_element->GetLocalPos();
 						int x_movement, y_movement;
@@ -237,7 +237,7 @@ j1UIImage::~j1UIImage()
 bool j1UIImage::UIBlit()
 {
 	iPoint screen_pos = GetScreenPos();
-	App->render->Blit(App->gui->GetAtlas(), screen_pos.x, screen_pos.y, &rect_sprite, 0.0F);
+	App->render->Blit(App->gui->GetAtlas(), screen_pos.x, screen_pos.y, &rect_sprite, 0.0F, false, false,0.0, INT_MAX, INT_MAX, scale_X, scale_Y);
 	return true;
 }
 
@@ -303,10 +303,11 @@ void j1UIButton::OnMouseExit()
 
 j1UIButton::j1UIButton(iPoint position)
 {
-	rect_box = { position.x, position.y, 162,89 };
+	interactable = true;
+	rect_box = { position.x, position.y, 180,89 };
 	anim = new SDL_Rect[3];
-	anim[0] = { 1630,50,182,89 };
-	anim[1] = { 1822,50,182,89 };
-	anim[2] = { 2014,50,182,89 };
+	anim[0] = { 2461,524,180,89 };
+	anim[1] = { 2650,524,180,89 };
+	anim[2] = { 2839,524,180,89 };
 	rect_sprite = anim[0];
 }

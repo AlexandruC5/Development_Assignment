@@ -39,9 +39,27 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 		Level lvl;
 		lvl.map_path = level.child_value();
 		lvl.sound_path = level.attribute("music").as_string();
+		lvl.next_level = level.attribute("next_level").as_int() - 1;
 		levels.add(lvl);
 	}
-	current_scene = (Scene) conf.child("start_scene").attribute("value").as_int();
+	current_level = conf.child("start_level").attribute("value").as_int() - 1;
+
+
+
+	main_menu_panel = App->gui->CreateImage({ 50,50 }, { 551,711,380,539 });
+	main_menu_panel->scale_Y = 1.17F;
+	main_menu_button_play = App->gui->CreateButton({ 100, 75 }, main_menu_panel);
+	main_menu_button_continue = App->gui->CreateButton({ 100, 175 }, main_menu_panel);
+	main_menu_button_settings = App->gui->CreateButton({ 100, 275 }, main_menu_panel);
+	main_menu_button_credits = App->gui->CreateButton({ 100, 375 }, main_menu_panel);
+	main_menu_button_exit = App->gui->CreateButton({ 100, 475}, main_menu_panel);
+
+	main_menu_button_play_text = App->gui->CreateLabel({ 58,22 },"fonts/open_sans/OpenSans-Bold.ttf", 28, "PLAY", { 255,255,255 }, main_menu_button_play);
+	main_menu_button_continue_text = App->gui->CreateLabel({ 17,22 }, "fonts/open_sans/OpenSans-Bold.ttf", 28, "CONTINUE", { 255,255,255 }, main_menu_button_continue);
+	main_menu_button_settings_text = App->gui->CreateLabel({ 25,22 }, "fonts/open_sans/OpenSans-Bold.ttf", 28, "SETTINGS", { 255,255,255 }, main_menu_button_settings);
+	main_menu_button_credits_text = App->gui->CreateLabel({ 35,22 }, "fonts/open_sans/OpenSans-Bold.ttf", 28, "CREDITS", { 255,255,255 }, main_menu_button_credits);
+	main_menu_button_exit_text = App->gui->CreateLabel({ 60,22 }, "fonts/open_sans/OpenSans-Bold.ttf", 28, "EXIT", { 255,255,255 }, main_menu_button_exit);
+
 	return true;
 }
 
@@ -50,10 +68,8 @@ bool j1Scene::Start()
 {
 	BROFILER_CATEGORY("StartScene", Profiler::Color::Plum);
 	App->entitymanager->CleanUp();
-	App->map->Load(levels.At((int)current_scene)->data.map_path.GetString());
+	App->map->Load(levels.At(current_level)->data.map_path.GetString());
 	App->entitymanager->player->ResetEntity();
-
-	App->gui->CreateButton({ 50,50 });
 
 	//pathfinding
 	int w, h;
@@ -63,7 +79,7 @@ bool j1Scene::Start()
 
 	RELEASE_ARRAY(data);
 
-	App->audio->PlayMusic(levels.At((int)current_scene)->data.sound_path.GetString());
+	App->audio->PlayMusic(levels.At(current_level)->data.sound_path.GetString());
 	return true;
 }
 
@@ -79,11 +95,16 @@ bool j1Scene::Update(float dt)
 	//Debug Functionalities
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 	{
-		current_scene = FOREST;
+		current_level = 0;
 		App->swap_scene->FadeToBlack();
 	}
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 		App->swap_scene->FadeToBlack();
+	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+	{
+		current_level = levels.At(current_level)->data.next_level;
+		App->swap_scene->FadeToBlack();
+	}
 	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
 		App->LoadGame();
 	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
@@ -186,15 +207,7 @@ bool j1Scene::OnCollision(Collider * c1, Collider * c2)
 {
 	App->entitymanager->player->state = WIN;
 
-	switch (current_scene)
-	{
-		case FOREST:
-			current_scene = DESERT;
-		break;
-		case DESERT:
-			current_scene = FOREST;
-		break;
-	}
+	current_level = levels.At(current_level)->data.next_level;
 	App->swap_scene->FadeToBlack();
 
 	return true;
@@ -202,10 +215,10 @@ bool j1Scene::OnCollision(Collider * c1, Collider * c2)
 
 bool j1Scene::Load(pugi::xml_node &node)
 {
-	Scene saved_scene = (Scene) node.child("current_scene").attribute("value").as_int();
-	if (saved_scene != current_scene)
+	int saved_level = node.child("current_level").attribute("value").as_int();
+	if (saved_level != current_level)
 	{
-		current_scene = saved_scene;
+		current_level = saved_level;
 		App->swap_scene->FadeToBlack(0.0F);
 	}
 
@@ -216,7 +229,7 @@ bool j1Scene::Save(pugi::xml_node &node) const
 {
 	pugi::xml_node scene_node;
 	scene_node = node.append_child("current_scene");
-	scene_node.append_attribute("value") = (int) current_scene;
+	scene_node.append_attribute("value") = current_level;
 
 	return true;
 }

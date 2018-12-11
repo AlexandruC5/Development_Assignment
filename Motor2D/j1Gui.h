@@ -20,9 +20,15 @@ class j1UIElement
 protected:
 	SDL_Rect rect_box;
 	SDL_Rect rect_sprite;
+
+
 public:
 	bool hovered = false;
 	bool interactable = false;
+	bool dragable = false;
+	float scale_X = 1.0F;
+	float scale_Y = 1.0F;
+
 	j1UIElement(j1UIElement* parent = nullptr);
 	~j1UIElement();
 	virtual bool UIBlit();

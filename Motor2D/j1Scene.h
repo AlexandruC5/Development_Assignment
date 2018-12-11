@@ -10,12 +10,7 @@ enum GUI_Event;
 struct Level {
 	p2SString map_path = "";
 	p2SString sound_path = "";
-};
-
-enum Scene{
-	FOREST,
-	DESERT,
-	NONE,
+	int next_level = 0;
 };
 
 class j1Scene : public j1Module
@@ -52,9 +47,25 @@ public:
 
 	bool GUIEvent(j1UIElement* element, GUI_Event gui_event);
 
+	int current_level = 0;
+
+
+private:
 	p2List<Level> levels;
 
-	Scene current_scene = FOREST;
+	j1UIElement* main_menu_panel;
+	j1UIElement* main_menu_button_play;
+	j1UIElement* main_menu_button_continue;
+	j1UIElement* main_menu_button_settings;
+	j1UIElement* main_menu_button_credits;
+	j1UIElement* main_menu_button_exit;
+
+	j1UIElement* main_menu_button_play_text;
+	j1UIElement* main_menu_button_continue_text;
+	j1UIElement* main_menu_button_settings_text;
+	j1UIElement* main_menu_button_credits_text;
+	j1UIElement* main_menu_button_exit_text;
+
 };
 
 #endif // __j1SCENE_H__

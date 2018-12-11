@@ -4,31 +4,27 @@
 	<window />
 	<textures />
 	<audio />
-	<scene>
-		<current_scene value="0" />
-	</scene>
-	<swap_scene />
 	<map>
 		<background_1 x="0" />
-		<background_2 x="-1925" />
+		<background_2 x="1925" />
 	</map>
 	<entity_manager>
 		<player_0>
-			<position x="80.1045456" y="1505.74231" />
-			<velocity x="-5.49231981e-24" y="14.4410858" />
-			<target_speed x="0" y="598.5" />
-			<state value="2" />
-			<is_grounded value="false" />
-			<flipX value="false" />
-		</player_0>
-		<enemy_1>
-			<position x="549.928528" y="1607.97229" />
-			<velocity x="-1.26139347e-28" y="-14.6896992" />
-			<target_speed x="0" y="-608" />
+			<position x="1392.31104" y="1747.59204" />
+			<velocity x="15.138833" y="-14.2430201" />
+			<target_speed x="627" y="-589.5" />
 			<state value="2" />
 			<is_grounded value="false" />
 			<flipX value="true" />
-			<state value="2" />
+		</player_0>
+		<enemy_1>
+			<position x="1052.14209" y="2147.82129" />
+			<velocity x="0.0579476804" y="0" />
+			<target_speed x="0" y="0" />
+			<state value="0" />
+			<is_grounded value="true" />
+			<flipX value="false" />
+			<state value="0" />
 			<chase value="true" />
 			<movement_controls moving_right="false" />
 			<movement_controls moving_left="false" />
@@ -105,7 +101,13 @@
 	</entity_manager>
 	<collision />
 	<pathfinding />
+	<fonts />
+	<gui />
+	<scene>
+		<current_scene value="0" />
+	</scene>
+	<swap_scene />
 	<renderer>
-		<camera x="0" y="-1341.92737" />
+		<camera x="-774.96051" y="-1584" />
 	</renderer>
 </game_state>
