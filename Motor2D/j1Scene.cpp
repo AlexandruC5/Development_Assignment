@@ -46,7 +46,7 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 
 
 
-	main_menu_panel = App->gui->CreateImage({ 50,50 }, { 551,711,380,539 });
+	main_menu_panel = App->gui->CreateImage({ 850,50 }, { 551,711,380,539 });
 	main_menu_panel->scale_Y = 1.17F;
 	main_menu_button_play = App->gui->CreateButton({ 100, 75 }, main_menu_panel);
 	main_menu_button_continue = App->gui->CreateButton({ 100, 175 }, main_menu_panel);
@@ -68,6 +68,18 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	pause_menu_button_resume_text = App->gui->CreateLabel({ 48,26 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "RESUME", { 255,255,255 }, pause_menu_button_resume);
 	pause_menu_button_main_menu_text = App->gui->CreateLabel({ 60,14 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MAIN", { 255,255,255 }, pause_menu_button_main_menu);
 	pause_menu_button_main_menu_text = App->gui->CreateLabel({ 56,36 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MENU", { 255,255,255 }, pause_menu_button_main_menu);
+
+	settings_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 });
+	settings_menu_panel->scale_Y = 0.6F;
+	settings_menu_button_main_menu = App->gui->CreateButton({ 100, 180 }, settings_menu_panel);
+	settings_menu_button_main_menu_text = App->gui->CreateLabel({ 60,14 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MAIN", { 255,255,255 }, settings_menu_button_main_menu);
+	settings_menu_button_main_menu_text = App->gui->CreateLabel({ 56,36 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MENU", { 255,255,255 }, settings_menu_button_main_menu);
+
+	credits_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 });
+	credits_menu_panel->scale_Y = 0.9F;
+	credits_menu_button_main_menu = App->gui->CreateButton({ 100, 320 }, credits_menu_panel);
+	credits_menu_button_main_menu_text = App->gui->CreateLabel({ 60,14 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MAIN", { 255,255,255 }, credits_menu_button_main_menu);
+	credits_menu_button_main_menu_text = App->gui->CreateLabel({ 56,36 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MENU", { 255,255,255 }, credits_menu_button_main_menu);
 
 	return true;
 }
@@ -249,12 +261,44 @@ bool j1Scene::GUIEvent(j1UIElement * element, GUI_Event gui_event)
 	{
 		case MOUSE_OVER:
 		{
-		
+			
 		}
 		break;
 		case MOUSE_EXIT:
 		{
 		
+		}
+		break;
+		case LEFT_CLICK_UP:
+		{
+			if (element == pause_menu_button_resume)
+			{
+
+			}
+			else if(element == pause_menu_button_main_menu)
+			{
+
+			}
+			else if(element == main_menu_button_play)
+			{
+
+			}
+			else if(element == main_menu_button_continue)
+			{
+
+			}
+			else if (element == main_menu_button_settings)
+			{
+
+			}
+			else if (element == main_menu_button_credits)
+			{
+
+			}
+			else if (element == main_menu_button_exit)
+			{
+
+			}
 		}
 		break;
 	}
