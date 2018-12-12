@@ -176,7 +176,6 @@ bool j1Scene::Update(float dt)
 	else if (-(App->render->camera.position.x - App->render->camera.body.w) > App->map->data.width*App->map->data.tile_width)
 		App->render->camera.position.x = -(App->map->data.width * App->map->data.tile_width - App->render->camera.body.w);
 
-
 	App->map->Draw();
 
 	return true;
@@ -282,7 +281,7 @@ bool j1Scene::GUIEvent(j1UIElement * element, GUI_Event gui_event)
 		{
 			if (element == pause_menu_button_resume)
 			{
-
+				pause_menu_panel->SetEnabled(false);
 			}
 			else if (element == settings_menu_button_main_menu)
 			{
@@ -296,11 +295,13 @@ bool j1Scene::GUIEvent(j1UIElement * element, GUI_Event gui_event)
 			}
 			else if(element == main_menu_button_play)
 			{
-
+				main_menu_panel->SetEnabled(false);
+				
 			}
 			else if(element == main_menu_button_continue)
 			{
-
+				main_menu_panel->SetEnabled(false);
+				App->LoadGame();
 			}
 			else if (element == main_menu_button_settings)
 			{
@@ -314,7 +315,7 @@ bool j1Scene::GUIEvent(j1UIElement * element, GUI_Event gui_event)
 			}
 			else if (element == main_menu_button_exit)
 			{
-
+				exit(0);
 			}
 			else if (element == credits_menu_button_main_menu)
 			{

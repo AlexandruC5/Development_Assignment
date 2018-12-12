@@ -10,22 +10,22 @@
 	</map>
 	<entity_manager>
 		<player_0>
-			<position x="1392.31104" y="1747.59204" />
-			<velocity x="15.138833" y="-14.2430201" />
-			<target_speed x="627" y="-589.5" />
-			<state value="2" />
-			<is_grounded value="false" />
-			<flipX value="true" />
-		</player_0>
-		<enemy_1>
-			<position x="1052.14209" y="2147.82129" />
-			<velocity x="0.0579476804" y="0" />
+			<position x="334.712189" y="2091" />
+			<velocity x="0" y="0" />
 			<target_speed x="0" y="0" />
 			<state value="0" />
 			<is_grounded value="true" />
-			<flipX value="false" />
+			<flipX value="true" />
+		</player_0>
+		<enemy_1>
+			<position x="1583.32996" y="2147.38257" />
+			<velocity x="0" y="0" />
+			<target_speed x="0" y="0" />
 			<state value="0" />
-			<chase value="true" />
+			<is_grounded value="true" />
+			<flipX value="true" />
+			<state value="0" />
+			<chase value="false" />
 			<movement_controls moving_right="false" />
 			<movement_controls moving_left="false" />
 			<movement_controls jump="false" />
@@ -108,6 +108,6 @@
 	</scene>
 	<swap_scene />
 	<renderer>
-		<camera x="-774.96051" y="-1584" />
+		<camera x="0" y="-1584" />
 	</renderer>
 </game_state>
