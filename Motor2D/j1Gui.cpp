@@ -111,7 +111,6 @@ bool j1Gui::PreUpdate()
 	}
 
 
-
 	j1UIElement* selected_element = GetElementUnderMouse();
 
 	for (p2List_item<j1UIElement*>* item = elements.start; item != NULL; item = item->next)
@@ -163,6 +162,8 @@ bool j1Gui::PostUpdate()
 {
 	for (p2List_item<j1UIElement*>* item = elements.start; item != NULL; item = item->next)
 	{
+		item->data->DadEnabled();
+		if (item->data->enabled)
 		item->data->UIBlit();
 	}
 	return true;
@@ -280,6 +281,22 @@ void j1UIElement::SetScale(float scaleX, float scaleY)
 {
 	scale_X = scaleX;
 	scale_Y = scaleY;
+}
+
+void j1UIElement::DadEnabled()
+{
+	if (parent != nullptr)
+	{
+		if (!parent->enabled)
+			this->enabled = false;
+		else
+			this->enabled = true;
+	}
+}
+
+void j1UIElement::SetEnabled(bool enabled)
+{
+	this->enabled = enabled;
 }
 
 j1UIImage::j1UIImage(iPoint pos, SDL_Rect rect)

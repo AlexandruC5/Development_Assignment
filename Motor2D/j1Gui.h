@@ -29,6 +29,7 @@ public:
 	bool hovered = false;
 	bool interactable = false;
 	bool dragable = false;
+	bool enabled = true;
 
 
 	j1UIElement(j1UIElement* parent = nullptr);
@@ -44,6 +45,8 @@ public:
 	void SetLocalPos(int x, int y);
 	void GetScale(float& scaleX, float &scaleY);
 	void SetScale(float scaleX, float scaleY);
+	void DadEnabled();
+	void SetEnabled(bool enabled);
 
 	virtual void OnMouseClick() {};
 	virtual void OnMouseHover() {};

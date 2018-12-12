@@ -80,6 +80,11 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	credits_menu_button_main_menu_text = App->gui->CreateLabel({ 60,14 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MAIN", { 255,255,255 }, credits_menu_button_main_menu);
 	credits_menu_button_main_menu_text = App->gui->CreateLabel({ 56,36 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MENU", { 255,255,255 }, credits_menu_button_main_menu);
 
+	pause_menu_panel->SetEnabled(false);
+	
+	settings_menu_panel->SetEnabled(false);
+	credits_menu_panel->SetEnabled(false);
+
 	return true;
 }
 
