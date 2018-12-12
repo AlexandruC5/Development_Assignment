@@ -60,6 +60,13 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	main_menu_button_exit_text = App->gui->CreateLabel({ 60,22 }, "fonts/open_sans/OpenSans-Bold.ttf", 28, "EXIT", { 255,255,255 }, main_menu_button_exit);
 
 
+	settings_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 });
+	App->gui->ScaleElement(settings_menu_panel, 0.0F, -0.4F);
+	settings_menu_button_main_menu = App->gui->CreateButton({ 100, 180 }, settings_menu_panel);
+	settings_menu_button_main_menu_text = App->gui->CreateLabel({ 60,14 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MAIN", { 255,255,255 }, settings_menu_button_main_menu);
+	settings_menu_button_main_menu_text = App->gui->CreateLabel({ 56,36 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MENU", { 255,255,255 }, settings_menu_button_main_menu);
+
+
 	pause_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 });
 	App->gui->ScaleElement(pause_menu_panel, 0.0F, -0.1F);
 	pause_menu_button_resume = App->gui->CreateButton({ 100, 75 }, pause_menu_panel);
@@ -68,12 +75,6 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	pause_menu_button_main_menu_text = App->gui->CreateLabel({ 60,14 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MAIN", { 255,255,255 }, pause_menu_button_main_menu);
 	pause_menu_button_main_menu_text = App->gui->CreateLabel({ 56,36 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MENU", { 255,255,255 }, pause_menu_button_main_menu);
 
-	settings_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 });
-	App->gui->ScaleElement(settings_menu_panel, 0.0F, -0.4F);
-	settings_menu_button_main_menu = App->gui->CreateButton({ 100, 180 }, settings_menu_panel);
-	settings_menu_button_main_menu_text = App->gui->CreateLabel({ 60,14 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MAIN", { 255,255,255 }, settings_menu_button_main_menu);
-	settings_menu_button_main_menu_text = App->gui->CreateLabel({ 56,36 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MENU", { 255,255,255 }, settings_menu_button_main_menu);
-
 	credits_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 });
 	App->gui->ScaleElement(credits_menu_panel, 0.0F, -0.1F);
 	credits_menu_button_main_menu = App->gui->CreateButton({ 100, 320 }, credits_menu_panel);
@@ -81,7 +82,6 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	credits_menu_button_main_menu_text = App->gui->CreateLabel({ 56,36 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MENU", { 255,255,255 }, credits_menu_button_main_menu);
 
 	pause_menu_panel->SetEnabled(false);
-	
 	settings_menu_panel->SetEnabled(false);
 	credits_menu_panel->SetEnabled(false);
 
@@ -278,15 +278,21 @@ bool j1Scene::GUIEvent(j1UIElement * element, GUI_Event gui_event)
 		
 		}
 		break;
-		case LEFT_CLICK_UP:
+		case LEFT_CLICK_DOWN:
 		{
 			if (element == pause_menu_button_resume)
 			{
 
 			}
+			else if (element == settings_menu_button_main_menu)
+			{
+				main_menu_panel->SetEnabled(true);
+				settings_menu_panel->SetEnabled(false);
+			}
 			else if(element == pause_menu_button_main_menu)
 			{
-
+				main_menu_panel->SetEnabled(true);
+				pause_menu_panel->SetEnabled(false);
 			}
 			else if(element == main_menu_button_play)
 			{
@@ -298,15 +304,22 @@ bool j1Scene::GUIEvent(j1UIElement * element, GUI_Event gui_event)
 			}
 			else if (element == main_menu_button_settings)
 			{
-
+				settings_menu_panel->SetEnabled(true);
+				main_menu_panel->SetEnabled(false);
 			}
 			else if (element == main_menu_button_credits)
 			{
-
+				credits_menu_panel->SetEnabled(true);
+				main_menu_panel->SetEnabled(false);
 			}
 			else if (element == main_menu_button_exit)
 			{
 
+			}
+			else if (element == credits_menu_button_main_menu)
+			{
+				main_menu_panel->SetEnabled(true);
+				credits_menu_panel->SetEnabled(false);
 			}
 		}
 		break;
