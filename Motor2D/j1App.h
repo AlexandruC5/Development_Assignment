@@ -101,6 +101,7 @@ public:
 	j1Fonts*			fonts;
 	bool				frame_cap = true;
 	double				frame_rate;
+	bool				paused = true;
 
 private:
 

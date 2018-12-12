@@ -282,6 +282,7 @@ bool j1Scene::GUIEvent(j1UIElement * element, GUI_Event gui_event)
 			if (element == pause_menu_button_resume)
 			{
 				pause_menu_panel->SetEnabled(false);
+				App->paused = false;
 			}
 			else if (element == settings_menu_button_main_menu)
 			{
@@ -296,12 +297,13 @@ bool j1Scene::GUIEvent(j1UIElement * element, GUI_Event gui_event)
 			else if(element == main_menu_button_play)
 			{
 				main_menu_panel->SetEnabled(false);
-				
+				App->paused = false;
 			}
 			else if(element == main_menu_button_continue)
 			{
 				main_menu_panel->SetEnabled(false);
 				App->LoadGame();
+				App->paused = false;
 			}
 			else if (element == main_menu_button_settings)
 			{
