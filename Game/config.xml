@@ -10,6 +10,10 @@
     <vsync value="false"/>
   </renderer>
 
+  <gui>
+    <atlas file="gui/atlas.png"/>
+  </gui>
+
   <entity_manager>
     <player>
       <sprite>player_spritesheet.png</sprite>
@@ -119,15 +123,14 @@
     <path>data.zip</path>
   </file_system>
 
-  <scene_forest>
-    <map_file>lvl_1.tmx</map_file>
-    <music>music_forest.ogg</music>
-  </scene_forest>
-  
-  <scene_desert>
-    <map_file>lvl_2.tmx</map_file>
-    <music>music_desert.ogg</music>
-  </scene_desert>
+  <scene>
+    <start_level value="1"/>
+    <levels>
+      <level music="music_forest.ogg" next_level="2">lvl_1.tmx</level>
+      <level music="music_desert.ogg" next_level="1">lvl_2.tmx</level>
+    </levels>
+  </scene>
+ 
 
   <collision>
     <max_colliders value="200"/>

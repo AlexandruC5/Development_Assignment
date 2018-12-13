@@ -1237,8 +1237,8 @@
    <tile gid="3"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
    <tile gid="1"/>
+   <tile gid="2"/>
    <tile gid="2"/>
    <tile gid="2"/>
    <tile gid="2"/>
@@ -3806,7 +3806,7 @@
   <object id="2" type="0" x="0" y="2192.36" width="4362.67" height="104"/>
   <object id="5" type="1" x="3201.94" y="1546" width="766" height="44"/>
   <object id="7" type="1" x="1921.94" y="1932" width="640" height="36"/>
-  <object id="8" type="0" x="4740.6" y="2187.33" width="1400.67" height="114.667"/>
+  <object id="8" type="0" x="4596.6" y="2187.33" width="1544.67" height="114.667"/>
   <object id="9" type="0" x="6533.33" y="1930.3" width="1658.67" height="366.545"/>
   <object id="10" type="0" x="8449.76" y="1416.55" width="528.609" height="885.09"/>
   <object id="11" type="1" x="6912.88" y="1547.18" width="1020.55" height="40"/>
@@ -5064,7 +5064,7 @@
    <tile gid="43"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="43"/>
    <tile gid="43"/>
    <tile gid="43"/>
    <tile gid="43"/>

@@ -4,6 +4,14 @@
 #include "j1Module.h"
 
 struct SDL_Texture;
+struct j1UIElement;
+enum GUI_Event;
+
+struct Level {
+	p2SString map_path = "";
+	p2SString sound_path = "";
+	int next_level = 0;
+};
 
 class j1Scene : public j1Module
 {
@@ -32,14 +40,50 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-protected:
-	p2SString music_file = "";
-	p2SString map_file = "";
-	p2SString background_file = "";
+	bool OnCollision(Collider* c1, Collider* c2);
+
+	bool Load(pugi::xml_node &node);
+	bool Save(pugi::xml_node &node) const;
+
+	bool GUIEvent(j1UIElement* element, GUI_Event gui_event);
+
+	int current_level = 0;
+
 
 private:
-	SDL_Texture* debug_tex;
-	uint dt_;
+	p2List<Level> levels;
+
+	j1UIElement* main_menu_panel;
+	j1UIElement* main_menu_button_play;
+	j1UIElement* main_menu_button_continue;
+	j1UIElement* main_menu_button_settings;
+	j1UIElement* main_menu_button_credits;
+	j1UIElement* main_menu_button_exit;
+
+	j1UIElement* main_menu_button_play_text;
+	j1UIElement* main_menu_button_continue_text;
+	j1UIElement* main_menu_button_settings_text;
+	j1UIElement* main_menu_button_credits_text;
+	j1UIElement* main_menu_button_exit_text;
+
+
+	j1UIElement* pause_menu_panel;
+	j1UIElement* pause_menu_button_resume;
+	j1UIElement* pause_menu_button_main_menu;
+	
+	j1UIElement* pause_menu_button_resume_text;
+	j1UIElement* pause_menu_button_main_menu_text;
+	j1UIElement* pause_menu_button_main_menu_text2;
+
+	j1UIElement* settings_menu_panel;
+	j1UIElement* settings_menu_button_main_menu;
+	j1UIElement* settings_menu_button_main_menu_text;
+	j1UIElement* settings_menu_button_main_menu_text2;
+
+	j1UIElement* credits_menu_panel;
+	j1UIElement* credits_menu_button_main_menu;
+	j1UIElement* credits_menu_button_main_menu_text;
+	j1UIElement* credits_menu_button_main_menu_text2;
 };
 
 #endif // __j1SCENE_H__

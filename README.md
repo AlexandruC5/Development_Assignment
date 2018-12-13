@@ -1,7 +1,7 @@
 ﻿# Salty the Slime
 
 ### Version of the game
-Salty the Slime v.0.0.1
+Salty the Slime v.0.0.2
 
 ### Description
 Platformer game made for Development subject. 
@@ -34,9 +34,11 @@ Be a salty slime jumping around the levels.
 
 	F6: Load.
 
-	F9: Colliders Draw.
+	F9: Colliders/Pathfinding Draw.
 
 	F10: God Mode.
+	
+	F11: Cap/Uncap FPS
 
 	+/-: Increase/Decrease music volume.
 	
@@ -55,9 +57,13 @@ Axel Alavedra Cabello
 
 [Github account](https://github.com/AxelAlavedra)
 
+	Pathfinding, Enemies, Entity Structure.
+
 Alejandro París Gómez
 
 [Github account](https://github.com/AlejandroParis)
+
+	FPS Cap, Brofiler, DT implementation, Entity Structure.
 
 ### Repository link
 https://github.com/AxelAlavedra/Development_Assignment

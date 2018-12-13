@@ -9,12 +9,12 @@
 #include "j1Textures.h"
 #include "j1Audio.h"
 #include "j1Scene.h"
-#include "j1SceneForest.h"
-#include "j1SceneDesert.h"
 #include "j1Collision.h"
 #include "j1Map.h"
 #include "j1SwapScene.h"
 #include "j1PathFinding.h"
+#include "j1Gui.h"
+#include "j1Fonts.h"
 #include "j1App.h"
 #include "j1EntityManager.h"
 #include "Brofiler/Brofiler.h"
@@ -33,13 +33,14 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	render = new j1Render();
 	tex = new j1Textures();
 	audio = new j1Audio();
-	scene_forest = new j1SceneForest();
-	scene_desert = new j1SceneDesert();
+	scene = new j1Scene();
 	map = new j1Map();
 	swap_scene = new j1SwapScene();
 	collision = new j1Collision();
 	pathfinding = new j1PathFinding();
 	entitymanager = new j1EntityManager();
+	fonts = new j1Fonts();
+	gui = new j1Gui();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -47,14 +48,15 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(win, true);
 	AddModule(tex, true);
 	AddModule(audio, true);
-	AddModule(scene_forest, true);
-	AddModule(scene_desert, false);
-	AddModule(swap_scene, true);
 	AddModule(map, true);
 	AddModule(entitymanager, true);
 	AddModule(collision, true);
 	AddModule(pathfinding, true);
+	AddModule(fonts, true);
+	AddModule(gui, true);
 
+	AddModule(scene, true);
+	AddModule(swap_scene, true);
 
 	// render last to swap buffer
 	AddModule(render, true);
@@ -104,7 +106,7 @@ bool j1App::Awake()
 		organization.create(app_config.child("organization").child_value());
 		save_game.create(app_config.child("save_file").child_value());
 		frame_rate = app_config.attribute("framerate_cap").as_uint();
-		vsync = config.child("vsync").attribute("value").as_bool();
+		vsync = config.child("renderer").child("vsync").attribute("value").as_bool();
 
 		load_game = save_game;
 	}
@@ -192,9 +194,16 @@ void j1App::PrepareUpdate()
 	last_sec_frame_count++;
 
 	// TODO 4: Calculate the dt: differential time since last frame
-	dt = frame_time.ReadSec();
-	if (dt > (float)frame_rate / 1000)
-		dt = (float)frame_rate / 1000;
+	if (!paused)
+	{
+		dt = frame_time.ReadSec();
+		if (dt > (float)frame_rate / 1000)
+			dt = (float)frame_rate / 1000;
+	}
+	else
+	{
+		dt = 0;
+	}
 	frame_time.Start();
 }
 

@@ -12,7 +12,7 @@
 
 j1FlyingEnemy::j1FlyingEnemy(EntityType type, pugi::xml_node config, fPoint position, p2SString id):j1Enemy(type, config, position, id)
 {
-	state = JUMPING;
+	state = MOVING;
 	jump_height = -1;
 	ignore_platforms = true;
 }
@@ -33,7 +33,7 @@ bool j1FlyingEnemy::PreUpdate()
 	PathfindingPreupdate();
 
 	switch (state) {
-	case JUMPING: JumpingUpdate();
+	case MOVING: MovingUpdate();
 		break;
 	case DEAD:
 		//TODO Die animation
@@ -54,7 +54,6 @@ bool j1FlyingEnemy::Update(float dt)
 	StepX();
 
 	animation_frame = animations[IDLE].GetCurrentFrame(dt);
-	App->render->Blit(sprite, position.x, position.y, &animation_frame, 1.0f, flipX);
 	return true;
 }
 
@@ -72,7 +71,7 @@ bool j1FlyingEnemy::Save(pugi::xml_node &conf) const
 	return true;
 }
 
-void j1FlyingEnemy::JumpingUpdate()
+void j1FlyingEnemy::MovingUpdate()
 {
 	if (moving_left == moving_right)
 	{

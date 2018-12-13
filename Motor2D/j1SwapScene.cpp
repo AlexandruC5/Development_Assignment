@@ -3,8 +3,6 @@
 #include "j1Window.h"
 #include "j1Render.h"
 #include "j1Scene.h"
-#include "j1SceneForest.h"
-#include "j1SceneDesert.h"
 #include "j1Map.h"
 #include "j1SwapScene.h"
 
@@ -44,8 +42,8 @@ bool j1SwapScene::PostUpdate()
 	{
 		if (now >= total_time)
 		{
-			scene_disable->Deactivate();
-			scene_enable->Activate();
+			App->scene->Deactivate();
+			App->scene->Activate();
 
 			total_time += total_time;
 			start_time = SDL_GetTicks();
@@ -72,7 +70,7 @@ bool j1SwapScene::PostUpdate()
 }
 
 // Fade to black. At mid point deactivate one module, then activate the other
-bool j1SwapScene::FadeToBlack(j1Scene* scene_off, j1Scene* scene_on, float time)
+bool j1SwapScene::FadeToBlack(float time)
 {
 	bool ret = false;
 
@@ -81,8 +79,6 @@ bool j1SwapScene::FadeToBlack(j1Scene* scene_off, j1Scene* scene_on, float time)
 		current_step = fade_step::fade_to_black;
 		start_time = SDL_GetTicks();
 		total_time = (Uint32)(time * 0.5F * 1000.0F);
-		scene_disable = scene_off;
-		scene_enable = scene_on;
 		ret = true;
 	}
 
@@ -91,34 +87,5 @@ bool j1SwapScene::FadeToBlack(j1Scene* scene_off, j1Scene* scene_on, float time)
 
 bool j1SwapScene::CleanUp()
 {
-	scene_disable = nullptr;
-	scene_enable = nullptr;
-	current_scene = nullptr;
-
 	return true;
-}
-
-bool j1SwapScene::Load(pugi::xml_node &node)
-{
-	p2SString scene_name = node.child("scene").attribute("value").as_string();
-	if (scene_name != current_scene->name)
-	{
-		current_scene->Deactivate();
-		if (scene_name == "scene_forest") App->scene_forest->Activate();
-		else App->scene_desert->Activate();
-	}
-	return true;
-}
-
-bool j1SwapScene::Save(pugi::xml_node &node) const
-{
-	pugi::xml_node scene_node;
-	scene_node = node.append_child("scene");
-	scene_node.append_attribute("value") = current_scene->name.GetString();
-	return true;
-}
-
-void j1SwapScene::Reload()
-{
-	FadeToBlack(current_scene, current_scene);
 }

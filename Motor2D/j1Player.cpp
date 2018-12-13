@@ -34,7 +34,7 @@ bool j1Player::PreUpdate()
 	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
 	{
 		if (state != GOD) state = GOD;
-		else state = IDLE;
+		else state = JUMPING;
 	}
 
 
@@ -104,7 +104,9 @@ bool j1Player::Update(float dt)
 	StepX();
 
 	animation_frame = animations[state == GOD? (int)JUMPING:state].GetCurrentFrame(dt);
-	App->render->Blit(sprite, position.x, position.y, &animation_frame, 1.0f, flipX, false, 0,0,0,scale);
+
+	App->render->Blit(sprite, position.x, position.y, &animation_frame, 1.0f, flipX, false, 0,0,0,scale,scale);
+
 	return true;
 }
 
@@ -292,5 +294,5 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 void j1Player::Die()
 {
 	j1Entity::Die();
-	App->swap_scene->Reload();
+	App->swap_scene->FadeToBlack();
 }

@@ -41,7 +41,6 @@ bool j1Enemy::Update(float dt)
 	StepX();
 
 	animation_frame = animations[state].GetCurrentFrame(dt);
-	App->render->Blit(sprite, position.x, position.y, &animation_frame, 1.0f, flipX);
 
 	return true;
 }
@@ -156,6 +155,12 @@ void j1Enemy::JumpingUpdate()
 
 		target_speed.y = 0.0F;
 		velocity.y = 0.0F;
+		total_jumps = 0;
+	}
+
+	if (jump && total_jumps < MAX_JUMPS)
+	{
+		Jump();
 	}
 }
 
@@ -164,29 +169,36 @@ void j1Enemy::Jump()
 	target_speed.y = -jump_speed;
 	is_grounded = false;
 	state = JUMPING;
+	total_jumps++;
 }
 
 bool j1Enemy::GetPath()
 {
-	iPoint origin = App->map->WorldToMap(pivot.x, pivot.y);
-	iPoint destination = App->map->WorldToMap(App->entitymanager->player->pivot.x, App->entitymanager->player->pivot.y);
+	iPoint new_destination = App->map->WorldToMap(App->entitymanager->player->pivot.x, App->entitymanager->player->pivot.y);
 
- 	App->pathfinding->CreatePath(origin, destination, 5, 5, jump_height);
-
-	const p2DynArray<iPoint>* tmp_array = App->pathfinding->GetLastPath();
-	current_path.Clear();
-	for (int i = 0; i < tmp_array->Count(); i++)
+	if (new_destination != destination || current_path.Count() == 0)
 	{
-		iPoint p = App->map->MapToWorld(tmp_array->At(i)->x, tmp_array->At(i)->y);
-		p.x += App->map->data.tile_width / 2;
-		p.y += App->map->data.tile_height / 2 + App->entitymanager->player->collider_offset;
-		current_path.PushBack(p);
-	}
-	current_destination = current_path.Count() > 1 ? 1 : 0;
-	previous_destination = 0;
-	next_destination = current_path.Count() > 2 ? 2:-1;
+		iPoint origin = App->map->WorldToMap(pivot.x, pivot.y);
+		destination = new_destination;
 
-	ResetPathfindingVariables();
+		App->pathfinding->CreatePath(origin, destination, jump_height);
+
+		const p2DynArray<iPoint>* tmp_array = App->pathfinding->GetLastPath();
+		current_path.Clear();
+		for (int i = 0; i < tmp_array->Count(); i++)
+		{
+			iPoint p = App->map->MapToWorld(tmp_array->At(i)->x, tmp_array->At(i)->y);
+			p.x += App->map->data.tile_width / 2;
+			p.y += App->map->data.tile_height / 2 + App->entitymanager->player->collider_offset;
+			current_path.PushBack(p);
+		}
+		current_destination = current_path.Count() > 1 ? 1 : 0;
+		previous_destination = 0;
+		next_destination = current_path.Count() > 2 ? 2 : -1;
+
+		ResetPathfindingVariables();
+	}
+	
 
 	return true;
 }
@@ -232,17 +244,35 @@ void j1Enemy::ResetPathfindingVariables()
 
 void j1Enemy::PathfindX()
 {
-	reached_X = (current_path.At(previous_destination)->x <= current_path.At(current_destination)->x  && current_path.At(current_destination)->x <= pivot.x)
+	reached_X = (current_path.At(previous_destination)->x <= current_path.At(current_destination)->x && current_path.At(current_destination)->x <= pivot.x)
 		|| (current_path.At(previous_destination)->x >= current_path.At(current_destination)->x && current_path.At(current_destination)->x >= pivot.x);
-	if (abs(pivot.x - current_path.At(current_destination)->x) > POSITION_ERROR_X)
-		reached_X = false;
 
 	if (!reached_X)
 	{
 		if (pivot.x < current_path.At(current_destination)->x)
 			moving_right = true;
+	
 		else if (pivot.x > current_path.At(current_destination)->x)
 			moving_left = true;
+	}
+	else
+	{
+		if (next_destination > 0)
+		{
+			iPoint point = App->map->WorldToMap(current_path.At(next_destination)->x, current_path.At(next_destination)->y);
+			if (!App->pathfinding->IsGround({ point.x, point.y+1 }))
+			{
+				moving_right = false;
+				moving_left = false;
+			}
+			else
+			{
+				if (pivot.x < current_path.At(next_destination)->x)
+					moving_right = true;
+				else if (pivot.x > current_path.At(next_destination)->x)
+					moving_left = true;
+			}
+		}
 	}
 }
 

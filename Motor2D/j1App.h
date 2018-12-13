@@ -14,14 +14,14 @@ class j1Render;
 class j1Textures;
 class j1Audio;
 class j1Scene;
-class j1SceneForest;
-class j1SceneDesert;
 class j1Player;
 class j1Map;
 class j1Collision; 
 class j1SwapScene;
 class j1Enemy;
 class j1PathFinding;
+class j1Gui;
+class j1Fonts;
 class j1EntityManager;
 
 class j1App
@@ -91,14 +91,17 @@ public:
 	j1Render*			render;
 	j1Textures*			tex;
 	j1Audio*			audio;
-	j1SceneForest*		scene_forest;
-	j1SceneDesert*		scene_desert;
+	j1Scene*			scene;
 	j1Map*				map;
 	j1Collision*		collision;
 	j1SwapScene*		swap_scene;
 	j1PathFinding*		pathfinding;
 	j1EntityManager*	entitymanager;
+	j1Gui*				gui;
+	j1Fonts*			fonts;
 	bool				frame_cap = true;
+	double				frame_rate;
+	bool				paused = true;
 
 private:
 
@@ -109,7 +112,6 @@ private:
 
 	p2SString			title;
 	p2SString			organization;
-	double				frame_rate;
 	bool				vsync;
 	pugi::xml_document	config_file;
 

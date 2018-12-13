@@ -75,6 +75,11 @@ public:
 	virtual bool Start() { return true; };
 	virtual bool Update(float dt) { return true; };
 	virtual bool PreUpdate() { return true; };
+	virtual bool PostUpdate() 
+	{ 
+		App->render->Blit(sprite, position.x, position.y, &animation_frame, 1.0f, flipX);
+		return true; 
+	};
 	virtual bool CleanUp();
 	virtual bool Load(pugi::xml_node&);
 	virtual bool Save(pugi::xml_node&) const;
