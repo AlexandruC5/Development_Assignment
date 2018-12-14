@@ -31,38 +31,40 @@ j1Player::~j1Player()
 
 bool j1Player::PreUpdate() 
 {
-	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
+	if (!App->paused)
 	{
-		if (state != GOD) state = GOD;
-		else state = JUMPING;
+		if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
+		{
+			if (state != GOD) state = GOD;
+			else state = JUMPING;
+		}
+
+		switch (state) {
+		case IDLE:
+			IdleUpdate();
+			break;
+		case MOVING:
+			MovingUpdate();
+			break;
+		case JUMPING:
+			JumpingUpdate();
+			break;
+		case DEAD:
+			break;
+		case CHARGE:
+			ChargingUpdate();
+			break;
+		case WIN:
+			target_speed.x = 0.0F;
+			break;
+		case GOD:
+			GodUpdate();
+			break;
+		default:
+			break;
+		}
+
 	}
-
-
-	switch (state) {
-	case IDLE: 
-		IdleUpdate();
-		break;
-	case MOVING:
-		MovingUpdate();
-		break;
-	case JUMPING: 
-		JumpingUpdate();
-		break;
-	case DEAD:
-		break;
-	case CHARGE: 
-		ChargingUpdate();
-		break;
-	case WIN: 
-		target_speed.x = 0.0F;
-		break;
-	case GOD: 
-		GodUpdate();
-		break;
-	default:
-		break;
-	}
-
 	
 	return true;
 }
@@ -230,17 +232,12 @@ void j1Player::Jump(float boost_y)
 	state = JUMPING;
 	charge_value = 0;
 	App->audio->PlayFx(jump_fx);
-
-	/*if (!App->frame_cap)
-		position.y -= 5;*/
 }
 
 void j1Player::CheckDeath()
 {
 	if(position.y > App->map->data.height * App->map->data.tile_height && state != DEAD && state != GOD)
-	{
 		Die();
-	}
 }
 
 
@@ -278,9 +275,7 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 			}
 		}
 		else
-		{
 			Die();
-		}
 	}
 }
 

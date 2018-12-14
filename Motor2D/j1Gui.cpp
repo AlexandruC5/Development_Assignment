@@ -36,7 +36,24 @@ bool j1Gui::Start()
 	return true;
 }
 
-
+void j1Gui::EnableElement(j1UIElement* element)
+{
+	element->SetEnabled(true);
+	for (p2List_item<j1UIElement*>* item = elements.start; item != NULL; item = item->next)
+	{
+		if (item->data->parent && item->data->parent == element)
+			EnableElement(item->data);
+	}
+}
+void j1Gui::DisableElement(j1UIElement* element)
+{
+	element->SetEnabled(false);
+	for (p2List_item<j1UIElement*>* item = elements.start; item != NULL; item = item->next)
+	{
+		if (item->data->parent && item->data->parent == element)
+			DisableElement(item->data);
+	}
+}
 j1UIElement* j1Gui::GetElementUnderMouse()
 {
 	int x, y;
@@ -44,12 +61,12 @@ j1UIElement* j1Gui::GetElementUnderMouse()
 
 	for (p2List_item<j1UIElement*>* item = elements.start; item != NULL; item = item->next)
 	{
-		if (item->data->IsInside(x, y) && item->data->interactable)
+		if (item->data->IsInside(x, y) && item->data->interactable && item->data->enabled)
 		{
 			bool inside_child = false;
 			for (p2List_item<j1UIElement*>* child_item = elements.start; child_item != NULL; child_item = child_item->next)
 			{
-				if (child_item->data->parent && child_item->data->parent == item->data && child_item->data->IsInside(x, y) && child_item->data->interactable)
+				if (child_item->data->parent && child_item->data->parent == item->data && child_item->data->IsInside(x, y) && child_item->data->interactable && item->data->enabled)
 				{
 					inside_child = true;
 					break;
@@ -165,7 +182,6 @@ bool j1Gui::PostUpdate()
 {
 	for (p2List_item<j1UIElement*>* item = elements.start; item != NULL; item = item->next)
 	{
-		item->data->DadEnabled();
 		if (item->data->enabled)
 		{
 			item->data->UIBlit();

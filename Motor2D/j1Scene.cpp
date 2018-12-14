@@ -40,19 +40,19 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 		lvl.map_path = level.child_value();
 		lvl.sound_path = level.attribute("music").as_string();
 		lvl.next_level = level.attribute("next_level").as_int() - 1;
+		lvl.game_level = level.attribute("game_level").as_bool(true);
 		levels.add(lvl);
 	}
 	current_level = conf.child("start_level").attribute("value").as_int() - 1;
 
+	menu_background = App->gui->CreateImage({ 0,0 }, { 2371,1452,1280,720 });
 
-	main_menu_panel = App->gui->CreateImage({ 850,50 }, { 551,711,380,539 });
+	main_menu_panel = App->gui->CreateImage({ 850,50 }, { 551,711,380,539 }, menu_background);
 	App->gui->ScaleElement(main_menu_panel, 0.0F, 0.17F);
 	main_menu_button_play = App->gui->CreateButton({ 100, 75 }, main_menu_panel);
 	main_menu_button_continue = App->gui->CreateButton({ 100, 175 }, main_menu_panel);
 	main_menu_button_settings = App->gui->CreateButton({ 100, 275 }, main_menu_panel);
 	main_menu_button_credits = App->gui->CreateButton({ 100, 375 }, main_menu_panel);
-	main_menu_button_credits->dragable = true;
-	main_menu_button_credits->clipping = true;
 	main_menu_button_exit = App->gui->CreateButton({ 100, 475}, main_menu_panel);
 
 	main_menu_button_play_text = App->gui->CreateLabel({ 58,22 },"fonts/open_sans/OpenSans-Bold.ttf", 28, "PLAY", { 255,255,255 }, main_menu_button_play);
@@ -83,9 +83,9 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	credits_menu_button_main_menu_text = App->gui->CreateLabel({ 60,14 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MAIN", { 255,255,255 }, credits_menu_button_main_menu);
 	credits_menu_button_main_menu_text = App->gui->CreateLabel({ 56,36 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MENU", { 255,255,255 }, credits_menu_button_main_menu);
 
-	pause_menu_panel->SetEnabled(false);
-	settings_menu_panel->SetEnabled(false);
-	credits_menu_panel->SetEnabled(false);
+	App->gui->DisableElement(pause_menu_panel);
+	App->gui->DisableElement(settings_menu_panel);
+	App->gui->DisableElement(credits_menu_panel);
 
 	return true;
 }
@@ -95,6 +95,7 @@ bool j1Scene::Start()
 {
 	BROFILER_CATEGORY("StartScene", Profiler::Color::Plum);
 	App->entitymanager->CleanUp();
+
 	App->map->Load(levels.At(current_level)->data.map_path.GetString());
 	App->entitymanager->player->ResetEntity();
 
@@ -107,6 +108,7 @@ bool j1Scene::Start()
 	RELEASE_ARRAY(data);
 
 	App->audio->PlayMusic(levels.At(current_level)->data.sound_path.GetString());
+
 	return true;
 }
 
@@ -154,11 +156,21 @@ bool j1Scene::Update(float dt)
 		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) App->audio->DecreaseFXVolume();
 		else App->audio->DecreaseMusicVolume();
 	}		
+	if (levels.At(current_level)->data.game_level && App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+	{
+		if (App->paused)
+		{
+			App->paused = false;
+			App->gui->DisableElement(pause_menu_panel);
+		}
+		else
+		{
+			App->paused = true;
+			App->gui->EnableElement(pause_menu_panel);
+		}
+	}
+		
 
-	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
-		App->gui->ScaleElement(main_menu_panel, -0.5F, -0.5F, 0.5F);
-	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
-		App->gui->ScaleElement(main_menu_panel, 0.5F, 0.5F, 0.5F);
 
 	
 	App->render->camera.velocity = ((App->render->camera.target_speed * 0.4F) + (App->render->camera.velocity * (1 - 0.4F)));
@@ -178,7 +190,7 @@ bool j1Scene::Update(float dt)
 	else if (-(App->render->camera.position.x - App->render->camera.body.w) > App->map->data.width*App->map->data.tile_width)
 		App->render->camera.position.x = -(App->map->data.width * App->map->data.tile_width - App->render->camera.body.w);
 
-	App->map->Draw();
+	if(levels.At(current_level)->data.game_level) App->map->Draw();
 
 	return true;
 }
@@ -188,40 +200,41 @@ bool j1Scene::PostUpdate()
 {
 	bool ret = true;
 	//Camera movement
-	if (App->entitymanager->player->position.x + App->entitymanager->player->collider->rect.w > RIGHT_CAMERA_LIMIT && App->entitymanager->player->velocity.x > 0.0F)
+	if (levels.At(current_level)->data.game_level)
 	{
-		App->render->camera.target_speed.x = -(App->entitymanager->player->velocity.x);
-	}
-	else
-	{
-		if (App->entitymanager->player->position.x < LEFT_CAMERA_LIMIT && App->entitymanager->player->velocity.x < 0.0F)
+		if (App->entitymanager->player->position.x + App->entitymanager->player->collider->rect.w > RIGHT_CAMERA_LIMIT && App->entitymanager->player->velocity.x > 0.0F)
 		{
 			App->render->camera.target_speed.x = -(App->entitymanager->player->velocity.x);
 		}
 		else
 		{
-			App->render->camera.target_speed.x = 0.0F;
+			if (App->entitymanager->player->position.x < LEFT_CAMERA_LIMIT && App->entitymanager->player->velocity.x < 0.0F)
+			{
+				App->render->camera.target_speed.x = -(App->entitymanager->player->velocity.x);
+			}
+			else
+			{
+				App->render->camera.target_speed.x = 0.0F;
+			}
 		}
-	}
-	if (App->entitymanager->player->position.y < TOP_CAMERA_LIMIT && App->entitymanager->player->velocity.y < 0.0F)
-	{
-		App->render->camera.target_speed.y = -(App->entitymanager->player->velocity.y);
-	}
-	else
-	{
-		if (App->entitymanager->player->position.y + App->entitymanager->player->collider->rect.h > BOTTOM_CAMERA_LIMIT && App->entitymanager->player->velocity.y > 0.0F)
+		if (App->entitymanager->player->position.y < TOP_CAMERA_LIMIT && App->entitymanager->player->velocity.y < 0.0F)
 		{
 			App->render->camera.target_speed.y = -(App->entitymanager->player->velocity.y);
 		}
 		else
 		{
-			App->render->camera.target_speed.y = 0.0F;
+			if (App->entitymanager->player->position.y + App->entitymanager->player->collider->rect.h > BOTTOM_CAMERA_LIMIT && App->entitymanager->player->velocity.y > 0.0F)
+			{
+				App->render->camera.target_speed.y = -(App->entitymanager->player->velocity.y);
+			}
+			else
+			{
+				App->render->camera.target_speed.y = 0.0F;
+			}
+
 		}
-
 	}
-
-	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-		ret = false;
+	
 
 	return ret;
 }
@@ -283,39 +296,47 @@ bool j1Scene::GUIEvent(j1UIElement * element, GUI_Event gui_event)
 		{
 			if (element == pause_menu_button_resume)
 			{
-				pause_menu_panel->SetEnabled(false);
+				App->gui->DisableElement(pause_menu_panel);
 				App->paused = false;
 			}
 			else if (element == settings_menu_button_main_menu)
 			{
-				main_menu_panel->SetEnabled(true);
-				settings_menu_panel->SetEnabled(false);
+				App->gui->EnableElement(main_menu_panel);
+				App->gui->DisableElement(settings_menu_panel);
 			}
 			else if(element == pause_menu_button_main_menu)
 			{
-				main_menu_panel->SetEnabled(true);
-				pause_menu_panel->SetEnabled(false);
+				current_level = 0;
+				App->swap_scene->FadeToBlack(0.0F);
+
+				App->gui->EnableElement(menu_background);
+				App->gui->DisableElement(pause_menu_panel);
 			}
 			else if(element == main_menu_button_play)
 			{
-				main_menu_panel->SetEnabled(false);
+				App->gui->DisableElement(menu_background);
+
+				//? main menu should be a level or not?
+				current_level = levels.At(current_level)->data.next_level;
+				App->swap_scene->FadeToBlack(0.0F);
+
 				App->paused = false;
 			}
 			else if(element == main_menu_button_continue)
 			{
-				main_menu_panel->SetEnabled(false);
+				App->gui->DisableElement(main_menu_panel);
 				App->LoadGame();
 				App->paused = false;
 			}
 			else if (element == main_menu_button_settings)
 			{
-				settings_menu_panel->SetEnabled(true);
-				main_menu_panel->SetEnabled(false);
+				App->gui->EnableElement(settings_menu_panel);
+				App->gui->DisableElement(main_menu_panel);
 			}
 			else if (element == main_menu_button_credits)
 			{
-				credits_menu_panel->SetEnabled(true);
-				main_menu_panel->SetEnabled(false);
+				App->gui->EnableElement(credits_menu_panel);
+				App->gui->DisableElement(main_menu_panel);
 			}
 			else if (element == main_menu_button_exit)
 			{
@@ -323,8 +344,8 @@ bool j1Scene::GUIEvent(j1UIElement * element, GUI_Event gui_event)
 			}
 			else if (element == credits_menu_button_main_menu)
 			{
-				main_menu_panel->SetEnabled(true);
-				credits_menu_panel->SetEnabled(false);
+				App->gui->EnableElement(main_menu_panel);
+				App->gui->DisableElement(credits_menu_panel);
 			}
 		}
 		break;

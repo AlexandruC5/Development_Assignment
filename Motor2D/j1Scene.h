@@ -3,6 +3,7 @@
 
 #include "j1Module.h"
 
+
 struct SDL_Texture;
 struct j1UIElement;
 enum GUI_Event;
@@ -11,6 +12,7 @@ struct Level {
 	p2SString map_path = "";
 	p2SString sound_path = "";
 	int next_level = 0;
+	bool game_level = true;
 };
 
 class j1Scene : public j1Module
@@ -52,6 +54,8 @@ public:
 
 private:
 	p2List<Level> levels;
+
+	j1UIElement* menu_background;
 
 	j1UIElement* main_menu_panel;
 	j1UIElement* main_menu_button_play;

@@ -126,8 +126,9 @@
   <scene>
     <start_level value="1"/>
     <levels>
-      <level music="music_forest.ogg" next_level="2">lvl_1.tmx</level>
-      <level music="music_desert.ogg" next_level="1">lvl_2.tmx</level>
+      <level music="music_menu.ogg" next_level="2" game_level="false"></level>
+      <level music="music_forest.ogg" next_level="3">lvl_1.tmx</level>
+      <level music="music_desert.ogg" next_level="2">lvl_2.tmx</level>
     </levels>
   </scene>
  
@@ -143,7 +144,7 @@
   <audio>
     <fx_folder>audio/fx</fx_folder>
     <music_folder>audio/music</music_folder>
-    <music_volume value="25"/>
+    <music_volume value="50"/>
     <fx_volume value="25"/>
   </audio>
 

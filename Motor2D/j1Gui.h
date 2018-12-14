@@ -143,6 +143,8 @@ public:
 
 	j1UIElement* GetElementUnderMouse();
 	void ScaleElement(j1UIElement* element, float scaleX, float scaleY, float time = 0.0F);
+	void EnableElement(j1UIElement* element);
+	void DisableElement(j1UIElement* element);
 
 
 	SDL_Texture* GetAtlas() const;
