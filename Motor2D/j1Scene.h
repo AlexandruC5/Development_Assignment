@@ -6,6 +6,7 @@
 
 struct SDL_Texture;
 struct j1UIElement;
+struct j1UIScrollBar;
 enum GUI_Event;
 
 struct Level {
@@ -88,6 +89,8 @@ private:
 	j1UIElement* credits_menu_button_main_menu;
 	j1UIElement* credits_menu_button_main_menu_text;
 	j1UIElement* credits_menu_button_main_menu_text2;
+
+	j1UIScrollBar* scroll;
 };
 
 #endif // __j1SCENE_H__

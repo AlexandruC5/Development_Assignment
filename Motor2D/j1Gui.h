@@ -110,8 +110,8 @@ public:
 	void OnMouseHover();
 	void OnMouseRelease();
 	void OnMouseExit();
-	void MoveOtherElement();
-	void GetValue();*/
+	void MoveOtherElement();*/
+	float GetValue();
 };
 
 // ---------------------------------------------------

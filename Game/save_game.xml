@@ -6,95 +6,27 @@
 	<audio />
 	<map>
 		<background_1 x="0" />
-		<background_2 x="1800" />
+		<background_2 x="0" />
 	</map>
+	<collision />
 	<entity_manager>
 		<player_0>
-			<position x="16" y="2099.58398" />
+			<position x="0" y="0" />
 			<velocity x="0" y="0" />
 			<target_speed x="0" y="0" />
 			<state value="0" />
-			<is_grounded value="true" />
+			<is_grounded value="false" />
 			<flipX value="true" />
 		</player_0>
-		<flier_1>
-			<position x="1598.12" y="759.333008" />
-			<velocity x="0" y="0" />
-			<target_speed x="0" y="0" />
-			<state value="1" />
-			<is_grounded value="false" />
-			<flipX value="true" />
-			<state value="1" />
-			<chase value="false" />
-			<movement_controls moving_right="false" />
-			<movement_controls moving_left="false" />
-			<movement_controls jump="false" />
-			<movement_controls moving_down="false" />
-		</flier_1>
-		<flier_2>
-			<position x="5434.12012" y="519.333008" />
-			<velocity x="0" y="0" />
-			<target_speed x="0" y="0" />
-			<state value="1" />
-			<is_grounded value="false" />
-			<flipX value="true" />
-			<state value="1" />
-			<chase value="false" />
-			<movement_controls moving_right="false" />
-			<movement_controls moving_left="false" />
-			<movement_controls jump="false" />
-			<movement_controls moving_down="false" />
-		</flier_2>
-		<flier_3>
-			<position x="7670.12012" y="1231.32996" />
-			<velocity x="0" y="0" />
-			<target_speed x="0" y="0" />
-			<state value="1" />
-			<is_grounded value="false" />
-			<flipX value="true" />
-			<state value="1" />
-			<chase value="false" />
-			<movement_controls moving_right="false" />
-			<movement_controls moving_left="false" />
-			<movement_controls jump="false" />
-			<movement_controls moving_down="false" />
-		</flier_3>
-		<enemy_4>
-			<position x="5786.12012" y="2150.18555" />
-			<velocity x="0" y="0" />
-			<target_speed x="0" y="0" />
-			<state value="0" />
-			<is_grounded value="true" />
-			<flipX value="true" />
-			<state value="0" />
-			<chase value="false" />
-			<movement_controls moving_right="false" />
-			<movement_controls moving_left="false" />
-			<movement_controls jump="false" />
-		</enemy_4>
-		<enemy_5>
-			<position x="2646.12012" y="2155.7373" />
-			<velocity x="0" y="0" />
-			<target_speed x="0" y="0" />
-			<state value="0" />
-			<is_grounded value="true" />
-			<flipX value="true" />
-			<state value="0" />
-			<chase value="false" />
-			<movement_controls moving_right="false" />
-			<movement_controls moving_left="false" />
-			<movement_controls jump="false" />
-		</enemy_5>
 	</entity_manager>
-	<collision />
 	<pathfinding />
 	<fonts />
 	<gui />
 	<scene>
-		<current_scene value="1" />
+		<current_scene value="0" />
 	</scene>
 	<swap_scene />
 	<renderer>
-		<camera x="0" y="-1584" />
+		<camera x="1280" y="0" />
 	</renderer>
 </game_state>

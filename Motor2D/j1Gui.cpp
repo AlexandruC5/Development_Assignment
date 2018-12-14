@@ -471,4 +471,13 @@ j1UIScrollBar::j1UIScrollBar(iPoint pos)
 	thumb->dragable = true;
 	thumb->interactable = true;
 
+	
+}
+
+float j1UIScrollBar::GetValue()
+{
+	SDL_Rect thumb_rect = thumb->GetLocalRect();
+	float value = floor((((thumb_rect.y * scale_Y) / ((rect_box.h * scale_Y) - thumb_rect.h)) * 100) + .5) / 100;
+	LOG("VALUE IS: %f", value);
+	return value;
 }
