@@ -48,6 +48,7 @@ public:
 	void SetLocalPos(int x, int y);
 	void GetScale(float& scaleX, float &scaleY);
 	void SetScale(float scaleX, float scaleY);
+	void SetScreenPos(int x, int y);
 	void SetLocalRect(SDL_Rect rect);
 	void DadEnabled();
 	void SetEnabled(bool enabled);
@@ -101,6 +102,8 @@ public:
 	~j1UIScrollBar();
 
 	SDL_Rect* anim;
+	j1UIImage* thumb = nullptr;
+	float value = 0.0F;
 
 	bool UIBlit();
 	void OnMouseClick();
@@ -108,6 +111,7 @@ public:
 	void OnMouseRelease();
 	void OnMouseExit();
 	void MoveOtherElement();
+	void GetValue();
 };
 
 // ---------------------------------------------------

@@ -52,6 +52,7 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	main_menu_button_play = App->gui->CreateButton({ 100, 75 }, main_menu_panel);
 	main_menu_button_continue = App->gui->CreateButton({ 100, 175 }, main_menu_panel);
 	main_menu_button_settings = App->gui->CreateButton({ 100, 275 }, main_menu_panel);
+	main_menu_button_settings->dragable = true;
 	main_menu_button_credits = App->gui->CreateButton({ 100, 375 }, main_menu_panel);
 	main_menu_button_exit = App->gui->CreateButton({ 100, 475}, main_menu_panel);
 
@@ -169,7 +170,11 @@ bool j1Scene::Update(float dt)
 			App->gui->EnableElement(pause_menu_panel);
 		}
 	}
-		
+
+	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
+		App->gui->ScaleElement(main_menu_panel, -0.5F, -0.5F, 0.5F);
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
+		App->gui->ScaleElement(main_menu_panel, 0.5F, 0.5F, 0.5F);
 
 
 	
@@ -330,8 +335,8 @@ bool j1Scene::GUIEvent(j1UIElement * element, GUI_Event gui_event)
 			}
 			else if (element == main_menu_button_settings)
 			{
-				App->gui->EnableElement(settings_menu_panel);
-				App->gui->DisableElement(main_menu_panel);
+				/*App->gui->EnableElement(settings_menu_panel);
+				App->gui->DisableElement(main_menu_panel);*/
 			}
 			else if (element == main_menu_button_credits)
 			{

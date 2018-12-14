@@ -158,6 +158,27 @@ bool j1Gui::PreUpdate()
 						int x_movement, y_movement;
 						App->input->GetMouseMotion(x_movement, y_movement);
 						current_element->SetLocalPos(pos.x + x_movement, pos.y + y_movement);
+
+						if (current_element->parent_limit && current_element->parent)
+						{
+							SDL_Rect element_rect = current_element->GetLocalRect();
+							SDL_Rect parent_rect = current_element->parent->GetLocalRect();
+							float scaleX, scaleY;
+							current_element->parent->GetScale(scaleX, scaleY);
+							element_rect.x *= scaleX;
+							element_rect.y *= scaleY;
+
+							if (element_rect.x < 0)
+								element_rect.x = 0;
+							else if (element_rect.x + element_rect.w > parent_rect.w)
+								element_rect.x = parent_rect.w - element_rect.w;
+							if (element_rect.y < 0)
+								element_rect.y = 0;
+							else if (element_rect.y  + element_rect.h > parent_rect.h)
+								element_rect.y = parent_rect.h - element_rect.h;
+
+							current_element->SetLocalPos(element_rect.x / scaleX, element_rect.y /scaleY);
+						}
 					}
 				}
 				else
@@ -266,21 +287,34 @@ bool j1UIElement::IsInside(int x, int y)
 SDL_Rect j1UIElement::GetScreenRect()
 {
 	if (parent)
-		return { (int)(parent->GetScreenPos().x + (rect_box.x * parent->scale_X)), (int)(parent->GetScreenPos().y + (rect_box.y*parent->scale_Y)), (int) (rect_box.w * scale_X), (int) (rect_box.h * scale_Y) };
+		return { (int)(parent->GetScreenPos().x + (rect_box.x * parent->scale_X)), (int)(parent->GetScreenPos().y + (rect_box.y * parent->scale_Y)), (int) (rect_box.w * scale_X), (int) (rect_box.h * scale_Y) };
 	else
 		return  { rect_box.x, rect_box.y, (int)(rect_box.w * scale_X), (int)(rect_box.h * scale_Y) };
 }
 
+void j1UIElement::SetScreenPos(int x, int y)
+{
+	if (parent)
+	{
+		rect_box.x = (int) (x / parent->scale_X) - parent->GetScreenPos().x;
+		rect_box.y = (int) (y / parent->scale_Y) - parent->GetScreenPos().y;
+	}
+	else
+	{
+		rect_box.x = rect_box.x;
+		rect_box.y = rect_box.y;
+	}
+}
+
 SDL_Rect j1UIElement::GetLocalRect()
 {
-
-	return { rect_box.x, rect_box.y,(int)(rect_box.w*scale_X),(int)(rect_box.h*scale_Y) };
+	return { rect_box.x, rect_box.y, (int)(rect_box.w*scale_X), (int)(rect_box.h*scale_Y) };
 }
 
 iPoint j1UIElement::GetScreenPos()
 {
 	if (parent)
-		return { (int)(parent->GetScreenPos().x + (rect_box.x * parent->scale_X)), (int)(parent->GetScreenPos().y + (rect_box.y*parent->scale_Y)) };
+		return { (int)(parent->GetScreenPos().x + (rect_box.x * parent->scale_X)), (int)(parent->GetScreenPos().y + (rect_box.y * parent->scale_Y)) };
 	else
 		return { rect_box.x, rect_box.y };
 }
