@@ -96,9 +96,11 @@ bool j1EntityManager::Save(pugi::xml_node &file) const
 bool j1EntityManager::CreateEntity(EntityType type, fPoint position)
 {
 	BROFILER_CATEGORY("Create_Entity", Profiler::Color::MediumOrchid);
+
 	char* count = (char*)malloc(sizeof(char) * 2);
 	_itoa_s(id_count++, count, 2, 10);
 	p2SString id;
+
 	switch (type)
 	{
 	case EntityType::PLAYER:

@@ -48,6 +48,7 @@ public:
 	void SetLocalPos(int x, int y);
 	void GetScale(float& scaleX, float &scaleY);
 	void SetScale(float scaleX, float scaleY);
+	void SetLocalRect(SDL_Rect rect);
 	void DadEnabled();
 	void SetEnabled(bool enabled);
 
@@ -157,6 +158,7 @@ private:
 	Timer scale_timer;
 	float scale_increment_x, scale_increment_y;
 	void DoScale(j1UIElement* element, float scaleX, float scaleY);
+	bool debug_draw = false;
 };
 
 #endif // __j1GUI_H__

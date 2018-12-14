@@ -45,6 +45,8 @@ protected:
 	bool flipX = true;
 	bool is_grounded = true;
 	bool ignore_platforms = false;
+	float scale_X = 1.0F;
+	float scale_Y = 1.0F;
 
 	Animation* animations;
 	SDL_Rect animation_frame;
@@ -57,6 +59,7 @@ protected:
 	virtual void JumpingUpdate() {};
 	virtual void Jump() {};
 	virtual void LoadAnimations(pugi::xml_node conf);
+
 
 public:
 	
@@ -75,16 +78,13 @@ public:
 	virtual bool Start() { return true; };
 	virtual bool Update(float dt) { return true; };
 	virtual bool PreUpdate() { return true; };
-	virtual bool PostUpdate() 
-	{ 
-		App->render->Blit(sprite, position.x, position.y, &animation_frame, 1.0f, flipX);
-		return true; 
-	};
+	virtual bool PostUpdate();
 	virtual bool CleanUp();
 	virtual bool Load(pugi::xml_node&);
 	virtual bool Save(pugi::xml_node&) const;
 	virtual void OnCollision(Collider* c1, Collider* c2) {};
 	virtual void Die();
+	virtual void ScaleEntity(float x_increment, float y_increment);
 
 	virtual void ResetEntity();
 	virtual void SetPosition(float x, float y);

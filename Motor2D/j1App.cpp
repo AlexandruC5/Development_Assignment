@@ -49,8 +49,8 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(tex, true);
 	AddModule(audio, true);
 	AddModule(map, true);
-	AddModule(entitymanager, true);
 	AddModule(collision, true);
+	AddModule(entitymanager, true);
 	AddModule(pathfinding, true);
 	AddModule(fonts, true);
 	AddModule(gui, true);

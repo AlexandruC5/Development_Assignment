@@ -105,8 +105,6 @@ bool j1Player::Update(float dt)
 
 	animation_frame = animations[state == GOD? (int)JUMPING:state].GetCurrentFrame(dt);
 
-	App->render->Blit(sprite, position.x, position.y, &animation_frame, 1.0f, flipX, false, 0,0,0,scale,scale);
-
 	return true;
 }
 
@@ -275,14 +273,9 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 		if (c2->rect.h < this->animation_frame.h && c2->rect.w < this->animation_frame.w)
 		{
 			if (grow) {
-				scale += 0.8f;
-				this->collider->rect.h += this->collider->rect.h * 0.8f;
-				this->collider->rect.w += this->collider->rect.w * 0.8f;
-				this->collider_offset += this->collider_offset* 0.8f;
-				position.y -= this->collider->rect.h * 0.8f;
+				ScaleEntity(0.2F, 0.2F);
 				grow = false;
 			}
-
 		}
 		else
 		{

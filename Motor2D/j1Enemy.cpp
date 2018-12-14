@@ -70,6 +70,16 @@ bool j1Enemy::PreUpdate()
 	return true;
 }
 
+bool j1Enemy::PostUpdate()
+{
+	j1Entity::PostUpdate();
+
+	if (App->entitymanager->draw_path)
+		DrawPath();
+
+	return true;
+}
+
 bool j1Enemy::Load(pugi::xml_node &conf)
 {
 	j1Entity::Load(conf);
@@ -207,8 +217,6 @@ void j1Enemy::PathfindingUpdate()
 {
 	if (chase && state != JUMPING)
 		GetPath();
-	if (App->entitymanager->draw_path)
-		DrawPath();
 }
 
 void j1Enemy::PathfindingPreupdate()

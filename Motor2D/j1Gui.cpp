@@ -99,6 +99,9 @@ void j1Gui::DoScale(j1UIElement* element, float scaleX, float scaleY)
 // Update all guis
 bool j1Gui::PreUpdate()
 {
+	if (App->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
+		debug_draw = !debug_draw;
+
 	//scale stuff
 	if (scaling_element != nullptr)
 	{
@@ -164,7 +167,12 @@ bool j1Gui::PostUpdate()
 	{
 		item->data->DadEnabled();
 		if (item->data->enabled)
-		item->data->UIBlit();
+		{
+			item->data->UIBlit();
+			if (debug_draw)
+				App->render->DrawQuad(item->data->GetScreenRect(), 255, 0, 0, 255, false, false);
+		}
+		
 	}
 	return true;
 }
@@ -242,20 +250,21 @@ bool j1UIElement::IsInside(int x, int y)
 SDL_Rect j1UIElement::GetScreenRect()
 {
 	if (parent)
-		return { parent->GetScreenRect().x + rect_box.x, parent->GetScreenRect().y + rect_box.y, rect_box.w, rect_box.h };
+		return { (int)(parent->GetScreenPos().x + (rect_box.x * parent->scale_X)), (int)(parent->GetScreenPos().y + (rect_box.y*parent->scale_Y)), (int) (rect_box.w * scale_X), (int) (rect_box.h * scale_Y) };
 	else
-		return rect_box;
+		return  { rect_box.x, rect_box.y, (int)(rect_box.w * scale_X), (int)(rect_box.h * scale_Y) };
 }
 
 SDL_Rect j1UIElement::GetLocalRect()
 {
-	return rect_box;
+
+	return { rect_box.x, rect_box.y,(int)(rect_box.w*scale_X),(int)(rect_box.h*scale_Y) };
 }
 
 iPoint j1UIElement::GetScreenPos()
 {
 	if (parent)
-		return { parent->GetScreenRect().x + rect_box.x, parent->GetScreenRect().y + rect_box.y };
+		return { (int)(parent->GetScreenPos().x + (rect_box.x * parent->scale_X)), (int)(parent->GetScreenPos().y + (rect_box.y*parent->scale_Y)) };
 	else
 		return { rect_box.x, rect_box.y };
 }
@@ -281,6 +290,11 @@ void j1UIElement::SetScale(float scaleX, float scaleY)
 {
 	scale_X = scaleX;
 	scale_Y = scaleY;
+}
+
+void j1UIElement::SetLocalRect(SDL_Rect rect)
+{
+	rect_box = rect;
 }
 
 void j1UIElement::DadEnabled()
@@ -352,7 +366,10 @@ j1UIButton::~j1UIButton()
 bool j1UIButton::UIBlit()
 {
 	iPoint screen_pos = GetScreenPos();
-	App->render->Blit(App->gui->GetAtlas(), screen_pos.x, screen_pos.y, &rect_sprite, 0.0F, false, false, 0.0, INT_MAX,INT_MAX, scale_X, scale_Y);
+	if(!clipping) 
+		App->render->Blit(App->gui->GetAtlas(), screen_pos.x, screen_pos.y, &rect_sprite, 0.0F, false, false, 0.0, INT_MAX,INT_MAX, scale_X, scale_Y);
+	else
+		App->render->Blit(App->gui->GetAtlas(), screen_pos.x, screen_pos.y, &rect_sprite, 0.0F, false, false, 0.0, INT_MAX, INT_MAX, scale_X, scale_Y, &parent->GetScreenRect());
 	return true;
 }
 

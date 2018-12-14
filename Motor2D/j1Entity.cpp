@@ -84,6 +84,12 @@ void j1Entity::StepY()
 	pivot.y = position.y + (collider->rect.h / 2);
 }
 
+bool j1Entity::PostUpdate()
+{
+	App->render->Blit(sprite, position.x, position.y, &animation_frame, 1.0f, flipX, false, 0.0, INT_MAX, INT_MAX, scale_X, scale_Y);
+	return true;
+}
+
 bool j1Entity::CleanUp()
 {
 	if (sprite)
@@ -170,4 +176,17 @@ void j1Entity::Die()
 	target_speed.x = 0.0F;
 	velocity.y = 0.0F;
 	target_speed.y = 0.0F;
+}
+
+void j1Entity::ScaleEntity(float x_increment, float y_increment)
+{
+	scale_X += x_increment;
+	scale_Y += y_increment;
+
+	
+	position.y -= ((53 * scale_Y - collider->rect.h) + collider_offset);
+	collider_offset = 40 * scale_Y;
+	collider->rect.h = 53 * scale_Y;
+	collider->rect.w = 94 * scale_X;
+	collider->rect.y = position.y + collider_offset;
 }
