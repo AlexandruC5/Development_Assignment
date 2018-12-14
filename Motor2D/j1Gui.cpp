@@ -36,83 +36,6 @@ bool j1Gui::Start()
 	return true;
 }
 
-void j1Gui::EnableElement(j1UIElement* element)
-{
-	element->SetEnabled(true);
-	for (p2List_item<j1UIElement*>* item = elements.start; item != NULL; item = item->next)
-	{
-		if (item->data->parent && item->data->parent == element)
-			EnableElement(item->data);
-	}
-}
-void j1Gui::DisableElement(j1UIElement* element)
-{
-	element->SetEnabled(false);
-	for (p2List_item<j1UIElement*>* item = elements.start; item != NULL; item = item->next)
-	{
-		if (item->data->parent && item->data->parent == element)
-			DisableElement(item->data);
-	}
-}
-j1UIElement* j1Gui::GetElementUnderMouse()
-{
-	int x, y;
-	App->input->GetMousePosition(x, y);
-
-	for (p2List_item<j1UIElement*>* item = elements.start; item != NULL; item = item->next)
-	{
-		if (item->data->IsInside(x, y) && item->data->interactable && item->data->enabled)
-		{
-			bool inside_child = false;
-			for (p2List_item<j1UIElement*>* child_item = elements.start; child_item != NULL; child_item = child_item->next)
-			{
-				if (child_item->data->parent && child_item->data->parent == item->data && child_item->data->IsInside(x, y) && child_item->data->interactable && item->data->enabled)
-				{
-					inside_child = true;
-					break;
-				}
-			}
-			if (!inside_child)
-				return item->data;
-		}
-	}
-
-	return nullptr;
-}
-
-void j1Gui::ScaleElement(j1UIElement* element, float scaleX, float scaleY, float time)
-{
-	if (time != 0.0F)
-	{
-		scale_timer.Start();
-		scaling_element = element;
-		scale_time = (uint32)(time * 0.5F * 1000.0F);
-		scale_increment_x = (scaleX / time) / App->frame_rate;
-		scale_increment_y = (scaleY / time) / App->frame_rate;
-	}
-	else
-	{
-		DoScale(element, scaleX, scaleY);
-	}
-}
-
-void j1Gui::DoScale(j1UIElement* element, float scaleX, float scaleY)
-{
-	float scale_x, scale_y;
-	element->GetScale(scale_x, scale_y);
-	scale_x += scaleX;
-	scale_y += scaleY;
-	element->SetScale(scale_x, scale_y);
-
-	for (p2List_item<j1UIElement*>* child_item = elements.start; child_item != NULL; child_item = child_item->next)
-	{
-		if (child_item->data->parent && child_item->data->parent == element)
-		{
-			DoScale(child_item->data, scaleX, scaleY);
-		}
-	}
-}
-
 // Update all guis
 bool j1Gui::PreUpdate()
 {
@@ -249,6 +172,92 @@ j1UIButton * j1Gui::CreateButton(iPoint pos, j1UIElement* parent)
 	elements.add(button);
 
 	return button;
+}
+
+j1UIScrollBar * j1Gui::CreateScrollBar(iPoint pos, j1UIElement* parent)
+{
+	j1UIScrollBar* scroll = new j1UIScrollBar(pos);
+	scroll->parent = parent;
+	elements.add(scroll);
+
+	return scroll;
+}
+
+void j1Gui::EnableElement(j1UIElement* element)
+{
+	element->SetEnabled(true);
+	for (p2List_item<j1UIElement*>* item = elements.start; item != NULL; item = item->next)
+	{
+		if (item->data->parent && item->data->parent == element)
+			EnableElement(item->data);
+	}
+}
+void j1Gui::DisableElement(j1UIElement* element)
+{
+	element->SetEnabled(false);
+	for (p2List_item<j1UIElement*>* item = elements.start; item != NULL; item = item->next)
+	{
+		if (item->data->parent && item->data->parent == element)
+			DisableElement(item->data);
+	}
+}
+j1UIElement* j1Gui::GetElementUnderMouse()
+{
+	int x, y;
+	App->input->GetMousePosition(x, y);
+
+	for (p2List_item<j1UIElement*>* item = elements.start; item != NULL; item = item->next)
+	{
+		if (item->data->IsInside(x, y) && item->data->interactable && item->data->enabled)
+		{
+			bool inside_child = false;
+			for (p2List_item<j1UIElement*>* child_item = elements.start; child_item != NULL; child_item = child_item->next)
+			{
+				if (child_item->data->parent && child_item->data->parent == item->data && child_item->data->IsInside(x, y) && child_item->data->interactable && item->data->enabled)
+				{
+					inside_child = true;
+					break;
+				}
+			}
+			if (!inside_child)
+				return item->data;
+		}
+	}
+
+	return nullptr;
+}
+
+void j1Gui::ScaleElement(j1UIElement* element, float scaleX, float scaleY, float time)
+{
+	if (time != 0.0F)
+	{
+		scale_timer.Start();
+		scaling_element = element;
+		scale_time = (uint32)(time * 0.5F * 1000.0F);
+		scale_increment_x = (scaleX / time) / App->frame_rate;
+		scale_increment_y = (scaleY / time) / App->frame_rate;
+	}
+	else
+	{
+		DoScale(element, scaleX, scaleY);
+	}
+}
+
+void j1Gui::DoScale(j1UIElement* element, float scaleX, float scaleY)
+{
+	float scale_x, scale_y;
+	element->GetScale(scale_x, scale_y);
+	scale_x += scaleX;
+	scale_y += scaleY;
+	element->SetScale(scale_x, scale_y);
+
+	for (p2List_item<j1UIElement*>* child_item = elements.start; child_item != NULL; child_item = child_item->next)
+	{
+		if (child_item->data->parent && child_item->data->parent == element)
+		{
+			DoScale(child_item->data, scaleX, scaleY);
+		}
+	}
 }
 
 // const getter for atlas
@@ -452,4 +461,14 @@ j1UIButton::j1UIButton(iPoint position)
 	anim[1] = { 2650,524,180,89 };
 	anim[2] = { 2839,524,180,89 };
 	rect_sprite = anim[0];
+}
+
+j1UIScrollBar::j1UIScrollBar(iPoint pos)
+{
+	rect_box = { pos.x, pos.y, 18, 200 };
+	thumb = App->gui->CreateImage({ 0,0 }, { 2597,623,89,89 }, this);
+	thumb->SetScale(0.2F, 0.5F);
+	thumb->dragable = true;
+	thumb->interactable = true;
+
 }

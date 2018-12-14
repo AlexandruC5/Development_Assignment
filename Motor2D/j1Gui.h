@@ -99,19 +99,19 @@ class j1UIScrollBar : public j1UIElement
 {
 public:
 	j1UIScrollBar(iPoint pos);
-	~j1UIScrollBar();
+	~j1UIScrollBar() {};
 
 	SDL_Rect* anim;
 	j1UIImage* thumb = nullptr;
 	float value = 0.0F;
 
-	bool UIBlit();
+	/*bool UIBlit();
 	void OnMouseClick();
 	void OnMouseHover();
 	void OnMouseRelease();
 	void OnMouseExit();
 	void MoveOtherElement();
-	void GetValue();
+	void GetValue();*/
 };
 
 // ---------------------------------------------------
@@ -144,6 +144,7 @@ public:
 	j1UIImage* CreateImage(iPoint pos, SDL_Rect rect, j1UIElement* parent = nullptr);
 	j1UILabel* CreateLabel(iPoint pos, p2SString path, int size, p2SString text, SDL_Color color, j1UIElement* parent = nullptr);
 	j1UIButton* CreateButton(iPoint pos, j1UIElement* parent = nullptr);
+	j1UIScrollBar* CreateScrollBar(iPoint pos, j1UIElement* parent = nullptr);
 
 	j1UIElement* GetElementUnderMouse();
 	void ScaleElement(j1UIElement* element, float scaleX, float scaleY, float time = 0.0F);

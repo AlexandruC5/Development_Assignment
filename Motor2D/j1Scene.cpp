@@ -56,6 +56,8 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	main_menu_button_credits = App->gui->CreateButton({ 100, 375 }, main_menu_panel);
 	main_menu_button_exit = App->gui->CreateButton({ 100, 475}, main_menu_panel);
 
+	App->gui->CreateScrollBar({ 150,150 }, menu_background);
+
 	main_menu_button_play_text = App->gui->CreateLabel({ 58,22 },"fonts/open_sans/OpenSans-Bold.ttf", 28, "PLAY", { 255,255,255 }, main_menu_button_play);
 	main_menu_button_continue_text = App->gui->CreateLabel({ 17,22 }, "fonts/open_sans/OpenSans-Bold.ttf", 28, "CONTINUE", { 255,255,255 }, main_menu_button_continue);
 	main_menu_button_settings_text = App->gui->CreateLabel({ 25,22 }, "fonts/open_sans/OpenSans-Bold.ttf", 28, "SETTINGS", { 255,255,255 }, main_menu_button_settings);
