@@ -30,6 +30,9 @@ public:
 	bool interactable = false;
 	bool dragable = false;
 	bool enabled = true;
+	//TODO
+	bool clipping = true; //Zona que se pinta es el rectangulo del padre.
+	bool parent_limit = true;
 
 
 	j1UIElement(j1UIElement* parent = nullptr);
@@ -88,6 +91,24 @@ public:
 	void OnMouseRelease();
 	void OnMouseExit();
 };
+
+//TODO
+class j1UIScrollBar : public j1UIElement
+{
+public:
+	j1UIScrollBar(iPoint pos);
+	~j1UIScrollBar();
+
+	SDL_Rect* anim;
+
+	bool UIBlit();
+	void OnMouseClick();
+	void OnMouseHover();
+	void OnMouseRelease();
+	void OnMouseExit();
+	void MoveOtherElement();
+};
+
 // ---------------------------------------------------
 class j1Gui : public j1Module
 {
