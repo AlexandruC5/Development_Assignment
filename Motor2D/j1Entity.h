@@ -50,7 +50,7 @@ protected:
 
 	Animation* animations;
 	SDL_Rect animation_frame;
-	unsigned int jump_fx;
+
 
 	virtual void StepX();
 	virtual void StepY();
@@ -71,6 +71,8 @@ public:
 	EntityState state = IDLE;
 	p2SString id;
 	int collider_offset = 0;
+
+	unsigned int jump_fx;
 	
 	j1Entity(EntityType type, pugi::xml_node config, fPoint position, p2SString id);
 	~j1Entity();

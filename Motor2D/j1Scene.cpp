@@ -70,6 +70,9 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	settings_menu_music_text = App->gui->CreateLabel({ -55,-4 }, "fonts/open_sans/OpenSans-Bold.ttf", 16, "MUSIC", { 255,255,255 }, 0, settings_menu_music_slider);
 	settings_menu_music_text->parent_limit = false;
 	settings_menu_music_text->clipping = false;
+	settings_menu_music_text_value = App->gui->CreateLabel({ 205,-4 }, "fonts/open_sans/OpenSans-Bold.ttf", 16, "5", { 255,255,255 }, 0, settings_menu_music_slider);
+	settings_menu_music_text_value->parent_limit = false;
+	settings_menu_music_text_value->clipping = false;
 	settings_menu_sfx_slider = credits_menu_text_scroll = App->gui->CreateScrollBar({ 120, 250 }, 0, MIX_MAX_VOLUME, HORIZONTAL, settings_menu_panel);
 	settings_menu_sfx_slider->SetValue(App->audio->GetFXVolume());
 	settings_menu_sfx_text = App->gui->CreateLabel({ -55,-4 }, "fonts/open_sans/OpenSans-Bold.ttf", 16, "SFX", { 255,255,255 }, 0, settings_menu_sfx_slider);
@@ -389,6 +392,10 @@ bool j1Scene::GUIEvent(j1UIElement * element, GUI_Event gui_event)
 			{
 				App->gui->EnableElement(main_menu_panel);
 				App->gui->DisableElement(credits_menu_panel);
+			}
+			else if (element == settings_menu_sfx_slider->thumb || element == pause_menu_sfx_slider->thumb)
+			{
+				if(App->entitymanager->player->jump_fx) App->audio->PlayFx(App->entitymanager->player->jump_fx);
 			}
 		}
 		break;

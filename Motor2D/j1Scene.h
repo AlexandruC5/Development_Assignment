@@ -87,8 +87,10 @@ private:
 	j1UIElement* settings_menu_button_main_menu_text;
 	j1UIScrollBar* settings_menu_music_slider;
 	j1UIElement* settings_menu_music_text;
+	j1UIElement* settings_menu_music_text_value;
 	j1UIScrollBar* settings_menu_sfx_slider;
 	j1UIElement* settings_menu_sfx_text;
+	j1UIElement* settings_menu_sfx_text_value;
 
 	j1UIElement* credits_menu_panel;
 	j1UIElement* credits_menu_button_main_menu;
