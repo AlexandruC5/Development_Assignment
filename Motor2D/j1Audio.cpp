@@ -185,34 +185,24 @@ bool j1Audio::PlayFx(unsigned int id, int repeat)
 	return ret;
 }
 
-void j1Audio::DecreaseMusicVolume()
+void j1Audio::SetMusicVolume(int volume)
 {
-	if (music_volume > 0) {
-		music_volume -= 1;
-	}
-	Mix_VolumeMusic(music_volume);
+	music_volume = volume;
+	Mix_VolumeMusic(volume);
 }
 
-void j1Audio::IncreaseMusicVolume()
+void j1Audio::SetFXVolume(int volume)
 {
-	if (music_volume < MIX_MAX_VOLUME) {
-		music_volume += 1;
-	}
-	Mix_VolumeMusic(music_volume);
+	fx_volume = volume;
+	Mix_Volume(-1, volume);
 }
 
-void j1Audio::DecreaseFXVolume()
+int j1Audio::GetFXVolume()
 {
-	if (fx_volume > 0) {
-		fx_volume -= 1;
-	}
-	Mix_Volume(-1, fx_volume);
+	return fx_volume;
 }
 
-void j1Audio::IncreaseFXVolume()
+int j1Audio::GetMusicVolume()
 {
-	if (fx_volume < MIX_MAX_VOLUME) {
-		fx_volume += 1;
-	}
-	Mix_Volume(-1, fx_volume);
+	return music_volume;
 }

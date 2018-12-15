@@ -170,10 +170,11 @@ j1UIButton * j1Gui::CreateButton(iPoint pos, j1UIElement* parent)
 	return button;
 }
 
-j1UIScrollBar * j1Gui::CreateScrollBar(iPoint pos, j1UIElement* parent)
+j1UIScrollBar * j1Gui::CreateScrollBar(iPoint pos, float min, float max, ScrollType type, j1UIElement* parent)
 {
-	j1UIScrollBar* scroll = new j1UIScrollBar(pos);
+	j1UIScrollBar* scroll = new j1UIScrollBar(pos, type);
 	scroll->parent = parent;
+	scroll->SetMinMax(min, max);
 	elements.add(scroll);
 
 	return scroll;
@@ -518,24 +519,58 @@ j1UIButton::j1UIButton(iPoint position)
 	rect_sprite = anim[0];
 }
 
-j1UIScrollBar::j1UIScrollBar(iPoint pos)
+j1UIScrollBar::j1UIScrollBar(iPoint pos, ScrollType type)
 {
-	rect_box = { pos.x, pos.y, 18, 200 };
 	thumb = App->gui->CreateImage({ 0,0 }, { 2597,623,89,89 }, this);
-	thumb->SetScale(0.2F, 0.5F);
+	thumb->SetScale(0.2F, 0.2F);
 	thumb->dragable = true;
 	thumb->interactable = true;
+	this->type = type;
 
-	
+	if (type == VERTICAL)
+		rect_box = { pos.x, pos.y, 17, 200 };
+	else
+		rect_box = { pos.x, pos.y, 200, 17 };
+
+}
+
+void j1UIScrollBar::SetValue(float new_value)
+{
+	value = (new_value - min) / (max - min);
+	SDL_Rect thumb_rect = thumb->GetScreenRect();
+	SDL_Rect this_screen_rect = GetScreenRect();
+
+	if (type == VERTICAL)
+	{
+		float norm_max_value = float((this_screen_rect.y + this_screen_rect.h) - thumb_rect.h);
+		float norm_min_value = (float)this_screen_rect.y;
+		thumb->SetScreenPos(thumb_rect.x, (value * (norm_max_value - norm_min_value)) + norm_min_value);
+	}
+	else
+	{
+		float norm_max_value = float((this_screen_rect.x + this_screen_rect.w) - thumb_rect.w);
+		float norm_min_value = (float)this_screen_rect.x;
+		thumb->SetScreenPos((value * (norm_max_value - norm_min_value)) + norm_min_value, thumb_rect.y);
+	}
 }
 
 float j1UIScrollBar::GetValue()
 {
 	SDL_Rect thumb_rect = thumb->GetScreenRect();
 	SDL_Rect this_screen_rect = GetScreenRect();
-	float norm_max_value = float((this_screen_rect.y + this_screen_rect.h) - thumb_rect.h);
-	float norm_min_value = (float)this_screen_rect.y;
-	float thumb_norm_value = (thumb_rect.y - norm_min_value) / (norm_max_value - norm_min_value);
+	float thumb_norm_value;
+	if (type == VERTICAL)
+	{
+		float norm_max_value = float((this_screen_rect.y + this_screen_rect.h) - thumb_rect.h);
+		float norm_min_value = (float)this_screen_rect.y;
+		thumb_norm_value = (thumb_rect.y - norm_min_value) / (norm_max_value - norm_min_value);
+	}
+	else
+	{
+		float norm_max_value = float((this_screen_rect.x + this_screen_rect.w) - thumb_rect.w);
+		float norm_min_value = (float)this_screen_rect.x;
+		thumb_norm_value = (thumb_rect.x - norm_min_value) / (norm_max_value - norm_min_value);
+	}
 
 	value = floor((thumb_norm_value * 100) + .5) / 100;
 	return (value * (max - min)) + min;

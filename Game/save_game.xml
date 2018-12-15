@@ -27,6 +27,6 @@
 	</scene>
 	<swap_scene />
 	<renderer>
-		<camera x="1280" y="0" />
+		<camera x="0" y="720" />
 	</renderer>
 </game_state>

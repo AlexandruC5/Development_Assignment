@@ -52,7 +52,6 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	main_menu_button_play = App->gui->CreateButton({ 100, 75 }, main_menu_panel);
 	main_menu_button_continue = App->gui->CreateButton({ 100, 175 }, main_menu_panel);
 	main_menu_button_settings = App->gui->CreateButton({ 100, 275 }, main_menu_panel);
-	main_menu_button_settings->dragable = true;
 	main_menu_button_credits = App->gui->CreateButton({ 100, 375 }, main_menu_panel);
 	main_menu_button_exit = App->gui->CreateButton({ 100, 475}, main_menu_panel);
 
@@ -67,8 +66,14 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 
 	settings_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 });
 	App->gui->ScaleElement(settings_menu_panel, 0.0F, -0.4F);
-	settings_menu_button_main_menu = App->gui->CreateButton({ 100, 180 }, settings_menu_panel);
+	settings_menu_button_main_menu = App->gui->CreateButton({ 100, 320 }, settings_menu_panel);
 	settings_menu_button_main_menu_text = App->gui->CreateLabel({ 60,14 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MAIN\nMENU", { 255,255,255 }, 100, settings_menu_button_main_menu);
+	settings_menu_music_slider = credits_menu_text_scroll = App->gui->CreateScrollBar({ 120, 150 }, 0, MIX_MAX_VOLUME, HORIZONTAL, settings_menu_panel);
+	settings_menu_music_slider->SetValue(App->audio->GetMusicVolume());
+	settings_menu_music_text = App->gui->CreateLabel({ -55,-4 }, "fonts/open_sans/OpenSans-Bold.ttf", 16, "MUSIC", { 255,255,255 }, 0, settings_menu_music_slider);
+	settings_menu_music_text->parent_limit = false;
+	settings_menu_music_text->clipping = false;
+	//settings_menu_music_value_text = App->gui->CreateLabel({ 60,14 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, , { 255,255,255 }, 100, settings_menu_music_slider);
 
 
 	pause_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 });
@@ -86,12 +91,9 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	credits_menu_button_main_menu_text = App->gui->CreateLabel({ 60,14 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MAIN\nMENU", { 255,255,255 }, 80, credits_menu_button_main_menu);
 	credits_menu_text = App->gui->CreateLabel({ 5,5 }, "fonts/open_sans/OpenSans-Bold.ttf", 18, "MIT License\n\nCopyright(c) 2018 [Axel Alavedra Cabello, Alejandro París Gómez]\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files(the ""Software""), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions :\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED ""AS IS"", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.", { 255,255,255 }, 250, credits_menu_text_panel);
 	credits_menu_text->parent_limit = false;
-	scroll = App->gui->CreateScrollBar({ 335, 150 }, credits_menu_panel);
-
 	SDL_Rect parent_rect = credits_menu_text_panel->GetScreenRect();
 	SDL_Rect screen_rect = credits_menu_text->GetScreenRect();
-	scroll->SetMinMax(screen_rect.y, screen_rect.y - (screen_rect.h - parent_rect.h));
-
+	credits_menu_text_scroll = App->gui->CreateScrollBar({ 335, 150 }, screen_rect.y, screen_rect.y - (screen_rect.h - parent_rect.h), VERTICAL, credits_menu_panel);
 
 
 	App->gui->DisableElement(pause_menu_panel);
@@ -157,16 +159,6 @@ bool j1Scene::Update(float dt)
 	{
 		App->frame_cap = true;
 	}
-	if (App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_REPEAT)
-	{
-		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) App->audio->IncreaseFXVolume();
-		else App->audio->IncreaseMusicVolume();
-	}
-	if (App->input->GetKey(SDL_SCANCODE_KP_MINUS) == KEY_REPEAT)
-	{
-		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) App->audio->DecreaseFXVolume();
-		else App->audio->DecreaseMusicVolume();
-	}		
 	if (levels.At(current_level)->data.game_level && App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 	{
 		if (App->paused)
@@ -208,7 +200,9 @@ bool j1Scene::Update(float dt)
 	if(levels.At(current_level)->data.game_level) App->map->Draw();
 	
 
-	credits_menu_text->SetScreenPos(credits_menu_text->GetScreenRect().x, scroll->GetValue());
+	//SLIDER UPDATE
+	credits_menu_text->SetScreenPos(credits_menu_text->GetScreenRect().x, credits_menu_text_scroll->GetValue());
+	App->audio->SetMusicVolume(settings_menu_music_slider->GetValue());
 
 	return true;
 }
@@ -348,8 +342,8 @@ bool j1Scene::GUIEvent(j1UIElement * element, GUI_Event gui_event)
 			}
 			else if (element == main_menu_button_settings)
 			{
-				/*App->gui->EnableElement(settings_menu_panel);
-				App->gui->DisableElement(main_menu_panel);*/
+				App->gui->EnableElement(settings_menu_panel);
+				App->gui->DisableElement(main_menu_panel);
 			}
 			else if (element == main_menu_button_credits)
 			{

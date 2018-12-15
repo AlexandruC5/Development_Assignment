@@ -78,20 +78,20 @@ private:
 	
 	j1UIElement* pause_menu_button_resume_text;
 	j1UIElement* pause_menu_button_main_menu_text;
-	j1UIElement* pause_menu_button_main_menu_text2;
 
 	j1UIElement* settings_menu_panel;
 	j1UIElement* settings_menu_button_main_menu;
 	j1UIElement* settings_menu_button_main_menu_text;
-	j1UIElement* settings_menu_button_main_menu_text2;
+	j1UIScrollBar* settings_menu_music_slider;
+	j1UIElement* settings_menu_music_text;
+
 
 	j1UIElement* credits_menu_panel;
 	j1UIElement* credits_menu_button_main_menu;
 	j1UIElement* credits_menu_button_main_menu_text;
 	j1UIElement* credits_menu_text_panel;
 	j1UIElement* credits_menu_text;
-
-	j1UIScrollBar* scroll;
+	j1UIScrollBar* credits_menu_text_scroll;
 };
 
 #endif // __j1SCENE_H__

@@ -34,10 +34,10 @@ public:
 	// Play a previously loaded WAV
 	bool PlayFx(unsigned int fx, int repeat = 0);
 
-	void DecreaseMusicVolume();
-	void IncreaseMusicVolume();
-	void DecreaseFXVolume();
-	void IncreaseFXVolume();
+	void SetMusicVolume(int volume);
+	void SetFXVolume(int volume);
+	int GetMusicVolume();
+	int GetFXVolume();
 
 private:
 	p2SString			fx_folder;
