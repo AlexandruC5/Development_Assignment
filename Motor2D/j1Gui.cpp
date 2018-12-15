@@ -154,10 +154,10 @@ j1UIImage * j1Gui::CreateImage(iPoint pos, SDL_Rect rect, j1UIElement* parent)
 	return image;
 }
 
-j1UILabel * j1Gui::CreateLabel(iPoint pos, p2SString path, int size, p2SString text, SDL_Color color, j1UIElement* parent)
+j1UILabel * j1Gui::CreateLabel(iPoint pos, p2SString path, int size, p2SString text, SDL_Color color, int max_width, j1UIElement* parent)
 {
 	_TTF_Font* font = App->fonts->Load(path.GetString(), size);
-	j1UILabel* label = new j1UILabel(pos, font,text,color);
+	j1UILabel* label = new j1UILabel(pos, font, text, color, max_width);
 	label->parent = parent;
 	elements.add(label);
 
@@ -389,11 +389,61 @@ bool j1UIImage::UIBlit()
 	return true;
 }
 
-j1UILabel::j1UILabel(iPoint pos, _TTF_Font* font, p2SString text, SDL_Color color)
+j1UILabel::j1UILabel(iPoint pos, _TTF_Font* font, p2SString text, SDL_Color color, int max_width)
 {
-	App->fonts->CalcSize(text.GetString(), rect_box.w, rect_box.h, font);
+	int w, h;
+	App->fonts->CalcSize("a", w, h, font); //calc size of one char
+
+	if (max_width > 0)
+	{
+		//calculate the amount of lines that string has relative to the max width
+		int lines = 1;
+		int char_in_line = 0;
+		int max_chars_in_line = max_width / w;
+		for (int i = 0; i < text.Length(); i++)
+		{
+			if (text.GetString()[i] == '\n')
+			{
+				lines++;
+				char_in_line = 0;
+			}
+			else if (char_in_line > max_chars_in_line)
+			{
+				lines++;
+				char_in_line = 0;
+			}
+			char_in_line++;
+		}
+
+		rect_box.w = max_width;
+		rect_box.h = h * lines;
+	}
+	else
+	{
+		//calc amount of lines independent of a max width
+		int lines = 1;
+		int max_chars_in_line = 0;
+		int chars_in_line = 0;
+		for (int i = 0; i < text.Length(); i++)
+		{
+			if (text.GetString()[i] == '\n')
+			{
+				lines++;
+				max_chars_in_line = chars_in_line > max_chars_in_line ? chars_in_line : max_chars_in_line;
+				chars_in_line = 0;
+			}
+			chars_in_line++;
+		}
+		max_chars_in_line = chars_in_line > max_chars_in_line ? chars_in_line : max_chars_in_line;
+
+		//adjust size of box to the chars and lines
+		rect_box.w = w * max_chars_in_line;
+		rect_box.h = h * lines;
+	}	
+	
 	rect_box.x = pos.x;
 	rect_box.y = pos.y;
+
 	this->font = font;
 	this->text = text;
 	this->color = color;
@@ -405,7 +455,7 @@ j1UILabel::~j1UILabel()
 bool j1UILabel::UIBlit()
 {
 	iPoint screen_pos = GetScreenPos();
-	SDL_Texture* texture = App->fonts->Print(text.GetString(), color, font);
+	SDL_Texture* texture = App->fonts->Print(text.GetString(), color, font, rect_box.w);
 	App->render->Blit(texture, screen_pos.x, screen_pos.y, nullptr, 0.0F, false, false, 0.0, INT_MAX, INT_MAX, scale_X, scale_Y);
 	SDL_DestroyTexture(texture);
 	return true;
