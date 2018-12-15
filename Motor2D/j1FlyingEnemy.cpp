@@ -47,13 +47,16 @@ bool j1FlyingEnemy::PreUpdate()
 
 bool j1FlyingEnemy::Update(float dt)
 {
-	PathfindingUpdate();
+	if (state != DEAD) 
+	{
+		PathfindingUpdate();
 
-	velocity = (target_speed * acceleration + velocity * (1 - acceleration))*dt;
-	StepY();
-	StepX();
+		velocity = (target_speed * acceleration + velocity * (1 - acceleration))*dt;
+		StepY();
+		StepX();
+	}
 
-	animation_frame = animations[IDLE].GetCurrentFrame(dt);
+	animation_frame = animations[state!=DEAD? IDLE:DEAD].GetCurrentFrame(dt);
 	return true;
 }
 

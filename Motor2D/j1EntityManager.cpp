@@ -96,31 +96,23 @@ bool j1EntityManager::Save(pugi::xml_node &file) const
 bool j1EntityManager::CreateEntity(EntityType type, fPoint position)
 {
 	BROFILER_CATEGORY("Create_Entity", Profiler::Color::MediumOrchid);
-
-	char* count = (char*)malloc(sizeof(char) * 2);
-	_itoa_s(id_count++, count, 2, 10);
 	p2SString id;
-
 	switch (type)
 	{
 	case EntityType::PLAYER:
-		id = "player_";
-		id += count;
+		id.create("%s_%i", "player", id_count++);
 		player = new j1Player(type, entity_configs.child("player"), position, id);
 		entities.add(player);
 		break;
 	case EntityType::ENEMY:
-		id = "enemy_";
-		id += count;
+		id.create("%s_%i", "enemy", id_count++);
 		entities.add(new j1Enemy(type, entity_configs.child("enemy"), position, id));
 		break;
 	case EntityType::FLIER:
-		id = "flier_";
-		id += count;
+		id.create("%s_%i", "flier", id_count++);
 		entities.add(new j1FlyingEnemy(type, entity_configs.child("flying_enemy"), position, id));
 		break;
 	}
-	memset(count, 0, sizeof(char) * 2);
 	return true;
 }
 

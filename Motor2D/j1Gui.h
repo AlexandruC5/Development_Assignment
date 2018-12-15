@@ -112,8 +112,8 @@ public:
 	float norm_value = 0.0F;
 	float min, max;
 
-	/*bool UIBlit();
-	void OnMouseClick();
+	bool UIBlit();
+	/*void OnMouseClick();
 	void OnMouseHover();
 	void OnMouseRelease();
 	void OnMouseExit();

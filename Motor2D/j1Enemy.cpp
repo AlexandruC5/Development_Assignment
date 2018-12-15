@@ -28,17 +28,19 @@ j1Enemy::~j1Enemy()
 bool j1Enemy::Update(float dt)
 {
 	BROFILER_CATEGORY("Update_Enemy", Profiler::Color::LightSalmon);
-	PathfindingUpdate();
+	if (state != DEAD) {
+		PathfindingUpdate();
 
-	if (state == JUMPING)
-	{
-		target_speed.y += gravity*dt;
-		if (target_speed.y > fall_speed) target_speed.y = fall_speed; //limit falling speed
+		if (state == JUMPING)
+		{
+			target_speed.y += gravity * dt;
+			if (target_speed.y > fall_speed) target_speed.y = fall_speed; //limit falling speed
+		}
+
+		velocity = (target_speed * acceleration + velocity * (1 - acceleration))*dt;
+		StepY();
+		StepX();
 	}
-
-	velocity = (target_speed * acceleration + velocity * (1 - acceleration))*dt;
-	StepY();
-	StepX();
 
 	animation_frame = animations[state].GetCurrentFrame(dt);
 
@@ -306,5 +308,16 @@ void j1Enemy::DrawPath()
 
 		SDL_Rect quad = { p.x, p.y, App->map->data.tile_width , App->map->data.tile_height };
 		App->render->DrawQuad(quad, 255, 255, 0, 75, true);
+	}
+}
+
+void j1Enemy::OnCollision(Collider* c1, Collider* c2)
+{
+	if (c2->type == COLLIDER_PLAYER)
+	{
+		if (!(c2->rect.h < this->animation_frame.h) && !(c2->rect.w < this->animation_frame.w))
+		{
+			Die();
+		}		
 	}
 }

@@ -546,6 +546,12 @@ j1UIScrollBar::j1UIScrollBar(iPoint pos, ScrollType type)
 
 }
 
+bool j1UIScrollBar::UIBlit()
+{
+	App->render->DrawQuad(GetScreenRect(),0,0,0,150,true,false);
+	return true;
+}
+
 void j1UIScrollBar::SetValue(float new_value)
 {
 	norm_value = (new_value - min) / (max - min);

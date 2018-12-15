@@ -143,7 +143,7 @@ bool j1Entity::Save(pugi::xml_node &conf) const
 	target_speed_node.append_attribute("y") = target_speed.y;
 
 	//save state of entity
-	conf.append_child("state").append_attribute("value") = state != DEAD ? (int)state : (int)IDLE;
+	conf.append_child("state").append_attribute("value") = (int)state;
 	conf.append_child("is_grounded").append_attribute("value") = is_grounded;
 	conf.append_child("flipX").append_attribute("value") = flipX;
 
