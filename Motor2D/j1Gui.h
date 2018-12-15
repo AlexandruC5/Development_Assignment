@@ -108,7 +108,7 @@ public:
 	ScrollType type;
 	SDL_Rect* anim;
 	j1UIImage* thumb = nullptr;
-	float value = 0.0F;
+	float norm_value = 0.0F;
 	float min, max;
 
 	/*bool UIBlit();

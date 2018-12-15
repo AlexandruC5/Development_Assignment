@@ -536,7 +536,7 @@ j1UIScrollBar::j1UIScrollBar(iPoint pos, ScrollType type)
 
 void j1UIScrollBar::SetValue(float new_value)
 {
-	value = (new_value - min) / (max - min);
+	norm_value = (new_value - min) / (max - min);
 	SDL_Rect thumb_rect = thumb->GetScreenRect();
 	SDL_Rect this_screen_rect = GetScreenRect();
 
@@ -544,13 +544,13 @@ void j1UIScrollBar::SetValue(float new_value)
 	{
 		float norm_max_value = float((this_screen_rect.y + this_screen_rect.h) - thumb_rect.h);
 		float norm_min_value = (float)this_screen_rect.y;
-		thumb->SetScreenPos(thumb_rect.x, (value * (norm_max_value - norm_min_value)) + norm_min_value);
+		thumb->SetScreenPos(thumb_rect.x, (norm_value * (norm_max_value - norm_min_value)) + norm_min_value);
 	}
 	else
 	{
 		float norm_max_value = float((this_screen_rect.x + this_screen_rect.w) - thumb_rect.w);
 		float norm_min_value = (float)this_screen_rect.x;
-		thumb->SetScreenPos((value * (norm_max_value - norm_min_value)) + norm_min_value, thumb_rect.y);
+		thumb->SetScreenPos((norm_value * (norm_max_value - norm_min_value)) + norm_min_value, thumb_rect.y);
 	}
 }
 
@@ -572,8 +572,8 @@ float j1UIScrollBar::GetValue()
 		thumb_norm_value = (thumb_rect.x - norm_min_value) / (norm_max_value - norm_min_value);
 	}
 
-	value = floor((thumb_norm_value * 100) + .5) / 100;
-	return (value * (max - min)) + min;
+	norm_value = floor((thumb_norm_value * 100) + .5) / 100;
+	return (norm_value * (max - min)) + min;
 }
 
 void j1UIScrollBar::SetMinMax(float min, float max)

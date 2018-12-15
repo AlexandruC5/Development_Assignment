@@ -73,7 +73,11 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	settings_menu_music_text = App->gui->CreateLabel({ -55,-4 }, "fonts/open_sans/OpenSans-Bold.ttf", 16, "MUSIC", { 255,255,255 }, 0, settings_menu_music_slider);
 	settings_menu_music_text->parent_limit = false;
 	settings_menu_music_text->clipping = false;
-	//settings_menu_music_value_text = App->gui->CreateLabel({ 60,14 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, , { 255,255,255 }, 100, settings_menu_music_slider);
+	settings_menu_sfx_slider = credits_menu_text_scroll = App->gui->CreateScrollBar({ 120, 250 }, 0, MIX_MAX_VOLUME, HORIZONTAL, settings_menu_panel);
+	settings_menu_sfx_slider->SetValue(App->audio->GetFXVolume());
+	settings_menu_sfx_text = App->gui->CreateLabel({ -55,-4 }, "fonts/open_sans/OpenSans-Bold.ttf", 16, "SFX", { 255,255,255 }, 0, settings_menu_sfx_slider);
+	settings_menu_sfx_text->parent_limit = false;
+	settings_menu_sfx_text->clipping = false;
 
 
 	pause_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 });
@@ -203,6 +207,7 @@ bool j1Scene::Update(float dt)
 	//SLIDER UPDATE
 	credits_menu_text->SetScreenPos(credits_menu_text->GetScreenRect().x, credits_menu_text_scroll->GetValue());
 	App->audio->SetMusicVolume(settings_menu_music_slider->GetValue());
+	App->audio->SetFXVolume(settings_menu_sfx_slider->GetValue());
 
 	return true;
 }
