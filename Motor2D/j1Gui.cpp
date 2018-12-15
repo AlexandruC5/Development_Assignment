@@ -77,19 +77,18 @@ bool j1Gui::PreUpdate()
 					//drag
 					if (current_element->dragable)
 					{
+						float scaleX, scaleY;
+						current_element->parent->GetScale(scaleX, scaleY);
+
 						iPoint pos = current_element->GetLocalPos();
 						int x_movement, y_movement;
 						App->input->GetMouseMotion(x_movement, y_movement);
-						current_element->SetLocalPos(pos.x + x_movement, pos.y + y_movement);
+						current_element->SetLocalPos((pos.x/scaleX) + x_movement, (pos.y/scaleY) + y_movement);
 
 						if (current_element->parent_limit && current_element->parent)
 						{
 							SDL_Rect element_rect = current_element->GetLocalRect();
-							SDL_Rect parent_rect = current_element->parent->GetLocalRect();
-							float scaleX, scaleY;
-							current_element->parent->GetScale(scaleX, scaleY);
-							element_rect.x *= scaleX;
-							element_rect.y *= scaleY;
+							SDL_Rect parent_rect = current_element->parent->GetLocalRect();					
 
 							if (element_rect.x < 0)
 								element_rect.x = 0;
@@ -100,7 +99,7 @@ bool j1Gui::PreUpdate()
 							else if (element_rect.y  + element_rect.h > parent_rect.h)
 								element_rect.y = parent_rect.h - element_rect.h;
 
-							current_element->SetLocalPos(element_rect.x / scaleX, element_rect.y /scaleY);
+							current_element->SetLocalPos(element_rect.x /scaleX, element_rect.y /scaleY);
 						}
 					}
 				}
@@ -317,7 +316,14 @@ void j1UIElement::SetScreenPos(int x, int y)
 
 SDL_Rect j1UIElement::GetLocalRect()
 {
-	return { rect_box.x, rect_box.y, (int)(rect_box.w*scale_X), (int)(rect_box.h*scale_Y) };
+	if (parent)
+	{
+		return { (int)(rect_box.x* parent->scale_X), (int)(rect_box.y*parent->scale_Y), (int)(rect_box.w*scale_X), (int)(rect_box.h*scale_Y) };
+	}
+	else
+	{
+		return { rect_box.x, rect_box.y, (int)(rect_box.w*scale_X), (int)(rect_box.h*scale_Y) };
+	}
 }
 
 iPoint j1UIElement::GetScreenPos()
@@ -330,7 +336,14 @@ iPoint j1UIElement::GetScreenPos()
 
 iPoint j1UIElement::GetLocalPos()
 {
-	return { rect_box.x, rect_box.y };
+	if(parent)
+	{ 
+		return { (int)(rect_box.x*parent->scale_X), (int)(rect_box.y*parent->scale_Y) };
+	}
+	else
+	{
+		return { rect_box.x, rect_box.y };
+	}
 }
 
 void j1UIElement::SetLocalPos(int x, int y)
@@ -385,7 +398,11 @@ j1UIImage::~j1UIImage()
 bool j1UIImage::UIBlit()
 {
 	iPoint screen_pos = GetScreenPos();
-	App->render->Blit(App->gui->GetAtlas(), screen_pos.x, screen_pos.y, &rect_sprite, 0.0F, false, false,0.0, INT_MAX, INT_MAX, scale_X, scale_Y);
+	if (clipping && parent)
+		App->render->Blit(App->gui->GetAtlas(), screen_pos.x, screen_pos.y, &rect_sprite, 0.0F, false, false, 0.0, INT_MAX, INT_MAX, scale_X, scale_Y, &parent->GetScreenRect()); 
+	else
+		App->render->Blit(App->gui->GetAtlas(), screen_pos.x, screen_pos.y, &rect_sprite, 0.0F, false, false, 0.0, INT_MAX, INT_MAX, scale_X, scale_Y);
+
 	return true;
 }
 
@@ -456,7 +473,12 @@ bool j1UILabel::UIBlit()
 {
 	iPoint screen_pos = GetScreenPos();
 	SDL_Texture* texture = App->fonts->Print(text.GetString(), color, font, rect_box.w);
-	App->render->Blit(texture, screen_pos.x, screen_pos.y, nullptr, 0.0F, false, false, 0.0, INT_MAX, INT_MAX, scale_X, scale_Y);
+	if (clipping && parent)
+		App->render->Blit(texture, screen_pos.x, screen_pos.y, nullptr, 0.0F, false, false, 0.0, INT_MAX, INT_MAX, scale_X, scale_Y, &parent->GetScreenRect()); 
+	else
+		App->render->Blit(texture, screen_pos.x, screen_pos.y, nullptr, 0.0F, false, false, 0.0, INT_MAX, INT_MAX, scale_X, scale_Y);
+
+
 	SDL_DestroyTexture(texture);
 	return true;
 }
@@ -475,10 +497,10 @@ j1UIButton::~j1UIButton()
 bool j1UIButton::UIBlit()
 {
 	iPoint screen_pos = GetScreenPos();
-	if(!clipping) 
-		App->render->Blit(App->gui->GetAtlas(), screen_pos.x, screen_pos.y, &rect_sprite, 0.0F, false, false, 0.0, INT_MAX,INT_MAX, scale_X, scale_Y);
-	else
+	if(clipping && parent) 
 		App->render->Blit(App->gui->GetAtlas(), screen_pos.x, screen_pos.y, &rect_sprite, 0.0F, false, false, 0.0, INT_MAX, INT_MAX, scale_X, scale_Y, &parent->GetScreenRect());
+	else	
+		App->render->Blit(App->gui->GetAtlas(), screen_pos.x, screen_pos.y, &rect_sprite, 0.0F, false, false, 0.0, INT_MAX, INT_MAX, scale_X, scale_Y);
 	return true;
 }
 
@@ -524,10 +546,11 @@ j1UIScrollBar::j1UIScrollBar(iPoint pos)
 	
 }
 
-float j1UIScrollBar::GetValue()
+float j1UIScrollBar::GetValue(float min_value, float max_value)
 {
 	SDL_Rect thumb_rect = thumb->GetLocalRect();
-	float value = floor((((thumb_rect.y * scale_Y) / ((rect_box.h * scale_Y) - thumb_rect.h)) * 100) + .5) / 100;
-	LOG("VALUE IS: %f", value);
-	return value;
+	SDL_Rect this_local_rect = GetLocalRect();
+	float value = floor((((float)thumb_rect.y / ((float)this_local_rect.h - (float)thumb_rect.h)) * 100) + .5) / 100;
+	LOG("SLIDER VALUE IS: %f MAX VALUE IS: %f MIN VALUE IS: %f RETURNING VALUE IS: %f", value, max_value, min_value, (value * (max_value - min_value)) + min_value);
+	return (value * (max_value - min_value)) + min_value;
 }

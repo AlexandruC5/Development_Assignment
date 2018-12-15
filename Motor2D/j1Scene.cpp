@@ -56,7 +56,7 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	main_menu_button_credits = App->gui->CreateButton({ 100, 375 }, main_menu_panel);
 	main_menu_button_exit = App->gui->CreateButton({ 100, 475}, main_menu_panel);
 
-	scroll = App->gui->CreateScrollBar({ 150,150 }, menu_background);
+
 
 	main_menu_button_play_text = App->gui->CreateLabel({ 58,22 },"fonts/open_sans/OpenSans-Bold.ttf", 28, "PLAY", { 255,255,255 }, 0, main_menu_button_play);
 	main_menu_button_continue_text = App->gui->CreateLabel({ 17,22 }, "fonts/open_sans/OpenSans-Bold.ttf", 28, "CONTINUE", { 255,255,255 }, 0, main_menu_button_continue);
@@ -71,7 +71,6 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	settings_menu_button_main_menu_text = App->gui->CreateLabel({ 60,14 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MAIN\nMENU", { 255,255,255 }, 100, settings_menu_button_main_menu);
 
 
-
 	pause_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 });
 	App->gui->ScaleElement(pause_menu_panel, 0.0F, -0.1F);
 	pause_menu_button_resume = App->gui->CreateButton({ 100, 75 }, pause_menu_panel);
@@ -80,14 +79,20 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	pause_menu_button_main_menu_text = App->gui->CreateLabel({ 60,14 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MAIN\nMENU", { 255,255,255 }, 100, pause_menu_button_main_menu);
 
 	credits_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 });
-	App->gui->ScaleElement(credits_menu_panel, 0.0F, -0.1F);
-	credits_menu_button_main_menu = App->gui->CreateButton({ 100, 320 }, credits_menu_panel);
+	App->gui->ScaleElement(credits_menu_panel, 0.0F, 0.1F);
+	credits_menu_text_panel = App->gui->CreateImage({ 60, 70 }, { 1172,2283,297,395 }, credits_menu_panel);
+	App->gui->ScaleElement(credits_menu_text_panel, -0.12F, -0.1F);
+	credits_menu_button_main_menu = App->gui->CreateButton({ 100, 400 }, credits_menu_panel);
 	credits_menu_button_main_menu_text = App->gui->CreateLabel({ 60,14 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MAIN\nMENU", { 255,255,255 }, 80, credits_menu_button_main_menu);
+	credits_menu_text = App->gui->CreateLabel({ 5,5 }, "fonts/open_sans/OpenSans-Bold.ttf", 18, "MIT License\n\nCopyright(c) 2018 [Axel Alavedra Cabello, Alejandro París Gómez]\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files(the ""Software""), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions :\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED ""AS IS"", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.", { 255,255,255 }, 250, credits_menu_text_panel);
+	credits_menu_text->parent_limit = false;
+	scroll = App->gui->CreateScrollBar({ 335, 150 }, credits_menu_panel);
+
+
 
 	App->gui->DisableElement(pause_menu_panel);
 	App->gui->DisableElement(settings_menu_panel);
 	App->gui->DisableElement(credits_menu_panel);
-	App->gui->ScaleElement(scroll, 0.0F, 0.5f);
 
 	return true;
 }
@@ -198,7 +203,16 @@ bool j1Scene::Update(float dt)
 
 	if(levels.At(current_level)->data.game_level) App->map->Draw();
 	
-	scroll->GetValue();
+
+
+	//DIRTY
+	SDL_Rect local_rect = credits_menu_text->GetLocalRect();
+	SDL_Rect parent_rect = credits_menu_text_panel->GetLocalRect();
+	float scaleX, scaleY;
+	credits_menu_text_panel->GetScale(scaleX, scaleY);
+
+	iPoint local_pos = credits_menu_text->GetLocalPos();
+	credits_menu_text->SetLocalPos(local_pos.x/scaleX, scroll->GetValue(5, 5 - (local_rect.h - parent_rect.h))/scaleY);
 
 	return true;
 }

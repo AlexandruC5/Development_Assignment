@@ -88,7 +88,8 @@ private:
 	j1UIElement* credits_menu_panel;
 	j1UIElement* credits_menu_button_main_menu;
 	j1UIElement* credits_menu_button_main_menu_text;
-	j1UIElement* credits_menu_button_main_menu_text2;
+	j1UIElement* credits_menu_text_panel;
+	j1UIElement* credits_menu_text;
 
 	j1UIScrollBar* scroll;
 };

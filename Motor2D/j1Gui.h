@@ -111,7 +111,7 @@ public:
 	void OnMouseRelease();
 	void OnMouseExit();
 	void MoveOtherElement();*/
-	float GetValue();
+	float GetValue(float min, float max);
 };
 
 // ---------------------------------------------------
