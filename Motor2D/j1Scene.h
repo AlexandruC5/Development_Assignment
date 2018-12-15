@@ -71,10 +71,13 @@ private:
 	j1UIElement* main_menu_button_credits_text;
 	j1UIElement* main_menu_button_exit_text;
 
-
 	j1UIElement* pause_menu_panel;
 	j1UIElement* pause_menu_button_resume;
 	j1UIElement* pause_menu_button_main_menu;
+	j1UIScrollBar* pause_menu_music_slider;
+	j1UIElement* pause_menu_music_text;
+	j1UIScrollBar* pause_menu_sfx_slider;
+	j1UIElement* pause_menu_sfx_text;
 	
 	j1UIElement* pause_menu_button_resume_text;
 	j1UIElement* pause_menu_button_main_menu_text;
@@ -86,8 +89,6 @@ private:
 	j1UIElement* settings_menu_music_text;
 	j1UIScrollBar* settings_menu_sfx_slider;
 	j1UIElement* settings_menu_sfx_text;
-
-
 
 	j1UIElement* credits_menu_panel;
 	j1UIElement* credits_menu_button_main_menu;

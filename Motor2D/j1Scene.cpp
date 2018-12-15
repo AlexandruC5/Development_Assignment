@@ -82,10 +82,20 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 
 	pause_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 });
 	App->gui->ScaleElement(pause_menu_panel, 0.0F, -0.1F);
-	pause_menu_button_resume = App->gui->CreateButton({ 100, 75 }, pause_menu_panel);
-	pause_menu_button_main_menu = App->gui->CreateButton({ 100, 175 }, pause_menu_panel);
+	pause_menu_button_resume = App->gui->CreateButton({ 100, 275 }, pause_menu_panel);
+	pause_menu_button_main_menu = App->gui->CreateButton({ 100, 375 }, pause_menu_panel);
 	pause_menu_button_resume_text = App->gui->CreateLabel({ 48,26 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "RESUME", { 255,255,255 }, 0, pause_menu_button_resume);
 	pause_menu_button_main_menu_text = App->gui->CreateLabel({ 60,14 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MAIN\nMENU", { 255,255,255 }, 100, pause_menu_button_main_menu);
+	pause_menu_music_slider = credits_menu_text_scroll = App->gui->CreateScrollBar({ 120, 100 }, 0, MIX_MAX_VOLUME, HORIZONTAL, pause_menu_panel);
+	pause_menu_music_slider->SetValue(App->audio->GetMusicVolume());
+	pause_menu_music_text = App->gui->CreateLabel({ -55,-4 }, "fonts/open_sans/OpenSans-Bold.ttf", 16, "MUSIC", { 255,255,255 }, 0, pause_menu_music_slider);
+	pause_menu_music_text->parent_limit = false;
+	pause_menu_music_text->clipping = false;
+	pause_menu_sfx_slider = credits_menu_text_scroll = App->gui->CreateScrollBar({ 120, 200 }, 0, MIX_MAX_VOLUME, HORIZONTAL, pause_menu_panel);
+	pause_menu_sfx_slider->SetValue(App->audio->GetFXVolume());
+	pause_menu_sfx_text = App->gui->CreateLabel({ -55,-4 }, "fonts/open_sans/OpenSans-Bold.ttf", 16, "SFX", { 255,255,255 }, 0, pause_menu_sfx_slider);
+	pause_menu_sfx_text->parent_limit = false;
+	pause_menu_sfx_text->clipping = false;
 
 	credits_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 });
 	App->gui->ScaleElement(credits_menu_panel, 0.0F, 0.1F);
@@ -206,8 +216,20 @@ bool j1Scene::Update(float dt)
 
 	//SLIDER UPDATE
 	credits_menu_text->SetScreenPos(credits_menu_text->GetScreenRect().x, credits_menu_text_scroll->GetValue());
-	App->audio->SetMusicVolume(settings_menu_music_slider->GetValue());
-	App->audio->SetFXVolume(settings_menu_sfx_slider->GetValue());
+	if (settings_menu_panel->enabled)
+	{
+		App->audio->SetMusicVolume(settings_menu_music_slider->GetValue());
+		App->audio->SetFXVolume(settings_menu_sfx_slider->GetValue());
+		pause_menu_music_slider->SetValue(App->audio->GetMusicVolume());
+		pause_menu_sfx_slider->SetValue(App->audio->GetFXVolume());
+	}
+	else if (pause_menu_panel->enabled)
+	{
+		App->audio->SetMusicVolume(pause_menu_music_slider->GetValue());
+		App->audio->SetFXVolume(pause_menu_sfx_slider->GetValue());
+		settings_menu_music_slider->SetValue(App->audio->GetMusicVolume());
+		settings_menu_sfx_slider->SetValue(App->audio->GetFXVolume());
+	}
 
 	return true;
 }
