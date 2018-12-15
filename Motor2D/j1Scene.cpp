@@ -70,7 +70,7 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	settings_menu_music_text = App->gui->CreateLabel({ -55,-4 }, "fonts/open_sans/OpenSans-Bold.ttf", 16, "MUSIC", { 255,255,255 }, 0, settings_menu_music_slider);
 	settings_menu_music_text->parent_limit = false;
 	settings_menu_music_text->clipping = false;
-	settings_menu_music_text_value = App->gui->CreateLabel({ 205,-4 }, "fonts/open_sans/OpenSans-Bold.ttf", 16, "5", { 255,255,255 }, 0, settings_menu_music_slider);
+	settings_menu_music_text_value = App->gui->CreateLabel({ 205,-4 }, "fonts/open_sans/OpenSans-Bold.ttf", 16, " ", { 255,255,255 }, 0, settings_menu_music_slider);
 	settings_menu_music_text_value->parent_limit = false;
 	settings_menu_music_text_value->clipping = false;
 	settings_menu_sfx_slider = credits_menu_text_scroll = App->gui->CreateScrollBar({ 120, 250 }, 0, MIX_MAX_VOLUME, HORIZONTAL, settings_menu_panel);
@@ -78,6 +78,9 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	settings_menu_sfx_text = App->gui->CreateLabel({ -55,-4 }, "fonts/open_sans/OpenSans-Bold.ttf", 16, "SFX", { 255,255,255 }, 0, settings_menu_sfx_slider);
 	settings_menu_sfx_text->parent_limit = false;
 	settings_menu_sfx_text->clipping = false;
+	settings_menu_sfx_text_value = App->gui->CreateLabel({ 205,-4 }, "fonts/open_sans/OpenSans-Bold.ttf", 16, " ", { 255,255,255 }, 0, settings_menu_sfx_slider);
+	settings_menu_sfx_text_value->parent_limit = false;
+	settings_menu_sfx_text_value->clipping = false;
 
 	pause_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 });
 	App->gui->ScaleElement(pause_menu_panel, 0.0F, -0.1F);
@@ -90,11 +93,17 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	pause_menu_music_text = App->gui->CreateLabel({ -55,-4 }, "fonts/open_sans/OpenSans-Bold.ttf", 16, "MUSIC", { 255,255,255 }, 0, pause_menu_music_slider);
 	pause_menu_music_text->parent_limit = false;
 	pause_menu_music_text->clipping = false;
+	pause_menu_music_text_value = App->gui->CreateLabel({ 205,-4 }, "fonts/open_sans/OpenSans-Bold.ttf", 16, " ", { 255,255,255 }, 0, pause_menu_music_slider);
+	pause_menu_music_text_value->parent_limit = false;
+	pause_menu_music_text_value->clipping = false;
 	pause_menu_sfx_slider = credits_menu_text_scroll = App->gui->CreateScrollBar({ 120, 200 }, 0, MIX_MAX_VOLUME, HORIZONTAL, pause_menu_panel);
 	pause_menu_sfx_slider->SetValue(App->audio->GetFXVolume());
 	pause_menu_sfx_text = App->gui->CreateLabel({ -55,-4 }, "fonts/open_sans/OpenSans-Bold.ttf", 16, "SFX", { 255,255,255 }, 0, pause_menu_sfx_slider);
 	pause_menu_sfx_text->parent_limit = false;
 	pause_menu_sfx_text->clipping = false;
+	pause_menu_sfx_text_value = App->gui->CreateLabel({ 205,-4 }, "fonts/open_sans/OpenSans-Bold.ttf", 16, " ", { 255,255,255 }, 0, pause_menu_sfx_slider);
+	pause_menu_sfx_text_value->parent_limit = false;
+	pause_menu_sfx_text_value->clipping = false;
 
 	credits_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 });
 	App->gui->ScaleElement(credits_menu_panel, 0.0F, 0.1F);
@@ -219,15 +228,29 @@ bool j1Scene::Update(float dt)
 	credits_menu_text->SetScreenPos(credits_menu_text->GetScreenRect().x, credits_menu_text_scroll->GetValue());
 	if (settings_menu_panel->enabled)
 	{
-		App->audio->SetMusicVolume(settings_menu_music_slider->GetValue());
-		App->audio->SetFXVolume(settings_menu_sfx_slider->GetValue());
+		char* int_string = (char*)malloc(sizeof(char) * 4);
+		_itoa_s((int)((settings_menu_music_slider->GetValue()/MIX_MAX_VOLUME) * 100), int_string, 4, 10);
+		settings_menu_music_text_value->SetText(int_string);
+		App->audio->SetMusicVolume((int)settings_menu_music_slider->GetValue());
+
+		_itoa_s((int)((settings_menu_sfx_slider->GetValue() / MIX_MAX_VOLUME) * 100), int_string, 4, 10);
+		settings_menu_sfx_text_value->SetText(int_string);
+		App->audio->SetFXVolume((int)settings_menu_sfx_slider->GetValue());
+
 		pause_menu_music_slider->SetValue(App->audio->GetMusicVolume());
 		pause_menu_sfx_slider->SetValue(App->audio->GetFXVolume());
 	}
 	else if (pause_menu_panel->enabled)
 	{
-		App->audio->SetMusicVolume(pause_menu_music_slider->GetValue());
-		App->audio->SetFXVolume(pause_menu_sfx_slider->GetValue());
+		char* int_string = (char*)malloc(sizeof(char) * 4);
+		_itoa_s((int)((pause_menu_music_slider->GetValue() / MIX_MAX_VOLUME) * 100), int_string, 4, 10);
+		pause_menu_music_text_value->SetText(int_string);
+		App->audio->SetMusicVolume((int)pause_menu_music_slider->GetValue());
+
+		_itoa_s((int)((pause_menu_sfx_slider->GetValue() / MIX_MAX_VOLUME) * 100), int_string, 4, 10);
+		pause_menu_sfx_text_value->SetText(int_string);
+		App->audio->SetFXVolume((int)pause_menu_sfx_slider->GetValue());
+
 		settings_menu_music_slider->SetValue(App->audio->GetMusicVolume());
 		settings_menu_sfx_slider->SetValue(App->audio->GetFXVolume());
 	}

@@ -7,6 +7,8 @@
 struct SDL_Texture;
 struct j1UIElement;
 struct j1UIScrollBar;
+struct j1UILabel;
+
 enum GUI_Event;
 
 struct Level {
@@ -76,8 +78,10 @@ private:
 	j1UIElement* pause_menu_button_main_menu;
 	j1UIScrollBar* pause_menu_music_slider;
 	j1UIElement* pause_menu_music_text;
+	j1UILabel* pause_menu_music_text_value;
 	j1UIScrollBar* pause_menu_sfx_slider;
 	j1UIElement* pause_menu_sfx_text;
+	j1UILabel* pause_menu_sfx_text_value;
 	
 	j1UIElement* pause_menu_button_resume_text;
 	j1UIElement* pause_menu_button_main_menu_text;
@@ -87,10 +91,10 @@ private:
 	j1UIElement* settings_menu_button_main_menu_text;
 	j1UIScrollBar* settings_menu_music_slider;
 	j1UIElement* settings_menu_music_text;
-	j1UIElement* settings_menu_music_text_value;
+	j1UILabel* settings_menu_music_text_value;
 	j1UIScrollBar* settings_menu_sfx_slider;
 	j1UIElement* settings_menu_sfx_text;
-	j1UIElement* settings_menu_sfx_text_value;
+	j1UILabel* settings_menu_sfx_text_value;
 
 	j1UIElement* credits_menu_panel;
 	j1UIElement* credits_menu_button_main_menu;
