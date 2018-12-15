@@ -39,30 +39,27 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 		Level lvl;
 		lvl.map_path = level.child_value();
 		lvl.sound_path = level.attribute("music").as_string();
-		lvl.next_level = level.attribute("next_level").as_int() - 1;
+		lvl.next_level = level.attribute("next_level").as_int();
 		lvl.game_level = level.attribute("game_level").as_bool(true);
 		levels.add(lvl);
 	}
-	current_level = conf.child("start_level").attribute("value").as_int() - 1;
+	current_level = conf.child("start_level").attribute("value").as_int();
 
 	menu_background = App->gui->CreateImage({ 0,0 }, { 2371,1452,1280,720 });
 
 	main_menu_panel = App->gui->CreateImage({ 850,50 }, { 551,711,380,539 }, menu_background);
 	App->gui->ScaleElement(main_menu_panel, 0.0F, 0.17F);
-	main_menu_button_play = App->gui->CreateButton({ 100, 75 }, main_menu_panel);
-	main_menu_button_continue = App->gui->CreateButton({ 100, 175 }, main_menu_panel);
-	main_menu_button_settings = App->gui->CreateButton({ 100, 275 }, main_menu_panel);
-	main_menu_button_credits = App->gui->CreateButton({ 100, 375 }, main_menu_panel);
-	main_menu_button_exit = App->gui->CreateButton({ 100, 475}, main_menu_panel);
-
-
+	main_menu_button_play = App->gui->CreateButton({ 100, 52 }, main_menu_panel);
+	main_menu_button_continue = App->gui->CreateButton({ 100, 137 }, main_menu_panel, App->save_file_exists);
+	main_menu_button_settings = App->gui->CreateButton({ 100, 222 }, main_menu_panel);
+	main_menu_button_credits = App->gui->CreateButton({ 100, 307 }, main_menu_panel);
+	main_menu_button_exit = App->gui->CreateButton({ 100, 392}, main_menu_panel);
 
 	main_menu_button_play_text = App->gui->CreateLabel({ 58,22 },"fonts/open_sans/OpenSans-Bold.ttf", 28, "PLAY", { 255,255,255 }, 0, main_menu_button_play);
 	main_menu_button_continue_text = App->gui->CreateLabel({ 17,22 }, "fonts/open_sans/OpenSans-Bold.ttf", 28, "CONTINUE", { 255,255,255 }, 0, main_menu_button_continue);
 	main_menu_button_settings_text = App->gui->CreateLabel({ 25,22 }, "fonts/open_sans/OpenSans-Bold.ttf", 28, "SETTINGS", { 255,255,255 }, 0, main_menu_button_settings);
 	main_menu_button_credits_text = App->gui->CreateLabel({ 35,22 }, "fonts/open_sans/OpenSans-Bold.ttf", 28, "CREDITS", { 255,255,255 }, 0, main_menu_button_credits);
 	main_menu_button_exit_text = App->gui->CreateLabel({ 60,22 }, "fonts/open_sans/OpenSans-Bold.ttf", 28, "EXIT", { 255,255,255 }, 0, main_menu_button_exit);
-
 
 	settings_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 });
 	App->gui->ScaleElement(settings_menu_panel, 0.0F, -0.4F);
@@ -78,7 +75,6 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	settings_menu_sfx_text = App->gui->CreateLabel({ -55,-4 }, "fonts/open_sans/OpenSans-Bold.ttf", 16, "SFX", { 255,255,255 }, 0, settings_menu_sfx_slider);
 	settings_menu_sfx_text->parent_limit = false;
 	settings_menu_sfx_text->clipping = false;
-
 
 	pause_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 });
 	App->gui->ScaleElement(pause_menu_panel, 0.0F, -0.1F);
@@ -103,12 +99,13 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	App->gui->ScaleElement(credits_menu_text_panel, -0.12F, -0.1F);
 	credits_menu_button_main_menu = App->gui->CreateButton({ 100, 400 }, credits_menu_panel);
 	credits_menu_button_main_menu_text = App->gui->CreateLabel({ 60,14 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MAIN\nMENU", { 255,255,255 }, 80, credits_menu_button_main_menu);
-	credits_menu_text = App->gui->CreateLabel({ 5,5 }, "fonts/open_sans/OpenSans-Bold.ttf", 18, "MIT License\n\nCopyright(c) 2018 [Axel Alavedra Cabello, Alejandro París Gómez]\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files(the ""Software""), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions :\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED ""AS IS"", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.", { 255,255,255 }, 250, credits_menu_text_panel);
+	credits_menu_text = App->gui->CreateLabel({ 5,5 }, "fonts/open_sans/OpenSans-Bold.ttf", 18, 
+		"MIT License\n\nCopyright(c) 2018 [Axel Alavedra Cabello, Alejandro París Gómez]\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files(the ""Software""), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions :\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED ""AS IS"", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.",
+		{ 255,255,255 }, 250, credits_menu_text_panel);
 	credits_menu_text->parent_limit = false;
 	SDL_Rect parent_rect = credits_menu_text_panel->GetScreenRect();
 	SDL_Rect screen_rect = credits_menu_text->GetScreenRect();
 	credits_menu_text_scroll = App->gui->CreateScrollBar({ 335, 150 }, screen_rect.y, screen_rect.y - (screen_rect.h - parent_rect.h), VERTICAL, credits_menu_panel);
-
 
 	App->gui->DisableElement(pause_menu_panel);
 	App->gui->DisableElement(settings_menu_panel);
@@ -125,6 +122,7 @@ bool j1Scene::Start()
 
 	App->map->Load(levels.At(current_level)->data.map_path.GetString());
 	App->entitymanager->player->ResetEntity();
+
 
 	//pathfinding
 	int w, h;
@@ -231,6 +229,9 @@ bool j1Scene::Update(float dt)
 		settings_menu_sfx_slider->SetValue(App->audio->GetFXVolume());
 	}
 
+	if (main_menu_button_continue->interactable != App->save_file_exists)
+		((j1UIButton*)main_menu_button_continue)->SetLocked(App->save_file_exists);
+
 	return true;
 }
 
@@ -303,6 +304,8 @@ bool j1Scene::Load(pugi::xml_node &node)
 	{
 		current_level = saved_level;
 		App->swap_scene->FadeToBlack(0.0F);
+		if (levels.At(current_level)->data.game_level && menu_background->enabled)
+			menu_background->enabled = false;
 	}
 
 	return true;
@@ -311,10 +314,10 @@ bool j1Scene::Load(pugi::xml_node &node)
 bool j1Scene::Save(pugi::xml_node &node) const
 {
 	pugi::xml_node scene_node;
-	scene_node = node.append_child("current_scene");
+	scene_node = node.append_child("current_level");
 	scene_node.append_attribute("value") = current_level;
 
-	return true;
+	return levels.At(current_level)->data.game_level?true:false;
 }
 
 bool j1Scene::GUIEvent(j1UIElement * element, GUI_Event gui_event)
@@ -364,6 +367,7 @@ bool j1Scene::GUIEvent(j1UIElement * element, GUI_Event gui_event)
 			else if(element == main_menu_button_continue)
 			{
 				App->gui->DisableElement(main_menu_panel);
+
 				App->LoadGame();
 				App->paused = false;
 			}

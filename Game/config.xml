@@ -124,11 +124,11 @@
   </file_system>
 
   <scene>
-    <start_level value="1"/>
+    <start_level value="0"/>
     <levels>
-      <level music="music_menu.ogg" next_level="2" game_level="false"></level>
-      <level music="music_forest.ogg" next_level="3">lvl_1.tmx</level>
-      <level music="music_desert.ogg" next_level="2">lvl_2.tmx</level>
+      <level music="music_menu.ogg" next_level="1" game_level="false"></level>
+      <level music="music_forest.ogg" next_level="2">lvl_1.tmx</level>
+      <level music="music_desert.ogg" next_level="1">lvl_2.tmx</level>
     </levels>
   </scene>
  

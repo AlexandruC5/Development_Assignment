@@ -109,6 +109,11 @@ bool j1App::Awake()
 		vsync = config.child("renderer").child("vsync").attribute("value").as_bool();
 
 		load_game = save_game;
+
+		pugi::xml_document save;
+		pugi::xml_parse_result result = save.load_file(load_game.GetString());
+		if (result)
+			save_file_exists = true;
 	}
 
 	if(ret == true)
@@ -211,8 +216,9 @@ void j1App::PrepareUpdate()
 void j1App::FinishUpdate()
 {
 	BROFILER_CATEGORY("FinishUpdate", Profiler::Color::Crimson);
-	if(want_to_save == true)
-		SavegameNow();
+	if (want_to_save == true)
+		if (SavegameNow())
+			save_file_exists = true;
 
 	if(want_to_load == true)
 		LoadGameNow();

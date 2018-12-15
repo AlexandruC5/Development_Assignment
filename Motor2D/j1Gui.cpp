@@ -161,9 +161,9 @@ j1UILabel * j1Gui::CreateLabel(iPoint pos, p2SString path, int size, p2SString t
 	return label;
 }
 
-j1UIButton * j1Gui::CreateButton(iPoint pos, j1UIElement* parent)
+j1UIButton * j1Gui::CreateButton(iPoint pos, j1UIElement* parent, bool is_interactable)
 {
-	j1UIButton* button = new j1UIButton(pos);
+	j1UIButton* button = new j1UIButton(pos, is_interactable);
 	button->parent = parent;
 	elements.add(button);
 
@@ -508,15 +508,22 @@ void j1UIButton::OnMouseExit()
 	rect_sprite = anim[0];
 }
 
-j1UIButton::j1UIButton(iPoint position)
+void j1UIButton::SetLocked(bool value)
 {
-	interactable = true;
+	interactable = value;
+	rect_sprite = anim[interactable ? 0 : 3];
+}
+
+j1UIButton::j1UIButton(iPoint position, bool is_interactable)
+{
+	interactable = is_interactable;
 	rect_box = { position.x, position.y, 180,89 };
-	anim = new SDL_Rect[3];
+	anim = new SDL_Rect[4];
 	anim[0] = { 2461,524,180,89 };
 	anim[1] = { 2650,524,180,89 };
 	anim[2] = { 2839,524,180,89 };
-	rect_sprite = anim[0];
+	anim[3] = { 3029,524,180,89 };
+	rect_sprite = anim[interactable?0:3];
 }
 
 j1UIScrollBar::j1UIScrollBar(iPoint pos, ScrollType type)

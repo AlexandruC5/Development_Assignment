@@ -86,7 +86,7 @@ public:
 class j1UIButton : public j1UIElement
 {
 public:
-	j1UIButton(iPoint pos);
+	j1UIButton(iPoint pos, bool is_interactable = true);
 	~j1UIButton();
 
 	SDL_Rect* anim;
@@ -96,6 +96,7 @@ public:
 	void OnMouseHover();
 	void OnMouseRelease();
 	void OnMouseExit();
+	void SetLocked(bool value);
 };
 
 //TODO
@@ -151,7 +152,7 @@ public:
 	// Gui creation functions
 	j1UIImage* CreateImage(iPoint pos, SDL_Rect rect, j1UIElement* parent = nullptr);
 	j1UILabel* CreateLabel(iPoint pos, p2SString path, int size, p2SString text, SDL_Color color, int max_width = 0, j1UIElement* parent = nullptr);
-	j1UIButton* CreateButton(iPoint pos, j1UIElement* parent = nullptr);
+	j1UIButton* CreateButton(iPoint pos, j1UIElement* parent = nullptr, bool is_interactable = true);
 	j1UIScrollBar* CreateScrollBar(iPoint pos, float min, float max, ScrollType type = VERTICAL, j1UIElement* parent = nullptr);
 
 	j1UIElement* GetElementUnderMouse();

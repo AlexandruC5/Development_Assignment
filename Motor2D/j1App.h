@@ -102,6 +102,7 @@ public:
 	bool				frame_cap = true;
 	double				frame_rate;
 	bool				paused = true;
+	bool				save_file_exists = false;
 
 private:
 
