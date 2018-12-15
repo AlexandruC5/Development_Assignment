@@ -88,6 +88,10 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	credits_menu_text->parent_limit = false;
 	scroll = App->gui->CreateScrollBar({ 335, 150 }, credits_menu_panel);
 
+	SDL_Rect parent_rect = credits_menu_text_panel->GetScreenRect();
+	SDL_Rect screen_rect = credits_menu_text->GetScreenRect();
+	scroll->SetMinMax(screen_rect.y, screen_rect.y - (screen_rect.h - parent_rect.h));
+
 
 
 	App->gui->DisableElement(pause_menu_panel);
@@ -204,15 +208,7 @@ bool j1Scene::Update(float dt)
 	if(levels.At(current_level)->data.game_level) App->map->Draw();
 	
 
-
-	//DIRTY
-	SDL_Rect local_rect = credits_menu_text->GetLocalRect();
-	SDL_Rect parent_rect = credits_menu_text_panel->GetLocalRect();
-	float scaleX, scaleY;
-	credits_menu_text_panel->GetScale(scaleX, scaleY);
-
-	iPoint local_pos = credits_menu_text->GetLocalPos();
-	credits_menu_text->SetLocalPos(local_pos.x/scaleX, scroll->GetValue(5, 5 - (local_rect.h - parent_rect.h))/scaleY);
+	credits_menu_text->SetScreenPos(credits_menu_text->GetScreenRect().x, scroll->GetValue());
 
 	return true;
 }

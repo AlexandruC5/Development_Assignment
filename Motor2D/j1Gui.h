@@ -104,6 +104,7 @@ public:
 	SDL_Rect* anim;
 	j1UIImage* thumb = nullptr;
 	float value = 0.0F;
+	float min, max;
 
 	/*bool UIBlit();
 	void OnMouseClick();
@@ -111,7 +112,8 @@ public:
 	void OnMouseRelease();
 	void OnMouseExit();
 	void MoveOtherElement();*/
-	float GetValue(float min, float max);
+	float GetValue();
+	void SetMinMax(float min, float max);
 };
 
 // ---------------------------------------------------

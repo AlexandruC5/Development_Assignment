@@ -77,29 +77,26 @@ bool j1Gui::PreUpdate()
 					//drag
 					if (current_element->dragable)
 					{
-						float scaleX, scaleY;
-						current_element->parent->GetScale(scaleX, scaleY);
-
 						iPoint pos = current_element->GetLocalPos();
 						int x_movement, y_movement;
 						App->input->GetMouseMotion(x_movement, y_movement);
-						current_element->SetLocalPos((pos.x/scaleX) + x_movement, (pos.y/scaleY) + y_movement);
+						current_element->SetLocalPos(pos.x + x_movement, pos.y + y_movement);
 
 						if (current_element->parent_limit && current_element->parent)
 						{
-							SDL_Rect element_rect = current_element->GetLocalRect();
-							SDL_Rect parent_rect = current_element->parent->GetLocalRect();					
+							SDL_Rect element_rect = current_element->GetScreenRect();
+							SDL_Rect parent_rect = current_element->parent->GetScreenRect();					
 
-							if (element_rect.x < 0)
-								element_rect.x = 0;
-							else if (element_rect.x + element_rect.w > parent_rect.w)
-								element_rect.x = parent_rect.w - element_rect.w;
-							if (element_rect.y < 0)
-								element_rect.y = 0;
-							else if (element_rect.y  + element_rect.h > parent_rect.h)
-								element_rect.y = parent_rect.h - element_rect.h;
+							if (element_rect.x < parent_rect.x)
+								element_rect.x = parent_rect.x;
+							else if (element_rect.x + element_rect.w > parent_rect.x + parent_rect.w)
+								element_rect.x = (parent_rect.x + parent_rect.w) - element_rect.w;
+							if (element_rect.y <  parent_rect.y)
+								element_rect.y = parent_rect.y;
+							else if (element_rect.y  + element_rect.h > parent_rect.y + parent_rect.h)
+								element_rect.y = (parent_rect.y + parent_rect.h) - element_rect.h;
 
-							current_element->SetLocalPos(element_rect.x /scaleX, element_rect.y /scaleY);
+							current_element->SetScreenPos(element_rect.x, element_rect.y);
 						}
 					}
 				}
@@ -304,8 +301,8 @@ void j1UIElement::SetScreenPos(int x, int y)
 {
 	if (parent)
 	{
-		rect_box.x = (int) (x / parent->scale_X) - parent->GetScreenPos().x;
-		rect_box.y = (int) (y / parent->scale_Y) - parent->GetScreenPos().y;
+		rect_box.x = (x - parent->GetScreenPos().x) / parent->scale_X;
+		rect_box.y = (y - parent->GetScreenPos().y) / parent->scale_Y;
 	}
 	else
 	{
@@ -316,14 +313,7 @@ void j1UIElement::SetScreenPos(int x, int y)
 
 SDL_Rect j1UIElement::GetLocalRect()
 {
-	if (parent)
-	{
-		return { (int)(rect_box.x* parent->scale_X), (int)(rect_box.y*parent->scale_Y), (int)(rect_box.w*scale_X), (int)(rect_box.h*scale_Y) };
-	}
-	else
-	{
-		return { rect_box.x, rect_box.y, (int)(rect_box.w*scale_X), (int)(rect_box.h*scale_Y) };
-	}
+	return { rect_box.x, rect_box.y, (int)(rect_box.w*scale_X), (int)(rect_box.h*scale_Y) };
 }
 
 iPoint j1UIElement::GetScreenPos()
@@ -336,14 +326,7 @@ iPoint j1UIElement::GetScreenPos()
 
 iPoint j1UIElement::GetLocalPos()
 {
-	if(parent)
-	{ 
-		return { (int)(rect_box.x*parent->scale_X), (int)(rect_box.y*parent->scale_Y) };
-	}
-	else
-	{
-		return { rect_box.x, rect_box.y };
-	}
+	return { rect_box.x, rect_box.y };
 }
 
 void j1UIElement::SetLocalPos(int x, int y)
@@ -546,11 +529,20 @@ j1UIScrollBar::j1UIScrollBar(iPoint pos)
 	
 }
 
-float j1UIScrollBar::GetValue(float min_value, float max_value)
+float j1UIScrollBar::GetValue()
 {
-	SDL_Rect thumb_rect = thumb->GetLocalRect();
-	SDL_Rect this_local_rect = GetLocalRect();
-	float value = floor((((float)thumb_rect.y / ((float)this_local_rect.h - (float)thumb_rect.h)) * 100) + .5) / 100;
-	LOG("SLIDER VALUE IS: %f MAX VALUE IS: %f MIN VALUE IS: %f RETURNING VALUE IS: %f", value, max_value, min_value, (value * (max_value - min_value)) + min_value);
-	return (value * (max_value - min_value)) + min_value;
+	SDL_Rect thumb_rect = thumb->GetScreenRect();
+	SDL_Rect this_screen_rect = GetScreenRect();
+	float norm_max_value = float((this_screen_rect.y + this_screen_rect.h) - thumb_rect.h);
+	float norm_min_value = (float)this_screen_rect.y;
+	float thumb_norm_value = (thumb_rect.y - norm_min_value) / (norm_max_value - norm_min_value);
+
+	value = floor((thumb_norm_value * 100) + .5) / 100;
+	return (value * (max - min)) + min;
+}
+
+void j1UIScrollBar::SetMinMax(float min, float max)
+{
+	this->min = min;
+	this->max = max;
 }
