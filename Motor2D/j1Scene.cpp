@@ -334,7 +334,7 @@ bool j1Scene::GUIEvent(j1UIElement * element, GUI_Event gui_event)
 		
 		}
 		break;
-		case LEFT_CLICK_DOWN:
+		case LEFT_CLICK_UP:
 		{
 			if (element == pause_menu_button_resume)
 			{

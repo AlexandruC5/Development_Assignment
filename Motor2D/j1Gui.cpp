@@ -7,6 +7,7 @@
 #include "j1Input.h"
 #include "j1Scene.h"
 #include "j1Gui.h"
+#include "Brofiler/Brofiler.h"
 
 j1Gui::j1Gui() : j1Module()
 {
@@ -39,6 +40,7 @@ bool j1Gui::Start()
 // Update all guis
 bool j1Gui::PreUpdate()
 {
+	BROFILER_CATEGORY("UIPreUpdate", Profiler::Color::Magenta);
 	if (App->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
 		debug_draw = !debug_draw;
 
@@ -69,11 +71,18 @@ bool j1Gui::PreUpdate()
 			}
 			else
 			{
-				if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT))
+				if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
 				{
 					current_element->OnMouseClick();
 					App->scene->GUIEvent(current_element, LEFT_CLICK_DOWN);
-
+				}
+				else if(App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
+				{
+					current_element->OnMouseRelease();
+					App->scene->GUIEvent(current_element, LEFT_CLICK_UP);
+				}
+				else if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
+				{
 					//drag
 					if (current_element->dragable)
 					{
@@ -85,7 +94,7 @@ bool j1Gui::PreUpdate()
 						if (current_element->parent_limit && current_element->parent)
 						{
 							SDL_Rect element_rect = current_element->GetScreenRect();
-							SDL_Rect parent_rect = current_element->parent->GetScreenRect();					
+							SDL_Rect parent_rect = current_element->parent->GetScreenRect();
 
 							if (element_rect.x < parent_rect.x)
 								element_rect.x = parent_rect.x;
@@ -93,17 +102,12 @@ bool j1Gui::PreUpdate()
 								element_rect.x = (parent_rect.x + parent_rect.w) - element_rect.w;
 							if (element_rect.y <  parent_rect.y)
 								element_rect.y = parent_rect.y;
-							else if (element_rect.y  + element_rect.h > parent_rect.y + parent_rect.h)
+							else if (element_rect.y + element_rect.h > parent_rect.y + parent_rect.h)
 								element_rect.y = (parent_rect.y + parent_rect.h) - element_rect.h;
 
 							current_element->SetScreenPos(element_rect.x, element_rect.y);
 						}
 					}
-				}
-				else
-				{
-					current_element->OnMouseRelease();
-					App->scene->GUIEvent(current_element, LEFT_CLICK_UP);
 				}
 			}
 		}
@@ -120,6 +124,7 @@ bool j1Gui::PreUpdate()
 // Called after all Updates
 bool j1Gui::PostUpdate()
 {
+	BROFILER_CATEGORY("UIPostUpdate", Profiler::Color::Magenta);
 	for (p2List_item<j1UIElement*>* item = elements.start; item != NULL; item = item->next)
 	{
 		if (item->data->enabled)
