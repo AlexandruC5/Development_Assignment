@@ -16,7 +16,8 @@ private:
 	float boost_x = 0.0F;
 	float max_charge = 0.0F;
 	float charge_increment = 0.0F;
-	
+	int lives = 0;
+	int starting_lives = 0;
 
 	void IdleUpdate();
 	void MovingUpdate();
@@ -35,6 +36,8 @@ public:
 
 	void CheckDeath();
 	void OnCollision(Collider* c1, Collider* c2);
+	void ResetLives();
+	void ResetScale();
 };
 
 #endif

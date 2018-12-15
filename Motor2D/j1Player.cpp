@@ -20,6 +20,7 @@ j1Player::j1Player(EntityType type, pugi::xml_node config, fPoint position, p2SS
 	charged_time = config.child("charged_jump").attribute("time").as_float();
 	charge_increment = config.child("charged_jump").attribute("charge_increment").as_float();
 	max_charge = config.child("charged_jump").attribute("max_charge").as_float();
+	starting_lives = config.child("lives").attribute("value").as_int();
 
 	collider = App->collision->AddCollider(animation_frame, COLLIDER_PLAYER, App->entitymanager, true);
 	collider->rect.x = position.x;
@@ -282,5 +283,25 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 void j1Player::Die()
 {
 	j1Entity::Die();
-	App->swap_scene->FadeToBlack();
+	lives--;
+	ResetScale();
+	if (lives > 0)
+		App->swap_scene->FadeToBlack();
+	else
+		App->scene->GameOver();
+}
+
+void j1Player::ResetLives()
+{
+	lives = starting_lives;
+}
+
+void j1Player::ResetScale()
+{
+	scale_X = 1.0F;
+	scale_Y = 1.0F;
+
+	collider_offset = 40 * scale_Y;
+	collider->rect.h = 53 * scale_Y;
+	collider->rect.w = 94 * scale_X;
 }

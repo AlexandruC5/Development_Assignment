@@ -130,21 +130,7 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 bool j1Scene::Start()
 {
 	BROFILER_CATEGORY("StartScene", Profiler::Color::Plum);
-	App->entitymanager->CleanUp();
-
-	App->map->Load(levels.At(current_level)->data.map_path.GetString());
-	App->entitymanager->player->ResetEntity();
-
-
-	//pathfinding
-	int w, h;
-	uchar* data = NULL;
-	if (App->map->CreateWalkabilityMap(w, h, &data))
-		App->pathfinding->SetMap(w, h, data);
-
-	RELEASE_ARRAY(data);
-
-	App->audio->PlayMusic(levels.At(current_level)->data.sound_path.GetString());
+	LoadLevel();
 
 	return true;
 }
@@ -347,6 +333,39 @@ bool j1Scene::Save(pugi::xml_node &node) const
 	return levels.At(current_level)->data.game_level?true:false;
 }
 
+void j1Scene::LoadLevel()
+{
+	App->map->CleanUp();
+	App->entitymanager->CleanMapEntities();
+
+	App->map->Load(levels.At(current_level)->data.map_path.GetString());
+	App->entitymanager->player->ResetEntity();
+
+	if (levels.At(current_level)->data.game_level)
+	{
+		//pathfinding
+		int w, h;
+		uchar* data = NULL;
+		if (App->map->CreateWalkabilityMap(w, h, &data))
+			App->pathfinding->SetMap(w, h, data);
+
+		RELEASE_ARRAY(data);
+	}
+	else
+	{
+		App->paused = true;
+		App->gui->EnableElement(menu_background);
+	}
+
+	App->audio->PlayMusic(levels.At(current_level)->data.sound_path.GetString());
+}
+
+void j1Scene::GameOver()
+{
+	current_level = 0;
+	App->swap_scene->FadeToBlack(0.0F);
+}
+
 bool j1Scene::GUIEvent(j1UIElement * element, GUI_Event gui_event)
 {
 	switch (gui_event)
@@ -385,9 +404,9 @@ bool j1Scene::GUIEvent(j1UIElement * element, GUI_Event gui_event)
 			{
 				App->gui->DisableElement(menu_background);
 
-				//? main menu should be a level or not?
 				current_level = levels.At(current_level)->data.next_level;
 				App->swap_scene->FadeToBlack(0.0F);
+				App->entitymanager->player->ResetLives();
 
 				App->paused = false;
 			}

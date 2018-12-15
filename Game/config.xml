@@ -25,6 +25,7 @@
       <gravity value="2200.0F"/>
       <charged_jump time="4.0F" max_charge="1000.0F" charge_increment="300.0F"/>
       <collider width="94" height="53" offset="40"/>
+      <lives value="3"/>
       <audio>
         <jump_fx>fx_jump.wav</jump_fx>
       </audio>

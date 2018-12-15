@@ -75,6 +75,21 @@ bool j1EntityManager::CleanUp()
 	return true;
 }
 
+bool j1EntityManager::CleanMapEntities()
+{
+	for (p2List_item<j1Entity*>* entity = entities.start; entity; entity = entity->next)
+	{
+		if (entity->data != player)
+		{
+			entity->data->CleanUp();
+			entities.del(entity);
+		}
+	}
+	id_count = 0;
+
+	return true;
+}
+
 bool j1EntityManager::Load(pugi::xml_node &file)
 {
 	for (p2List_item<j1Entity*>* entity = entities.start; entity; entity = entity->next)

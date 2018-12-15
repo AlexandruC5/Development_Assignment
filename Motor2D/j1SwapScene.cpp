@@ -42,8 +42,7 @@ bool j1SwapScene::PostUpdate()
 	{
 		if (now >= total_time)
 		{
-			App->scene->Deactivate();
-			App->scene->Activate();
+			App->scene->LoadLevel();
 
 			total_time += total_time;
 			start_time = SDL_GetTicks();
@@ -63,6 +62,7 @@ bool j1SwapScene::PostUpdate()
 	}
 
 	// Finally render the black square with alpha on the screen
+	SDL_RenderSetClipRect(App->render->renderer, nullptr);
 	SDL_SetRenderDrawColor(App->render->renderer, 0, 0, 0, (Uint8)(normalized * 255.0F));
 	SDL_RenderFillRect(App->render->renderer, &screen);
 

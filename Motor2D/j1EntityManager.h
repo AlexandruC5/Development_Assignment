@@ -29,7 +29,7 @@ public:
 	j1Entity* getEntity(EntityType type);
 	bool DeleteEntity(j1Entity* entity);
 	bool OnCollision(Collider* c1, Collider* c2);
-
+	bool CleanMapEntities();
 	bool draw_path = false;
 
 private:

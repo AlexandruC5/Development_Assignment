@@ -52,6 +52,9 @@ public:
 
 	bool GUIEvent(j1UIElement* element, GUI_Event gui_event);
 
+	void LoadLevel();
+	void GameOver();
+
 	int current_level = 0;
 
 
