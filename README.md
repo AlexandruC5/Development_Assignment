@@ -99,6 +99,7 @@ Loading screen with animated image.
 
 ### Video
 
+<video src="Website/Salty_the_Slime_Gameplay_video.mp4" width="320" height="200" controls preload></video>
 
 ### Credits
 
