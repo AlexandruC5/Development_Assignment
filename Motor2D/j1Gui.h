@@ -3,6 +3,7 @@
 
 #include "j1Module.h"
 #include "Timer.h"
+#include "j1Animation.h"
 
 #define CURSOR_WIDTH 2
 
@@ -44,6 +45,8 @@ public:
 	virtual bool UIBlit();
 	virtual bool UICleanUp();
 	virtual bool IsInside(int x, int y);
+	virtual bool Update(float dt) { return true; };
+	virtual bool CleanUp() { return true; };
 
 	SDL_Rect GetScreenRect();
 	SDL_Rect GetLocalRect(); 
@@ -68,11 +71,24 @@ public:
 class j1UIImage : public j1UIElement
 {
 public:
-	j1UIImage(iPoint pos, SDL_Rect rect,bool image = true);
+	j1UIImage(iPoint pos, SDL_Rect rect, bool image = true);
+	j1UIImage();
 	~j1UIImage();
 	bool UIBlit();
 	bool image = true;
 };
+
+class j1UIAnimatedImage : public j1UIImage
+{
+public:
+	j1UIAnimatedImage(iPoint pos, SDL_Rect* rect, int total_sprites, int speed);
+	~j1UIAnimatedImage();
+	bool UIBlit();
+	bool Update(float dt);
+	Animation animation;
+	SDL_Rect animation_frame;
+};
+
 class j1UILabel : public j1UIElement
 {
 public:
@@ -84,6 +100,7 @@ public:
 	bool UIBlit();
 	void SetText(p2SString text);
 	void SetColor(SDL_Color color);
+	bool CleanUp();
 };
 class j1UIButton : public j1UIElement
 {
@@ -99,9 +116,9 @@ public:
 	void OnMouseRelease();
 	void OnMouseExit();
 	void SetLocked(bool value);
+	bool CleanUp();
 };
 
-//TODO
 class j1UIScrollBar : public j1UIElement
 {
 public:
@@ -109,7 +126,6 @@ public:
 	~j1UIScrollBar() {};
 
 	ScrollType type;
-	SDL_Rect* anim;
 	j1UIImage* thumb = nullptr;
 	float norm_value = 0.0F;
 	float min, max;
@@ -123,6 +139,7 @@ public:
 	void SetValue(float new_value);
 	float GetValue();
 	void SetMinMax(float min, float max);
+	bool CleanUp();
 };
 
 // ---------------------------------------------------
@@ -144,6 +161,8 @@ public:
 	// Called before all Updates
 	bool PreUpdate();
 
+	bool Update(float dt);
+
 	// Called after all Updates
 	bool PostUpdate();
 
@@ -156,6 +175,7 @@ public:
 	j1UILabel* CreateLabel(iPoint pos, p2SString path, int size, p2SString text, SDL_Color color, int max_width = 0, j1UIElement* parent = nullptr);
 	j1UIButton* CreateButton(iPoint pos, j1UIElement* parent = nullptr, bool is_interactable = true);
 	j1UIScrollBar* CreateScrollBar(iPoint pos, float min, float max, ScrollType type = VERTICAL, j1UIElement* parent = nullptr);
+	j1UIAnimatedImage* CreateAnimatedImage(iPoint pos, SDL_Rect * rect, int total_sprites, int speed, j1UIElement* parent);
 
 	j1UIElement* GetElementUnderMouse();
 	void ScaleElement(j1UIElement* element, float scaleX, float scaleY, float time = 0.0F);

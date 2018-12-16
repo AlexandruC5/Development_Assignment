@@ -62,14 +62,16 @@ public:
 	void GameOver();
 
 	int current_level = 0;
-
+	j1UIElement* loading_background;
+	j1UIElement* menu_background;
 private:
 	bool game_running = true;
 
 	p2List<Level> levels;
 
-	j1UIElement* menu_background;
-	j1UIElement* loading_background;
+	j1UIElement* loading_animatedimage;
+	j1UIElement* loading_panel;
+	j1UIElement* loading_text;
 
 	j1UIElement* main_menu_panel;
 	j1UIElement* main_menu_button_play;

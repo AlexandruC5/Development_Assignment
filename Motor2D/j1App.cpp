@@ -337,6 +337,9 @@ bool j1App::CleanUp()
 	p2List_item<j1Module*>* item;
 	item = modules.end;
 
+	current_save.reset();
+	config_file.reset();
+
 	while(item != NULL && ret == true)
 	{
 		ret = item->data->CleanUp();
