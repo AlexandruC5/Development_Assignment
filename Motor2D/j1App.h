@@ -103,6 +103,7 @@ public:
 	double				frame_rate;
 	bool				paused = true;
 	bool				save_file_exists = false;
+	Timer				startup_time;
 
 private:
 
@@ -123,7 +124,6 @@ private:
 
 	PerfTimer			ptimer;
 	uint64				frame_count = 0;
-	Timer				startup_time;
 	Timer				frame_time;
 	Timer				last_sec_frame_time;
 	uint32				last_sec_frame_count = 0;

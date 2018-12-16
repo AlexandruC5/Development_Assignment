@@ -46,8 +46,12 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	}
 	current_level = conf.child("start_level").attribute("value").as_int();
 
-	menu_background = App->gui->CreateImage({ 0,0 }, { 1659, 2976, 1280, 720 });
-	loading_background = App->gui->CreateImage({ 0,0 }, { 75, 2968, 1280, 720 });
+
+	uint x, y;
+	App->win->GetWindowSize(x, y);
+	ingame_panel = App->gui->CreateImage({ 0,0 }, { 0,0,(int)x,(int)y }, nullptr, false);
+	menu_background = App->gui->CreateImage({ 0,0 }, { 1659, 2976,(int)x,(int)y },ingame_panel);
+	loading_background = App->gui->CreateImage({ 0,0 }, { 75, 2968, 1280, 720 }, ingame_panel);
 
 	main_menu_panel = App->gui->CreateImage({ 850,50 }, { 551,711,380,539 }, menu_background);
 	App->gui->ScaleElement(main_menu_panel, 0.0F, 0.17F);
@@ -63,7 +67,7 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	main_menu_button_credits_text = App->gui->CreateLabel({ 35,22 }, "fonts/open_sans/OpenSans-Bold.ttf", 28, "CREDITS", { 255,255,255 }, 0, main_menu_button_credits);
 	main_menu_button_exit_text = App->gui->CreateLabel({ 60,22 }, "fonts/open_sans/OpenSans-Bold.ttf", 28, "EXIT", { 255,255,255 }, 0, main_menu_button_exit);
 
-	settings_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 });
+	settings_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 },ingame_panel);
 	App->gui->ScaleElement(settings_menu_panel, 0.0F, -0.4F);
 	settings_menu_button_main_menu = App->gui->CreateButton({ 100, 320 }, settings_menu_panel);
 	settings_menu_button_main_menu_text = App->gui->CreateLabel({ 60,14 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MAIN\nMENU", { 255,255,255 }, 100, settings_menu_button_main_menu);
@@ -84,7 +88,7 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	settings_menu_sfx_text_value->parent_limit = false;
 	settings_menu_sfx_text_value->clipping = false;
 
-	pause_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 });
+	pause_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 }, ingame_panel);
 	App->gui->ScaleElement(pause_menu_panel, 0.0F, -0.1F);
 	pause_menu_button_resume = App->gui->CreateButton({ 100, 275 }, pause_menu_panel);
 	pause_menu_button_main_menu = App->gui->CreateButton({ 100, 375 }, pause_menu_panel);
@@ -107,7 +111,7 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	pause_menu_sfx_text_value->parent_limit = false;
 	pause_menu_sfx_text_value->clipping = false;
 
-	credits_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 });
+	credits_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 }, ingame_panel);
 	App->gui->ScaleElement(credits_menu_panel, 0.0F, 0.1F);
 	credits_menu_text_panel = App->gui->CreateImage({ 60, 70 }, { 1172,2283,297,395 }, credits_menu_panel);
 	App->gui->ScaleElement(credits_menu_text_panel, -0.12F, -0.1F);
@@ -120,6 +124,16 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	SDL_Rect parent_rect = credits_menu_text_panel->GetScreenRect();
 	SDL_Rect screen_rect = credits_menu_text->GetScreenRect();
 	credits_menu_text_scroll = App->gui->CreateScrollBar({ 330, 150 }, screen_rect.y, screen_rect.y - (screen_rect.h - parent_rect.h), VERTICAL, credits_menu_panel);
+
+	lives_text = App->gui->CreateLabel({45,10}, "fonts/open_sans/OpenSans-Bold.ttf", 22, "x 3", { 0,0,0 }, 80,ingame_panel);
+	lives_image = App->gui->CreateImage({ 5,5 }, { 1974,1998,94,87 }, ingame_panel);
+	App->gui->ScaleElement(lives_image, -0.6F, -0.6F);
+
+	time_text = App->gui->CreateLabel({ (ingame_panel->GetLocalRect().w/2) - 20,10 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "00:00", { 0,0,0 }, 80, ingame_panel);
+
+	score_text = App->gui->CreateLabel({ ingame_panel->GetLocalRect().w - 80,10 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "999", { 0,0,0 }, 80, ingame_panel);
+	score_image = App->gui->CreateImage({ ingame_panel->GetLocalRect().w - 120,5 }, { 2253,1997,115,133 }, ingame_panel);
+	App->gui->ScaleElement(score_image, -0.7F, -0.7F);
 
 	App->gui->DisableElement(pause_menu_panel);
 	App->gui->DisableElement(settings_menu_panel);
@@ -264,6 +278,10 @@ bool j1Scene::Update(float dt)
 		load_data.finished = false;
 		loaded_scene = true;
 		if(loading_background->enabled) App->gui->DisableElement(loading_background);
+
+		level_time.Start();
+		time_text->SetColor({ 0,0,0 });
+		SDL_DetachThread(load_map_thread);
 	}
 	credits_menu_text->SetScreenPos(credits_menu_text->GetScreenRect().x, credits_menu_text_scroll->GetValue());
 
@@ -294,6 +312,31 @@ bool j1Scene::Update(float dt)
 
 		settings_menu_music_slider->SetValue(App->audio->GetMusicVolume());
 		settings_menu_sfx_slider->SetValue(App->audio->GetFXVolume());
+	}
+	else if (score_text->enabled)
+	{
+		p2SString tmp_string;
+		tmp_string.create("%i", (int)((App->entitymanager->player->score)));
+		score_text->SetText(tmp_string);
+
+		tmp_string.create("x %i", (int)(App->entitymanager->player->lives));
+		lives_text->SetText(tmp_string);
+
+
+		tmp_string.create("%i", (int)(level_time.Read()/1000));
+		time_text->SetText(tmp_string);
+		if (((int)level_time.Read() / 1000) >= 900)
+		{
+			time_text->SetColor({ 255,0,0 });
+		}
+		if (((int)level_time.Read() / 1000) >= 1000)
+		{
+			current_level = 0;
+			App->swap_scene->FadeToBlack(0.0F);
+
+			App->gui->EnableElement(menu_background);
+			App->gui->DisableElement(pause_menu_panel);
+		}
 	}
 
 	if (main_menu_button_continue->interactable != App->save_file_exists)
@@ -386,7 +429,6 @@ bool j1Scene::Save(pugi::xml_node &node) const
 
 	return levels.At(current_level)->data.game_level?true:false;
 }
-
 
 
 void j1Scene::GameOver()

@@ -2,7 +2,7 @@
 #define __j1SCENE_H__
 
 #include "j1Module.h"
-
+#include "Timer.h"
 
 struct SDL_Texture;
 struct j1UIElement;
@@ -117,6 +117,15 @@ private:
 	j1UIElement* credits_menu_text_panel;
 	j1UIElement* credits_menu_text;
 	j1UIScrollBar* credits_menu_text_scroll;
+
+	j1UIElement* ingame_panel;
+	j1UILabel* lives_text;
+	j1UIElement* lives_image;
+	j1UILabel* time_text;
+	j1UIElement* score_image;
+	j1UILabel* score_text;
+
+	Timer level_time;
 };
 
 #endif // __j1SCENE_H__

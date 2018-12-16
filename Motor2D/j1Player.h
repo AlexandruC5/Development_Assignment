@@ -16,7 +16,6 @@ private:
 	float boost_x = 0.0F;
 	float max_charge = 0.0F;
 	float charge_increment = 0.0F;
-	int lives = 3;
 	int starting_lives = 0;
 
 	void IdleUpdate();
@@ -31,6 +30,8 @@ public:
 	j1Player(EntityType type, pugi::xml_node, fPoint position, p2SString id);
 	~j1Player();
 
+	int score;
+	int lives = 3;
 	bool Update(float dt);
 	bool PreUpdate();
 
