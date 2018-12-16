@@ -101,6 +101,17 @@ Loading screen with animated image.
 
 <video src="Website/Salty_the_Slime_Gameplay_video.mp4" width="640" height="400" controls preload></video>
 
+## Tools used
+* IDE: Microsoft Visual Studio 2018
+* Language: C++
+* Graphics and audio: SDL 2.0
+* Data: pugixml 
+* Level editor: Tiled 
+* Profiler: Brofiler
+* Code repository: GitHub
+* Others: Adobe Photoshop CS6 and SpriteCow
+
+
 ### Credits
 
 We do not own any of the sprites, tilesets, music or fx used in this game. Authors credited below
