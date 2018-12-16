@@ -35,12 +35,14 @@ bool j1Collision::PreUpdate()
 	}
 
 	// Calculate collisions
-	if (player_collider)
-	{
 		for (uint i = 0; i < max_colliders; ++i)
 		{
+			if (colliders[i] != nullptr && colliders[i]->type == COLLIDER_PLAYER)
+			{
+				player_collider = colliders[i];
+			}
 			// skip empty colliders
-			if (colliders[i] != nullptr && colliders[i]->type != COLLIDER_PLAYER)
+			if (colliders[i] != nullptr && colliders[i]->type != COLLIDER_PLAYER && colliders[i]->enabled)
 			{
 				if (player_collider->CheckCollision(colliders[i]->rect))
 				{
@@ -51,7 +53,6 @@ bool j1Collision::PreUpdate()
 						colliders[i]->callback->OnCollision(colliders[i], player_collider);
 				}
 			}
-		}
 	}
 
 	return true;

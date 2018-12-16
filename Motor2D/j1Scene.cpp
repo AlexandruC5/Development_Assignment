@@ -257,6 +257,16 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
 		App->gui->ScaleElement(main_menu_panel, 0.5F, 0.5F, 0.5F);
 
+	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN)
+	{
+		App->entitymanager->DividePlayer();
+	}
+	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
+	{
+		float scalex = App->entitymanager->Reagroup();
+		App->entitymanager->player->ScaleEntity(scalex, scalex);
+	}
+
 
 	
 	App->render->camera.velocity = ((App->render->camera.target_speed * 0.4F) + (App->render->camera.velocity * (1 - 0.4F)));

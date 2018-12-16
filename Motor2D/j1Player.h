@@ -27,9 +27,10 @@ private:
 	void Die();
 
 public:
-	j1Player(EntityType type, pugi::xml_node, fPoint position, p2SString id);
+	j1Player(EntityType type, pugi::xml_node, fPoint position, p2SString id,int clone_number);
 	~j1Player();
 
+	int clone_number = 0;
 	int score;
 	int lives = 3;
 	bool Update(float dt);
