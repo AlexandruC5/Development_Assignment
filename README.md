@@ -74,6 +74,9 @@ Alejandro París Gómez
 ### Repository link
 https://github.com/TheSaltMine/Development_Assignment
 
+### Web link
+ShellExecuteA(NULL, "open", “https://thesaltmine.github.io/Development_Assignment/”, NULL, NULL, SW_SHOWNORMAL);
+
 ### Innovations
 
 Implemented a method to only render the tiles inside the camera.
@@ -115,18 +118,6 @@ SFX:
 Jump (Retro video game SFX) by [cabled_mess](https://freesound.org/people/cabled_mess/)
 
 Downloaded from [here](https://freesound.org/people/cabled_mess/sounds/350900/)
-
-
-### Authors
-
-![Alejandro París Screenshot](https://raw.githubusercontent.com/AlmaCeax/ProjectI-AlmaCeax/master/Wiki/0.Home/alejandro.jpg)
-Alejandro París 
-[Github account](https://github.com/AlejandroParis)
-
-![Axel Alavedra Screenshot](https://raw.githubusercontent.com/AlmaCeax/ProjectI-AlmaCeax/master/Wiki/0.Home/axel.jpg)
-Alavedra Cabello
-[Github account](https://github.com/AxelAlavedra)
-
 
 ### License
 
