@@ -237,7 +237,7 @@ void j1Player::Jump(float boost_y)
 
 void j1Player::CheckDeath()
 {
-	if(position.y > App->map->data.height * App->map->data.tile_height && state != DEAD && state != GOD)
+	if(App->map->map_loaded && position.y > App->map->data.height * App->map->data.tile_height && state != DEAD && state != GOD)
 		Die();
 }
 

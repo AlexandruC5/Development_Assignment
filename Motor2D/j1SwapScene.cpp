@@ -5,6 +5,7 @@
 #include "j1Scene.h"
 #include "j1Map.h"
 #include "j1SwapScene.h"
+#include "j1Gui.h"
 
 j1SwapScene::j1SwapScene()
 {
@@ -76,6 +77,7 @@ bool j1SwapScene::PostUpdate()
 		if (now >= total_time)
 		{
 			App->scene->LoadLevel(save_game);
+			App->gui->DisableElement(App->scene->loading_background);
 			//end
 			current_step = fade_step::none;
 		}
@@ -108,10 +110,13 @@ bool j1SwapScene::LoadScreen(float time, bool save_game)
 
 	if (current_step == fade_step::none)
 	{
+		App->gui->EnableElement(App->scene->loading_background);
+		App->gui->DisableElement(App->scene->menu_background);
 		current_step = fade_step::fade_to_black;
 		start_time = SDL_GetTicks();
 		total_time = (Uint32)(time * 0.5F * 1000.0F);
 		swap = LOAD_SCREEN;
+		App->paused = false;
 		this->save_game = save_game;
 		ret = true;
 	}

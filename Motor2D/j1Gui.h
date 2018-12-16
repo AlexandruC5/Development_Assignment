@@ -46,6 +46,7 @@ public:
 	virtual bool UICleanUp();
 	virtual bool IsInside(int x, int y);
 	virtual bool Update(float dt) { return true; };
+	virtual bool CleanUp() { return true; };
 
 	SDL_Rect GetScreenRect();
 	SDL_Rect GetLocalRect(); 
@@ -80,7 +81,7 @@ public:
 class j1UIAnimatedImage : public j1UIImage
 {
 public:
-	j1UIAnimatedImage(iPoint pos, SDL_Rect * rect, int total_sprites, int speed);
+	j1UIAnimatedImage(iPoint pos, SDL_Rect* rect, int total_sprites, int speed);
 	~j1UIAnimatedImage();
 	bool UIBlit();
 	bool Update(float dt);
@@ -99,6 +100,7 @@ public:
 	bool UIBlit();
 	void SetText(p2SString text);
 	void SetColor(SDL_Color color);
+	bool CleanUp();
 };
 class j1UIButton : public j1UIElement
 {
@@ -114,6 +116,7 @@ public:
 	void OnMouseRelease();
 	void OnMouseExit();
 	void SetLocked(bool value);
+	bool CleanUp();
 };
 
 class j1UIScrollBar : public j1UIElement
@@ -123,7 +126,6 @@ public:
 	~j1UIScrollBar() {};
 
 	ScrollType type;
-	SDL_Rect* anim;
 	j1UIImage* thumb = nullptr;
 	float norm_value = 0.0F;
 	float min, max;
@@ -137,6 +139,7 @@ public:
 	void SetValue(float new_value);
 	float GetValue();
 	void SetMinMax(float min, float max);
+	bool CleanUp();
 };
 
 // ---------------------------------------------------

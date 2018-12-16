@@ -100,9 +100,9 @@ bool j1Scene::Start()
 	App->gui->ScaleElement(loading_panel, 0.0F, 0.5F);
 	loading_text = App->gui->CreateLabel({ 110,0 }, "fonts/open_sans/OpenSans-Bold.ttf", 28, "LOADING", { 255,255,255 }, 0, loading_panel);
 	SDL_Rect rects[3] = {
-		{ 444,3909,115,73 },
-		{ 571,3903,118,78 },
-		{ 698,3903,121,79 }
+		{ 444,3909,115,92 },
+		{ 571,3903,118,92 },
+		{ 698,3903,121,92 }
 	};
 	loading_animatedimage = App->gui->CreateAnimatedImage({120,30}, rects, 3, 10, loading_panel);
 
@@ -211,21 +211,15 @@ bool j1Scene::Update(float dt)
 	//Debug Functionalities
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 	{
-		App->gui->EnableElement(loading_background);
-		App->gui->DisableElement(menu_background);
 		current_level = 1;
 		App->swap_scene->LoadScreen();
 	}
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 	{
-		App->gui->DisableElement(menu_background);
-		App->gui->EnableElement(loading_background);
 		App->swap_scene->LoadScreen();
 	}
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
 	{
-		App->gui->DisableElement(menu_background);
-		App->gui->EnableElement(loading_background);
 		current_level = levels.At(current_level)->data.next_level;
 		App->swap_scene->LoadScreen();
 	}
@@ -398,6 +392,62 @@ bool j1Scene::CleanUp()
 {
 	LOG("Freeing scene");
 	App->map->CleanUp();
+	levels.clear();
+
+	loading_animatedimage = nullptr;
+	loading_panel = nullptr;
+	loading_text = nullptr;
+
+	main_menu_panel = nullptr;
+	main_menu_button_play = nullptr;
+	main_menu_button_continue = nullptr;
+	main_menu_button_settings = nullptr;
+	main_menu_button_credits = nullptr;
+	main_menu_button_exit = nullptr;
+
+	main_menu_button_play_text = nullptr;
+	main_menu_button_continue_text = nullptr;
+	main_menu_button_settings_text = nullptr;
+	main_menu_button_credits_text = nullptr;
+	main_menu_button_exit_text = nullptr;
+
+	pause_menu_panel = nullptr;
+	pause_menu_button_resume = nullptr;
+	pause_menu_button_main_menu = nullptr;
+	pause_menu_music_slider = nullptr;
+	pause_menu_music_text = nullptr;
+	pause_menu_music_text_value = nullptr;
+	pause_menu_sfx_slider = nullptr;
+	pause_menu_sfx_text = nullptr;
+	pause_menu_sfx_text_value = nullptr;
+
+	pause_menu_button_resume_text = nullptr;
+	pause_menu_button_main_menu_text = nullptr;
+
+	settings_menu_panel = nullptr;
+	settings_menu_button_main_menu = nullptr;
+	settings_menu_button_main_menu_text = nullptr;
+	settings_menu_music_slider = nullptr;
+	settings_menu_music_text = nullptr;
+	settings_menu_music_text_value = nullptr;
+	settings_menu_sfx_slider = nullptr;
+	settings_menu_sfx_text = nullptr;
+	settings_menu_sfx_text_value = nullptr;
+
+	credits_menu_panel = nullptr;
+	credits_menu_button_main_menu = nullptr;
+	credits_menu_button_main_menu_text = nullptr;
+	credits_menu_text_panel = nullptr;
+	credits_menu_text = nullptr;
+	credits_menu_text_scroll = nullptr;
+
+	ingame_panel = nullptr;
+	lives_text = nullptr;
+	lives_image = nullptr;
+	time_text = nullptr;
+	score_image = nullptr;
+	score_text = nullptr;
+
 	return true;
 }
 
@@ -406,7 +456,6 @@ bool j1Scene::OnCollision(Collider * c1, Collider * c2)
 	App->entitymanager->player->state = WIN;
 
 	current_level = levels.At(current_level)->data.next_level;
-	App->gui->EnableElement(loading_background);
 	App->swap_scene->LoadScreen();
 
 	return true;
@@ -417,8 +466,6 @@ bool j1Scene::Load(pugi::xml_node &node)
 	int saved_level = node.child("current_level").attribute("value").as_int();
 	if (saved_level != current_level)
 	{
-		App->gui->DisableElement(menu_background);
-		App->gui->EnableElement(loading_background);
 		current_level = saved_level;
 		App->swap_scene->LoadScreen(2.0F, true);
 		if (levels.At(current_level)->data.game_level && menu_background->enabled)
@@ -474,16 +521,11 @@ bool j1Scene::GUIEvent(j1UIElement * element, GUI_Event gui_event)
 			else if(element == pause_menu_button_main_menu)
 			{
 				current_level = 0;
-				App->swap_scene->LoadScreen();
-
-				App->gui->EnableElement(loading_background);
 				App->gui->DisableElement(pause_menu_panel);
+				App->swap_scene->LoadScreen();
 			}
 			else if(element == main_menu_button_play)
 			{
-				App->gui->DisableElement(menu_background);
-				App->gui->EnableElement(loading_background);
-
 				current_level = levels.At(current_level)->data.next_level;
 				App->swap_scene->LoadScreen();
 				App->entitymanager->player->ResetLives();

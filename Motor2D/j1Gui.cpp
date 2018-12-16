@@ -7,6 +7,7 @@
 #include "j1Input.h"
 #include "j1Scene.h"
 #include "j1Gui.h"
+#include "j1Textures.h"
 #include "Brofiler/Brofiler.h"
 
 j1Gui::j1Gui() : j1Module()
@@ -156,6 +157,14 @@ bool j1Gui::PostUpdate()
 bool j1Gui::CleanUp()
 {
 	LOG("Freeing GUI");
+	for (p2List_item<j1UIElement*>* item = elements.start; item != NULL; item = item->next)
+	{
+		item->data->CleanUp();
+	}
+	elements.clear();
+	App->tex->UnLoad(atlas);
+	atlas = nullptr;
+	scaling_element = nullptr;
 
 	return true;
 }
@@ -308,6 +317,7 @@ bool j1UIElement::UIBlit()
 
 bool j1UIElement::UICleanUp()
 {
+	parent = nullptr;
 	return true;
 }
 
@@ -511,6 +521,14 @@ void j1UILabel::SetColor(SDL_Color color)
 	this->color = color;
 }
 
+bool j1UILabel::CleanUp()
+{
+	parent = nullptr;
+	font = nullptr;
+
+	return true;
+}
+
 
 
 j1UIButton::~j1UIButton()
@@ -551,6 +569,13 @@ void j1UIButton::SetLocked(bool value)
 {
 	interactable = value;
 	rect_sprite = anim[interactable ? 0 : 3];
+}
+
+bool j1UIButton::CleanUp()
+{
+	delete[] anim;
+	parent = nullptr;
+	return true;
 }
 
 j1UIButton::j1UIButton(iPoint position, bool is_interactable)
@@ -632,6 +657,16 @@ void j1UIScrollBar::SetMinMax(float min, float max)
 {
 	this->min = min;
 	this->max = max;
+}
+
+bool j1UIScrollBar::CleanUp()
+{
+	parent = nullptr;
+	thumb->CleanUp();
+	delete thumb;
+	thumb = nullptr;
+
+	return true;
 }
 
 j1UIAnimatedImage::j1UIAnimatedImage(iPoint pos, SDL_Rect * rect, int total_sprites, int speed)
