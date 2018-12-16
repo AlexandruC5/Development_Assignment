@@ -14,6 +14,7 @@ public:
 	bool PostUpdate();
 	bool FadeToBlack(float time = 2.0f);
 	bool CleanUp();
+	bool LoadScreen(float time = 2.0F, bool save_game = false);
 
 private:
 
@@ -24,9 +25,15 @@ private:
 		fade_from_black
 	} current_step = fade_step::none;
 
+	enum swap_type {
+		FADE,
+		LOAD_SCREEN
+	}swap = FADE;
+
 	uint start_time = 0;
 	uint total_time = 0;
 	SDL_Rect screen;
+	bool save_game = false;
 };
 
 #endif

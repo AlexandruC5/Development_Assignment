@@ -46,11 +46,54 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	}
 	current_level = conf.child("start_level").attribute("value").as_int();
 
+	return true;
+}
 
+void j1Scene::LoadLevel(bool load_save)
+{
+	App->map->CleanUp();
+	App->entitymanager->CleanMapEntities();
+
+	App->map->Load(levels.At(current_level)->data.map_path.GetString());
+	App->entitymanager->player->ResetEntity();
+
+	if (levels.At(current_level)->data.game_level)
+	{
+		//pathfinding
+		int w, h;
+		uchar* data = NULL;
+		if (App->map->CreateWalkabilityMap(w, h, &data))
+			App->pathfinding->SetMap(w, h, data);
+
+		RELEASE_ARRAY(data);
+
+		App->gui->DisableElement(loading_background);
+		App->paused = false;
+	}
+	else
+	{
+		App->paused = true;
+		App->gui->EnableElement(menu_background);
+		App->gui->DisableElement(loading_background);
+	}
+
+	App->audio->PlayMusic(levels.At(current_level)->data.sound_path.GetString());
+
+	if (load_save)
+	{
+		App->entitymanager->Load(App->current_save.child("game_state").child("entity_manager")); //TODO BETTER
+		App->render->Load(App->current_save.child("game_state").child("renderer"));
+	}
+
+}
+// Called before the first frame
+bool j1Scene::Start()
+{
+	BROFILER_CATEGORY("StartScene", Profiler::Color::Plum);
 	uint x, y;
 	App->win->GetWindowSize(x, y);
 	ingame_panel = App->gui->CreateImage({ 0,0 }, { 0,0,(int)x,(int)y }, nullptr, false);
-	menu_background = App->gui->CreateImage({ 0,0 }, { 1659, 2976,(int)x,(int)y },ingame_panel);
+	menu_background = App->gui->CreateImage({ 0,0 }, { 1659, 2976,(int)x,(int)y }, ingame_panel);
 	loading_background = App->gui->CreateImage({ 0,0 }, { 75, 2968, 1280, 720 }, ingame_panel);
 
 	main_menu_panel = App->gui->CreateImage({ 850,50 }, { 551,711,380,539 }, menu_background);
@@ -59,15 +102,15 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	main_menu_button_continue = App->gui->CreateButton({ 100, 137 }, main_menu_panel, App->save_file_exists);
 	main_menu_button_settings = App->gui->CreateButton({ 100, 222 }, main_menu_panel);
 	main_menu_button_credits = App->gui->CreateButton({ 100, 307 }, main_menu_panel);
-	main_menu_button_exit = App->gui->CreateButton({ 100, 392}, main_menu_panel);
+	main_menu_button_exit = App->gui->CreateButton({ 100, 392 }, main_menu_panel);
 
-	main_menu_button_play_text = App->gui->CreateLabel({ 58,22 },"fonts/open_sans/OpenSans-Bold.ttf", 28, "PLAY", { 255,255,255 }, 0, main_menu_button_play);
+	main_menu_button_play_text = App->gui->CreateLabel({ 58,22 }, "fonts/open_sans/OpenSans-Bold.ttf", 28, "PLAY", { 255,255,255 }, 0, main_menu_button_play);
 	main_menu_button_continue_text = App->gui->CreateLabel({ 17,22 }, "fonts/open_sans/OpenSans-Bold.ttf", 28, "CONTINUE", { 255,255,255 }, 0, main_menu_button_continue);
 	main_menu_button_settings_text = App->gui->CreateLabel({ 25,22 }, "fonts/open_sans/OpenSans-Bold.ttf", 28, "SETTINGS", { 255,255,255 }, 0, main_menu_button_settings);
 	main_menu_button_credits_text = App->gui->CreateLabel({ 35,22 }, "fonts/open_sans/OpenSans-Bold.ttf", 28, "CREDITS", { 255,255,255 }, 0, main_menu_button_credits);
 	main_menu_button_exit_text = App->gui->CreateLabel({ 60,22 }, "fonts/open_sans/OpenSans-Bold.ttf", 28, "EXIT", { 255,255,255 }, 0, main_menu_button_exit);
 
-	settings_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 },ingame_panel);
+	settings_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 }, ingame_panel);
 	App->gui->ScaleElement(settings_menu_panel, 0.0F, -0.4F);
 	settings_menu_button_main_menu = App->gui->CreateButton({ 100, 320 }, settings_menu_panel);
 	settings_menu_button_main_menu_text = App->gui->CreateLabel({ 60,14 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MAIN\nMENU", { 255,255,255 }, 100, settings_menu_button_main_menu);
@@ -117,7 +160,7 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	App->gui->ScaleElement(credits_menu_text_panel, -0.12F, -0.1F);
 	credits_menu_button_main_menu = App->gui->CreateButton({ 100, 400 }, credits_menu_panel);
 	credits_menu_button_main_menu_text = App->gui->CreateLabel({ 60,14 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MAIN\nMENU", { 255,255,255 }, 80, credits_menu_button_main_menu);
-	credits_menu_text = App->gui->CreateLabel({ 5,5 }, "fonts/open_sans/OpenSans-Bold.ttf", 18, 
+	credits_menu_text = App->gui->CreateLabel({ 5,5 }, "fonts/open_sans/OpenSans-Bold.ttf", 18,
 		"MIT License\n\nCopyright(c) 2018 [Axel Alavedra Cabello, Alejandro París Gómez]\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files(the ""Software""), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions :\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED ""AS IS"", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.",
 		{ 255,255,255 }, 250, credits_menu_text_panel);
 	credits_menu_text->parent_limit = false;
@@ -125,11 +168,11 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	SDL_Rect screen_rect = credits_menu_text->GetScreenRect();
 	credits_menu_text_scroll = App->gui->CreateScrollBar({ 330, 150 }, screen_rect.y, screen_rect.y - (screen_rect.h - parent_rect.h), VERTICAL, credits_menu_panel);
 
-	lives_text = App->gui->CreateLabel({45,10}, "fonts/open_sans/OpenSans-Bold.ttf", 22, "x 3", { 0,0,0 }, 80,ingame_panel);
+	lives_text = App->gui->CreateLabel({ 45,10 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "x 3", { 0,0,0 }, 80, ingame_panel);
 	lives_image = App->gui->CreateImage({ 5,5 }, { 1974,1998,94,87 }, ingame_panel);
 	App->gui->ScaleElement(lives_image, -0.6F, -0.6F);
 
-	time_text = App->gui->CreateLabel({ (ingame_panel->GetLocalRect().w/2) - 20,10 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "00:00", { 0,0,0 }, 80, ingame_panel);
+	time_text = App->gui->CreateLabel({ (ingame_panel->GetLocalRect().w / 2) - 20,10 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "00:00", { 0,0,0 }, 80, ingame_panel);
 
 	score_text = App->gui->CreateLabel({ ingame_panel->GetLocalRect().w - 80,10 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "999", { 0,0,0 }, 80, ingame_panel);
 	score_image = App->gui->CreateImage({ ingame_panel->GetLocalRect().w - 120,5 }, { 2253,1997,115,133 }, ingame_panel);
@@ -140,35 +183,6 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	App->gui->DisableElement(credits_menu_panel);
 	App->gui->DisableElement(loading_background);
 
-	return true;
-}
-
-void j1Scene::LoadLevel()
-{
-	load_data.finished = false;
-	loaded_scene = false;
-	load_data.path = levels.At(current_level)->data.map_path.GetString();
-
-	load_map_thread = SDL_CreateThread(LoadLevelMap, "LoadLevelMap", (void *)&load_data);
-
-}
-int j1Scene::LoadLevelMap(void* data)
-{
-	App->map->CleanUp();
-	App->entitymanager->CleanMapEntities();
-
-	Load_Data* load_d = (Load_Data*) data;
-	App->map->Load(load_d->path.GetString());
-
-	load_d->finished = true;
-
-	return 0;
-}
-// Called before the first frame
-bool j1Scene::Start()
-{
-	BROFILER_CATEGORY("StartScene", Profiler::Color::Plum);
-	
 	LoadLevel();
 
 	return true;
@@ -186,18 +200,29 @@ bool j1Scene::Update(float dt)
 	//Debug Functionalities
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 	{
-		current_level = 0;
-		App->swap_scene->FadeToBlack();
+		App->gui->EnableElement(loading_background);
+		App->gui->DisableElement(menu_background);
+		current_level = 1;
+		App->swap_scene->LoadScreen();
 	}
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
-		App->swap_scene->FadeToBlack();
+	{
+		App->gui->DisableElement(menu_background);
+		App->gui->EnableElement(loading_background);
+		App->swap_scene->LoadScreen();
+	}
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
 	{
+		App->gui->DisableElement(menu_background);
+		App->gui->EnableElement(loading_background);
 		current_level = levels.At(current_level)->data.next_level;
-		App->swap_scene->FadeToBlack();
+		App->swap_scene->LoadScreen();
 	}
 	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
+	{
+		App->gui->DisableElement(menu_background);
 		App->LoadGame();
+	}
 	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
 		App->SaveGame();
 	if (App->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN && App->frame_cap == true)
@@ -246,43 +271,11 @@ bool j1Scene::Update(float dt)
 	else if (-(App->render->camera.position.x - App->render->camera.body.w) > App->map->data.width*App->map->data.tile_width)
 		App->render->camera.position.x = -(App->map->data.width * App->map->data.tile_width - App->render->camera.body.w);
 
-	if(levels.At(current_level)->data.game_level && loaded_scene)
+	if(levels.At(current_level)->data.game_level)
 		App->map->Draw();
 	
 
 	//SLIDER UPDATE
-	if (load_data.finished)
-	{
-		if (levels.At(current_level)->data.game_level)
-		{
-			//pathfinding
-			int w, h;
-			uchar* data = NULL;
-			if (App->map->CreateWalkabilityMap(w, h, &data))
-				App->pathfinding->SetMap(w, h, data);
-
-			RELEASE_ARRAY(data);
-			App->paused = false;
-		}
-		else
-		{
-			App->paused = true;
-			App->gui->EnableElement(menu_background);
-		}
-
-		if (!App->entitymanager->player)
-			App->entitymanager->CreateEntity(EntityType::PLAYER, { 0, 0 });
-
-		App->audio->PlayMusic(levels.At(current_level)->data.sound_path.GetString());
-
-		load_data.finished = false;
-		loaded_scene = true;
-		if(loading_background->enabled) App->gui->DisableElement(loading_background);
-
-		level_time.Start();
-		time_text->SetColor({ 0,0,0 });
-		SDL_DetachThread(load_map_thread);
-	}
 	credits_menu_text->SetScreenPos(credits_menu_text->GetScreenRect().x, credits_menu_text_scroll->GetValue());
 
 	if (settings_menu_panel->enabled)
@@ -402,7 +395,8 @@ bool j1Scene::OnCollision(Collider * c1, Collider * c2)
 	App->entitymanager->player->state = WIN;
 
 	current_level = levels.At(current_level)->data.next_level;
-	App->swap_scene->FadeToBlack();
+	App->gui->EnableElement(loading_background);
+	App->swap_scene->LoadScreen();
 
 	return true;
 }
@@ -412,8 +406,10 @@ bool j1Scene::Load(pugi::xml_node &node)
 	int saved_level = node.child("current_level").attribute("value").as_int();
 	if (saved_level != current_level)
 	{
+		App->gui->DisableElement(menu_background);
+		App->gui->EnableElement(loading_background);
 		current_level = saved_level;
-		App->swap_scene->FadeToBlack(0.0F);
+		App->swap_scene->LoadScreen(2.0F, true);
 		if (levels.At(current_level)->data.game_level && menu_background->enabled)
 			menu_background->enabled = false;
 	}
@@ -435,7 +431,7 @@ void j1Scene::GameOver()
 {
 	App->gui->EnableElement(loading_background);
 	current_level = 0;
-	App->swap_scene->FadeToBlack(0.0F);
+	App->swap_scene->LoadScreen();
 }
 
 bool j1Scene::GUIEvent(j1UIElement * element, GUI_Event gui_event)
@@ -467,7 +463,7 @@ bool j1Scene::GUIEvent(j1UIElement * element, GUI_Event gui_event)
 			else if(element == pause_menu_button_main_menu)
 			{
 				current_level = 0;
-				App->swap_scene->FadeToBlack(0.0F);
+				App->swap_scene->LoadScreen();
 
 				App->gui->EnableElement(loading_background);
 				App->gui->DisableElement(pause_menu_panel);
@@ -478,14 +474,11 @@ bool j1Scene::GUIEvent(j1UIElement * element, GUI_Event gui_event)
 				App->gui->EnableElement(loading_background);
 
 				current_level = levels.At(current_level)->data.next_level;
-				App->swap_scene->FadeToBlack(0.0F);
+				App->swap_scene->LoadScreen();
 				App->entitymanager->player->ResetLives();
 			}
 			else if(element == main_menu_button_continue)
 			{
-				App->gui->DisableElement(menu_background);
-				App->gui->EnableElement(loading_background);
-
 				App->LoadGame();
 				App->paused = false;
 			}

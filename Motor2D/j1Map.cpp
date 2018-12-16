@@ -216,14 +216,13 @@ bool j1Map::Load(const char* file_name)
 	}
 
 	//Load Utils
-	if (ret)
-	{
-		pugi::xml_node utils = map_file.child("map").find_child_by_attribute("name", "utils");
-		LoadUtilsLayer(utils);
-	}
 
-	if(ret)
-		LoadEnemiesLayer(map_file.child("map").find_child_by_attribute("name", "enemies"));
+	pugi::xml_node utils = map_file.child("map").find_child_by_attribute("name", "utils");
+	LoadUtilsLayer(utils);
+	
+
+
+	LoadEnemiesLayer(map_file.child("map").find_child_by_attribute("name", "enemies"));
 
 	if(ret == true)
 	{
@@ -461,10 +460,11 @@ bool j1Map::LoadUtilsLayer(pugi::xml_node & node)
 
 	pugi::xml_node spawn = node.find_child_by_attribute("name", "spawn");
 	
-	fPoint position = { spawn.attribute("x").as_float(0), spawn.attribute("y").as_float(0) };
+	fPoint position = { spawn.attribute("x").as_float(), spawn.attribute("y").as_float() };
+	if (!App->entitymanager->player)
+		App->entitymanager->CreateEntity(EntityType::PLAYER, position);
 	App->entitymanager->player->ResetEntity();
-	App->entitymanager->player->SetPosition(position.x, position.y-5);
-
+	App->entitymanager->player->SetPosition(position.x, position.y);
 	return true;
 }
 

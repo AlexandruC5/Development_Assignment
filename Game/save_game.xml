@@ -4,6 +4,9 @@
 	<window />
 	<textures />
 	<audio />
+	<scene>
+		<current_level value="1" />
+	</scene>
 	<map>
 		<background_1 x="0" />
 		<background_2 x="1925" />
@@ -11,7 +14,7 @@
 	<collision />
 	<entity_manager>
 		<player_0>
-			<position x="16" y="2091.53247" />
+			<position x="684.209351" y="1833.57495" />
 			<velocity x="0" y="0" />
 			<target_speed x="0" y="0" />
 			<state value="0" />
@@ -103,11 +106,8 @@
 	<pathfinding />
 	<fonts />
 	<gui />
-	<scene>
-		<current_level value="1" />
-	</scene>
 	<swap_scene />
 	<renderer>
-		<camera x="0" y="-1584" />
+		<camera x="-151.479218" y="-1584" />
 	</renderer>
 </game_state>

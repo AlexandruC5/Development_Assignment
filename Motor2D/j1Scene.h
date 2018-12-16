@@ -58,17 +58,13 @@ public:
 
 	bool GUIEvent(j1UIElement* element, GUI_Event gui_event);
 
-	static int LoadLevelMap(void* data);
-	void LoadLevel();
+	void LoadLevel(bool load_save = false);
 	void GameOver();
 
 	int current_level = 0;
 
 private:
-	SDL_Thread* load_map_thread = nullptr;
-	Load_Data load_data;
 	bool game_running = true;
-	bool loaded_scene = false;
 
 	p2List<Level> levels;
 

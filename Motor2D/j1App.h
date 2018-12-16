@@ -104,7 +104,8 @@ public:
 	bool				paused = true;
 	bool				save_file_exists = false;
 	Timer				startup_time;
-
+	pugi::xml_document	current_save;
+	
 private:
 
 	p2List<j1Module*>	modules;
