@@ -64,6 +64,9 @@ public:
 	int current_level = 0;
 	j1UIElement* loading_background;
 	j1UIElement* menu_background;
+	j1UIElement* settings_menu_panel;
+	j1UIElement* credits_menu_panel;
+	j1UIElement* ingame_panel;
 private:
 	bool game_running = true;
 	uint32 saved_time = 0;
@@ -100,7 +103,7 @@ private:
 	j1UIElement* pause_menu_button_resume_text;
 	j1UIElement* pause_menu_button_main_menu_text;
 
-	j1UIElement* settings_menu_panel;
+
 	j1UIElement* settings_menu_button_main_menu;
 	j1UIElement* settings_menu_button_main_menu_text;
 	j1UIScrollBar* settings_menu_music_slider;
@@ -110,14 +113,14 @@ private:
 	j1UIElement* settings_menu_sfx_text;
 	j1UILabel* settings_menu_sfx_text_value;
 
-	j1UIElement* credits_menu_panel;
+
 	j1UIElement* credits_menu_button_main_menu;
 	j1UIElement* credits_menu_button_main_menu_text;
 	j1UIElement* credits_menu_text_panel;
 	j1UIElement* credits_menu_text;
 	j1UIScrollBar* credits_menu_text_scroll;
 
-	j1UIElement* ingame_panel;
+
 	j1UILabel* lives_text;
 	j1UIElement* lives_image;
 	j1UILabel* time_text;

@@ -112,6 +112,10 @@ bool j1SwapScene::LoadScreen(float time, bool save_game)
 	{
 		App->gui->EnableElement(App->scene->loading_background);
 		App->gui->DisableElement(App->scene->menu_background);
+		App->gui->DisableElement(App->scene->settings_menu_panel);
+		App->gui->DisableElement(App->scene->credits_menu_panel);
+		App->gui->DisableElement(App->scene->ingame_panel);
+
 		current_step = fade_step::fade_to_black;
 		start_time = SDL_GetTicks();
 		total_time = (Uint32)(time * 0.5F * 1000.0F);

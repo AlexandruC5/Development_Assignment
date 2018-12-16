@@ -6,7 +6,7 @@
 	<audio />
 	<scene>
 		<current_level value="1" />
-		<time value="13" />
+		<time value="4" />
 	</scene>
 	<map>
 		<background_1 x="0" />
@@ -15,7 +15,7 @@
 	<collision />
 	<entity_manager>
 		<player_0>
-			<position x="1793.08179" y="1583.15588" />
+			<position x="16" y="2091.76147" />
 			<velocity x="0" y="0" />
 			<target_speed x="0" y="0" />
 			<state value="0" />
@@ -25,14 +25,14 @@
 			<score value="0" />
 		</player_0>
 		<enemy_0>
-			<position x="1583.3302" y="1806.12646" />
-			<velocity x="0.000347686058" y="-0.34764725" />
-			<target_speed x="0" y="-14" />
-			<state value="2" />
-			<is_grounded value="false" />
-			<flipX value="false" />
-			<state value="2" />
-			<chase value="true" />
+			<position x="1583.32996" y="2147.38257" />
+			<velocity x="0" y="0" />
+			<target_speed x="0" y="0" />
+			<state value="0" />
+			<is_grounded value="true" />
+			<flipX value="true" />
+			<state value="0" />
+			<chase value="false" />
 			<movement_controls moving_right="false" />
 			<movement_controls moving_left="false" />
 			<movement_controls jump="false" />
@@ -111,6 +111,6 @@
 	<gui />
 	<swap_scene />
 	<renderer>
-		<camera x="-1253.40454" y="-1323.84448" />
+		<camera x="0" y="-1584" />
 	</renderer>
 </game_state>
