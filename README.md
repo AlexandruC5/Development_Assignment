@@ -4,7 +4,7 @@
 Salty the Slime v.0.0.2
 
 ### Description
-Platformer game made for Development subject. 
+Platformer game made for Development subject with SDL2. 
 Be a salty slime jumping around the levels.
 Grow up, divide and be the best.
 
@@ -66,7 +66,7 @@ Axel Alavedra Cabello
 
 [Github account](https://github.com/AxelAlavedra)
 
-	Pathfinding, Enemies, Entity Structure.
+	Player Movement, Pathfinding, Enemies, Entity Structure, GUI.
 
 Alejandro París Gómez
 
@@ -74,9 +74,10 @@ Alejandro París Gómez
 
 [Github account](https://github.com/AlejandroParis)
 
-	FPS Cap, Brofiler, DT implementation, Entity Structure.
+	FPS Cap, Brofiler, DT implementation, Entity Structure, Player Divide and Grow, GUI.
 
 ### Repository link
+
 https://github.com/TheSaltMine/Development_Assignment
 
 ### Innovations
@@ -91,8 +92,11 @@ Charged jump with vertical or diagional force.
 The player can grow up eating enemies and can divide itself.
 The scale of the player affects his movility.
 You can only pass the levels by reaching a minimum score eating enemies.
-Escalable and dynamic UI. 
-Charging screen.
+Escalable and dynamic UI.
+Loading screen with animated image.
+
+### Video
+
 
 ### Credits
 
@@ -117,6 +121,8 @@ FREE DESERT PLATFORMER TILESET by [Zuhria Alfitra](https://www.gameart2d.com/)
 Downloaded from [here](https://www.gameart2d.com/free-desert-platformer-tileset.html)
 
 Music: 
+
+Main Menu Song (Zoo Tycoon 1 Theme)
 
 Forest Song by [FoolBoyMedia](https://freesound.org/people/FoolBoyMedia/)
 
