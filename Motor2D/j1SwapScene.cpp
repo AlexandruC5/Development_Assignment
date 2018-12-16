@@ -33,38 +33,54 @@ bool j1SwapScene::PostUpdate()
 	if (current_step == fade_step::none)
 		return true;
 
-	Uint32 now = SDL_GetTicks() - start_time;
-	float normalized = MIN(1.0f, (float)now / (float)total_time);
+	if (swap == FADE)
+	{
+		Uint32 now = SDL_GetTicks() - start_time;
+		float normalized = MIN(1.0f, (float)now / (float)total_time);
 
-	switch (current_step)
+		switch (current_step)
+		{
+		case fade_step::fade_to_black:
+		{
+			if (now >= total_time)
+			{
+				App->scene->LoadLevel();
+
+				total_time += total_time;
+				start_time = SDL_GetTicks();
+				current_step = fade_step::fade_from_black;
+			}
+		} break;
+
+		case fade_step::fade_from_black:
+		{
+			normalized = 1.0F - normalized;
+
+			if (now >= total_time)
+				current_step = fade_step::none;
+		} break;
+		default:
+			break;
+		}
+
+		// Finally render the black square with alpha on the screen
+		SDL_RenderSetClipRect(App->render->renderer, nullptr);
+		SDL_SetRenderDrawColor(App->render->renderer, 0, 0, 0, (Uint8)(normalized * 255.0F));
+		SDL_RenderFillRect(App->render->renderer, &screen);
+	}
+	else
 	{
-	case fade_step::fade_to_black:
-	{
+		Uint32 now = SDL_GetTicks() - start_time;
+		float normalized = MIN(1.0f, (float)now / (float)total_time);
+
 		if (now >= total_time)
 		{
-			App->scene->LoadLevel();
-
-			total_time += total_time;
-			start_time = SDL_GetTicks();
-			current_step = fade_step::fade_from_black;
-		}
-	} break;
-
-	case fade_step::fade_from_black:
-	{
-		normalized = 1.0F - normalized;
-
-		if (now >= total_time)
+			App->scene->LoadLevel(save_game);
+			//end
 			current_step = fade_step::none;
-	} break;
-	default:
-		break;
+		}
 	}
-
-	// Finally render the black square with alpha on the screen
-	SDL_RenderSetClipRect(App->render->renderer, nullptr);
-	SDL_SetRenderDrawColor(App->render->renderer, 0, 0, 0, (Uint8)(normalized * 255.0F));
-	SDL_RenderFillRect(App->render->renderer, &screen);
+	
 
 	return true;
 }
@@ -79,6 +95,24 @@ bool j1SwapScene::FadeToBlack(float time)
 		current_step = fade_step::fade_to_black;
 		start_time = SDL_GetTicks();
 		total_time = (Uint32)(time * 0.5F * 1000.0F);
+		swap = FADE;
+		ret = true;
+	}
+
+	return ret;
+}
+
+bool j1SwapScene::LoadScreen(float time, bool save_game)
+{
+	bool ret = false;
+
+	if (current_step == fade_step::none)
+	{
+		current_step = fade_step::fade_to_black;
+		start_time = SDL_GetTicks();
+		total_time = (Uint32)(time * 0.5F * 1000.0F);
+		swap = LOAD_SCREEN;
+		this->save_game = save_game;
 		ret = true;
 	}
 

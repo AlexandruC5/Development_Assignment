@@ -5,6 +5,7 @@
 #include "p2Log.h"
 #include "j1Input.h"
 #include "j1EntityManager.h"
+#include "j1Player.h"
 #include "Brofiler/Brofiler.h"
 
 j1EntityManager::j1EntityManager() : j1Module()
@@ -180,4 +181,42 @@ float j1EntityManager::Reagroup()
 		reduction = 0;
 	}
 	return scale-reduction;
+}
+
+void j1EntityManager::PlayersScale()
+{
+	for (p2List_item<j1Entity*>* entity = entities.start; entity; entity = entity->next)
+	{
+		if (entity->data->GetType() == EntityType::PLAYER || entity->data->GetType() == EntityType::PLAYERCLONE)
+		{
+			entity->data->ScaleEntity(-0.5f, -0.5f);
+		}
+	}
+}
+
+int j1EntityManager::PlayerCount()
+{
+	int count = 0;
+	for (p2List_item<j1Entity*>* entity = entities.start; entity; entity = entity->next)
+	{
+		if (entity->data->GetType() == EntityType::PLAYER || entity->data->GetType() == EntityType::PLAYERCLONE)
+		{
+			count++;
+		}
+	}
+	return count;
+}
+
+void j1EntityManager::DividePlayer()
+{
+		for (p2List_item<j1Entity*>* entity = entities.start; entity; entity = entity->next)
+		{
+			if (entity->data->GetType() == EntityType::PLAYER || entity->data->GetType() == EntityType::PLAYERCLONE)
+			{
+				float scalex = entity->data->GetScale();
+				if (scalex > 1)
+					CreateEntity(EntityType::PLAYERCLONE, { player->position.x + 104, App->entitymanager->player->position.y + 5 }, 2);
+				App->entitymanager->PlayersScale();
+			}
+		}
 }

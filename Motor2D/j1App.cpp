@@ -48,6 +48,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(win, true);
 	AddModule(tex, true);
 	AddModule(audio, true);
+	AddModule(scene, true);
 	AddModule(map, true);
 	AddModule(collision, true);
 	AddModule(entitymanager, true);
@@ -55,7 +56,6 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(fonts, true);
 	AddModule(gui, true);
 
-	AddModule(scene, true);
 	AddModule(swap_scene, true);
 
 	// render last to swap buffer
@@ -402,17 +402,15 @@ bool j1App::LoadGameNow()
 {
 	bool ret = false;
 
-	pugi::xml_document data;
 	pugi::xml_node root;
 
-	pugi::xml_parse_result result = data.load_file(load_game.GetString());
+	pugi::xml_parse_result result = current_save.load_file(load_game.GetString());
 
 	if(result != NULL)
 	{
 		LOG("Loading new Game State from %s...", load_game.GetString());
 
-		root = data.child("game_state");
-
+		root = current_save.child("game_state");
 		p2List_item<j1Module*>* item = modules.start;
 		ret = true;
 
@@ -422,7 +420,6 @@ bool j1App::LoadGameNow()
 			item = item->next;
 		}
 
-		data.reset();
 		if(ret == true)
 			LOG("...finished loading");
 		else
