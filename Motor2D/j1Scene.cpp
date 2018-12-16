@@ -313,6 +313,7 @@ bool j1Scene::Update(float dt)
 	
 
 	//SLIDER UPDATE
+	BROFILER_CATEGORY("SLiderUpdates", Profiler::Color::Plum);
 	credits_menu_text->SetScreenPos(credits_menu_text->GetScreenRect().x, credits_menu_text_scroll->GetValue());
 
 	if (settings_menu_panel->enabled)
