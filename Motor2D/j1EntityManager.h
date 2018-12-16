@@ -30,7 +30,7 @@ public:
 	bool DeleteEntity(j1Entity* entity);
 	bool OnCollision(Collider* c1, Collider* c2);
 	float Reagroup();
-	void PlayersScale();
+	void PlayersScale(j1Entity* entity);
 	int PlayerCount();
 	void DividePlayer();
 	bool CleanMapEntities();

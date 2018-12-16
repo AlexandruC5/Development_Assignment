@@ -175,23 +175,21 @@ float j1EntityManager::Reagroup()
 			}
 		}
 	}
-	if (reduction >= scale)
-	{
-		scale = (reduction-1) * 0.2f;
-		reduction = 0;
-	}
-	return scale-reduction;
+	scale = ((reduction-1) * 0.2f);
+	return scale;
 }
 
-void j1EntityManager::PlayersScale()
+void j1EntityManager::PlayersScale(j1Entity* entity)
 {
-	for (p2List_item<j1Entity*>* entity = entities.start; entity; entity = entity->next)
-	{
-		if (entity->data->GetType() == EntityType::PLAYER || entity->data->GetType() == EntityType::PLAYERCLONE)
+		if (entity->GetScale() > 1)
 		{
-			entity->data->ScaleEntity(-0.5f, -0.5f);
+			entity->grow = true;
 		}
-	}
+		if (entity->GetType() == EntityType::PLAYER && entity->grow || entity->GetType() == EntityType::PLAYERCLONE && entity->grow)
+		{
+			entity->ScaleEntity(-0.2f, -0.2f);
+			entity->grow = false;
+		}
 }
 
 int j1EntityManager::PlayerCount()
@@ -209,14 +207,46 @@ int j1EntityManager::PlayerCount()
 
 void j1EntityManager::DividePlayer()
 {
-		for (p2List_item<j1Entity*>* entity = entities.start; entity; entity = entity->next)
+	int count = 0;
+	for (p2List_item<j1Entity*>* entity = entities.start; entity; entity = entity->next)
+	{
+		if (entity->data->GetType() == EntityType::PLAYER || entity->data->GetType() == EntityType::PLAYERCLONE)
 		{
-			if (entity->data->GetType() == EntityType::PLAYER || entity->data->GetType() == EntityType::PLAYERCLONE)
-			{
-				float scalex = entity->data->GetScale();
-				if (scalex > 1)
-					CreateEntity(EntityType::PLAYERCLONE, { player->position.x + 104, App->entitymanager->player->position.y + 5 }, 2);
-				App->entitymanager->PlayersScale();
-			}
+			count++;
 		}
+	}
+	if ((count%2) > 0 && count > 1)
+	{
+		count = ((count-1)*(-1));
+	}else if(((count % 2) <= 0 && count > 1))
+	{
+		count -=1;
+	}
+	else
+	{
+		count *= -1;
+	}
+	for (p2List_item<j1Entity*>* entity = entities.start; entity; entity = entity->next)
+	{
+		if (entity->data->GetType() == EntityType::PLAYER || entity->data->GetType() == EntityType::PLAYERCLONE)
+		{
+				if (entity->data->GetType() == EntityType::PLAYER)
+				{
+					float scalex = entity->data->GetScale();
+					if (scalex > 1)
+					{
+						App->entitymanager->PlayersScale(entity->data);
+						CreateEntity(EntityType::PLAYERCLONE, { player->position.x + (104 * (count)), App->entitymanager->player->position.y }, 2);
+					}
+				}
+				else
+				{
+					float scalex = entity->data->GetScale();
+					if (scalex > App->entitymanager->player->GetScale())
+					{
+						App->entitymanager->PlayersScale(entity->data);
+					}
+				}
+		}
+	}
 }

@@ -6,6 +6,7 @@ Salty the Slime v.0.0.2
 ### Description
 Platformer game made for Development subject. 
 Be a salty slime jumping around the levels.
+Grow up, divide and be the best.
 
 ### Controls
 	Game Controls:
@@ -55,18 +56,26 @@ Be a salty slime jumping around the levels.
 ### Authors
 Axel Alavedra Cabello
 
+![Axel Alavedra Screenshot](https://raw.githubusercontent.com/AlmaCeax/ProjectI-AlmaCeax/master/Wiki/0.Home/axel.jpg)
+
 [Github account](https://github.com/AxelAlavedra)
+
 
 	Pathfinding, Enemies, Entity Structure.
 
 Alejandro París Gómez
+
+![Alejandro París Screenshot](https://raw.githubusercontent.com/AlmaCeax/ProjectI-AlmaCeax/master/Wiki/0.Home/alejandro.jpg)
 
 [Github account](https://github.com/AlejandroParis)
 
 	FPS Cap, Brofiler, DT implementation, Entity Structure.
 
 ### Repository link
-https://github.com/AxelAlavedra/Development_Assignment
+https://github.com/TheSaltMine/Development_Assignment
+
+### Web link
+ShellExecute(NULL, TEXT("open"), TEXT("https://thesaltmine.github.io/Development_Assignment/"), NULL, NULL, SW_SHOWNORMAL);
 
 ### Innovations
 
@@ -109,7 +118,6 @@ SFX:
 Jump (Retro video game SFX) by [cabled_mess](https://freesound.org/people/cabled_mess/)
 
 Downloaded from [here](https://freesound.org/people/cabled_mess/sounds/350900/)
-
 
 ### License
 

@@ -23,17 +23,19 @@ j1Player::j1Player(EntityType type, pugi::xml_node config, fPoint position, p2SS
 	starting_lives = config.child("lives").attribute("value").as_int();
 
 	collider = App->collision->AddCollider(animation_frame, COLLIDER_PLAYER, App->entitymanager, true);
-	collider->rect.x = position.x;
-	collider->rect.y = position.y + collider_offset;
-	this->clone_number = clone_number;
+
 	if (clone_number > 1)
 	{
 		scale_X = App->entitymanager->player->scale_X;
 		scale_Y = App->entitymanager->player->scale_Y;
-		collider_offset = App->entitymanager->player->collider_offset * scale_Y;
-		collider->rect.h = App->entitymanager->player->collider->rect.h * scale_Y;
-		collider->rect.w = App->entitymanager->player->collider->rect.w * scale_X;
+		collider_offset = 40 * scale_Y;
+		collider->rect.h = 53 * scale_Y;
+		collider->rect.w = 94 * scale_X;
 	}
+
+	collider->rect.x = position.x;
+	collider->rect.y = position.y + collider_offset;
+	this->clone_number = clone_number;
 }
 
 j1Player::~j1Player()
@@ -284,7 +286,6 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 				c2->enabled = false;
 				score++;
 				ScaleEntity(0.2F, 0.2F);
-				grow = false;
 			}			
 		}
 		else
