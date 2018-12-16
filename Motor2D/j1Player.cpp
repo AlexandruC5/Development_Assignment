@@ -270,6 +270,7 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 	{
 		if (c2->rect.h < this->animation_frame.h && c2->rect.w < this->animation_frame.w)
 		{
+			score++;
 			if (grow) {
 				ScaleEntity(0.2F, 0.2F);
 				grow = false;

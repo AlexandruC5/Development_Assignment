@@ -124,14 +124,15 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	SDL_Rect screen_rect = credits_menu_text->GetScreenRect();
 	credits_menu_text_scroll = App->gui->CreateScrollBar({ 330, 150 }, screen_rect.y, screen_rect.y - (screen_rect.h - parent_rect.h), VERTICAL, credits_menu_panel);
 
-	lives_label = App->gui->CreateLabel({45,10}, "fonts/open_sans/OpenSans-Bold.ttf", 22, "x 3", { 255,255,255 }, 80,ingame_panel);
+	lives_text = App->gui->CreateLabel({45,10}, "fonts/open_sans/OpenSans-Bold.ttf", 22, "x 3", { 0,0,0 }, 80,ingame_panel);
 	lives_image = App->gui->CreateImage({ 5,5 }, { 1974,1998,94,87 }, ingame_panel);
 	App->gui->ScaleElement(lives_image, -0.6F, -0.6F);
 
-	time_lavel = App->gui->CreateLabel({ ingame_panel->GetLocalRect().w/2,10 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "00:00", { 255,255,255 }, 80, ingame_panel);
+	time_text = App->gui->CreateLabel({ (ingame_panel->GetLocalRect().w/2) - 20,10 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "00:00", { 0,0,0 }, 80, ingame_panel);
 
-	//score_image = App->gui->CreateImage({ ingame_panel->GetLocalRect().w - 20,5 }, { 1974,1998,94,87 }, ingame_panel);
-
+	score_text = App->gui->CreateLabel({ ingame_panel->GetLocalRect().w - 80,10 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "999", { 0,0,0 }, 80, ingame_panel);
+	score_image = App->gui->CreateImage({ ingame_panel->GetLocalRect().w - 120,5 }, { 1687,1844,115,133 }, ingame_panel);
+	App->gui->ScaleElement(score_image, -0.7F, -0.7F);
 
 	App->gui->DisableElement(pause_menu_panel);
 	App->gui->DisableElement(settings_menu_panel);
@@ -254,6 +255,19 @@ bool j1Scene::Update(float dt)
 
 		settings_menu_music_slider->SetValue(App->audio->GetMusicVolume());
 		settings_menu_sfx_slider->SetValue(App->audio->GetFXVolume());
+	}
+	else if (score_text->enabled)
+	{
+		p2SString tmp_string;
+		tmp_string.create("%i", (int)((App->entitymanager->player->score)));
+		score_text->SetText(tmp_string);
+
+		tmp_string.create("x %i", (int)(App->entitymanager->player->lives));
+		lives_text->SetText(tmp_string);
+
+
+		tmp_string.create("%i", (int)(level_time.Read()/1000));
+		time_text->SetText(tmp_string);
 	}
 
 	if (main_menu_button_continue->interactable != App->save_file_exists)
@@ -421,6 +435,7 @@ bool j1Scene::GUIEvent(j1UIElement * element, GUI_Event gui_event)
 				current_level = levels.At(current_level)->data.next_level;
 				App->swap_scene->FadeToBlack(0.0F);
 				App->entitymanager->player->ResetLives();
+				level_time.Start();
 
 				App->paused = false;
 			}
