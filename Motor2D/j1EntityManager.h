@@ -25,10 +25,11 @@ public:
 	bool CleanUp();
 	bool Load(pugi::xml_node&);
 	bool Save(pugi::xml_node&) const;
-	bool CreateEntity(EntityType type, fPoint position);
+	bool CreateEntity(EntityType type, fPoint position, int clone_number = 0);
 	j1Entity* getEntity(EntityType type);
 	bool DeleteEntity(j1Entity* entity);
 	bool OnCollision(Collider* c1, Collider* c2);
+	float Reagroup();
 	bool CleanMapEntities();
 	bool draw_path = false;
 

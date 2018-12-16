@@ -183,10 +183,25 @@ void j1Entity::ScaleEntity(float x_increment, float y_increment)
 	scale_X += x_increment;
 	scale_Y += y_increment;
 
-	
+	if (scale_X < 1)
+	{
+		scale_X = 1;
+		scale_Y = 1;
+	}
+
 	position.y -= ((53 * scale_Y - collider->rect.h) + collider_offset);
 	collider_offset = 40 * scale_Y;
 	collider->rect.h = 53 * scale_Y;
 	collider->rect.w = 94 * scale_X;
 	collider->rect.y = position.y + collider_offset;
+}
+
+float j1Entity::GetScale()
+{
+	return scale_X;
+}
+
+EntityType j1Entity::GetType()
+{
+	return type;
 }

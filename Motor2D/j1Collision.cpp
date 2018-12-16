@@ -40,7 +40,7 @@ bool j1Collision::PreUpdate()
 		for (uint i = 0; i < max_colliders; ++i)
 		{
 			// skip empty colliders
-			if (colliders[i] != nullptr && colliders[i]->type != COLLIDER_PLAYER)
+			if (colliders[i] != nullptr && colliders[i]->type != COLLIDER_PLAYER && colliders[i]->enabled)
 			{
 				if (player_collider->CheckCollision(colliders[i]->rect))
 				{

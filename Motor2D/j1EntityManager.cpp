@@ -108,7 +108,7 @@ bool j1EntityManager::Save(pugi::xml_node &file) const
 	return true;
 }
 
-bool j1EntityManager::CreateEntity(EntityType type, fPoint position)
+bool j1EntityManager::CreateEntity(EntityType type, fPoint position, int clone_number)
 {
 	BROFILER_CATEGORY("Create_Entity", Profiler::Color::MediumOrchid);
 	p2SString id;
@@ -116,8 +116,12 @@ bool j1EntityManager::CreateEntity(EntityType type, fPoint position)
 	{
 	case EntityType::PLAYER:
 		id.create("%s_%i", "player", id_count++);
-		player = new j1Player(type, entity_configs.child("player"), position, id);
+		player = new j1Player(type, entity_configs.child("player"), position, id, clone_number);
 		entities.add(player);
+		break;
+	case EntityType::PLAYERCLONE:
+		id.create("%s_%i", "player", id_count++);
+		entities.add(new j1Player(type, entity_configs.child("player"), position, id, clone_number));
 		break;
 	case EntityType::ENEMY:
 		id.create("%s_%i", "enemy", id_count++);
@@ -139,7 +143,6 @@ j1Entity * j1EntityManager::getEntity(EntityType type)
 
 bool j1EntityManager::DeleteEntity(j1Entity * entity)
 {
-
 	return true;
 }
 
@@ -153,4 +156,28 @@ bool j1EntityManager::OnCollision(Collider * c1, Collider * c2)
 			entity->data->OnCollision(c2, c1);
 	}
 	return true;
+}
+
+float j1EntityManager::Reagroup()
+{
+	float scale = 0;
+	int reduction = 0;
+	for (p2List_item<j1Entity*>* entity = entities.start; entity; entity = entity->next)
+	{
+		if (entity->data->GetType() == EntityType::PLAYER || entity->data->GetType() == EntityType::PLAYERCLONE)
+		{
+			reduction++;
+			scale += entity->data->GetScale();
+			if (entity->data->GetType() == EntityType::PLAYERCLONE)
+			{
+				entities.del(entity);
+			}
+		}
+	}
+	if (reduction >= scale)
+	{
+		scale = (reduction-1) * 0.2f;
+		reduction = 0;
+	}
+	return scale-reduction;
 }

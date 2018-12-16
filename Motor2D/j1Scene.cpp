@@ -227,6 +227,20 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
 		App->gui->ScaleElement(main_menu_panel, 0.5F, 0.5F, 0.5F);
 
+	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN)
+	{
+		float scalex = App->entitymanager->player->GetScale();
+		App->entitymanager->player->ScaleEntity(-0.5f, -0.5f);
+		if (scalex > 1)
+			App->entitymanager->CreateEntity(EntityType::PLAYERCLONE, { App->entitymanager->player->position.x + App->entitymanager->player->collider->rect.w + 10, App->entitymanager->player->position.y + 5 }, 2);
+
+	}
+	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
+	{
+		float scalex = App->entitymanager->Reagroup();
+		App->entitymanager->player->ScaleEntity(scalex, scalex);
+	}
+
 
 	
 	App->render->camera.velocity = ((App->render->camera.target_speed * 0.4F) + (App->render->camera.velocity * (1 - 0.4F)));
@@ -271,7 +285,7 @@ bool j1Scene::Update(float dt)
 		}
 
 		if (!App->entitymanager->player)
-			App->entitymanager->CreateEntity(EntityType::PLAYER, { 0, 0 });
+			App->entitymanager->CreateEntity(EntityType::PLAYER, { 0, 0 }, 1);
 
 		App->audio->PlayMusic(levels.At(current_level)->data.sound_path.GetString());
 

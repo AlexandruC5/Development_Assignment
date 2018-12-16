@@ -11,6 +11,7 @@ enum class EntityType {
 	PLAYER,
 	ENEMY,
 	FLIER,
+	PLAYERCLONE,
 	COUNT
 };
 
@@ -87,6 +88,8 @@ public:
 	virtual void OnCollision(Collider* c1, Collider* c2) {};
 	virtual void Die();
 	virtual void ScaleEntity(float x_increment, float y_increment);
+	virtual float GetScale();
+	virtual EntityType GetType();
 
 	virtual void ResetEntity();
 	virtual void SetPosition(float x, float y);

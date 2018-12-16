@@ -14,7 +14,7 @@
 #include "Brofiler/Brofiler.h"
 
 
-j1Player::j1Player(EntityType type, pugi::xml_node config, fPoint position, p2SString id) : j1Entity(type, config, position, id)
+j1Player::j1Player(EntityType type, pugi::xml_node config, fPoint position, p2SString id, int clone_number) : j1Entity(type, config, position, id)
 {
 	jump_fx = App->audio->LoadFx(config.child("audio").child("jump_fx").child_value());
 	charged_time = config.child("charged_jump").attribute("time").as_float();
@@ -25,6 +25,15 @@ j1Player::j1Player(EntityType type, pugi::xml_node config, fPoint position, p2SS
 	collider = App->collision->AddCollider(animation_frame, COLLIDER_PLAYER, App->entitymanager, true);
 	collider->rect.x = position.x;
 	collider->rect.y = position.y + collider_offset;
+	this->clone_number = clone_number;
+	if (clone_number > 1)
+	{
+		scale_X = App->entitymanager->player->scale_X;
+		scale_Y = App->entitymanager->player->scale_Y;
+		collider_offset = App->entitymanager->player->collider_offset * scale_Y;
+		collider->rect.h = App->entitymanager->player->collider->rect.h * scale_Y;
+		collider->rect.w = App->entitymanager->player->collider->rect.w * scale_X;
+	}
 }
 
 j1Player::~j1Player()
@@ -101,8 +110,8 @@ bool j1Player::Update(float dt)
 			charge_value += charge_increment * dt;
 	}
 
-	velocity = (target_speed * acceleration + velocity * (1 - acceleration))*dt;
-
+	velocity = ((target_speed * acceleration + velocity * (1 - acceleration))*dt);
+	velocity.x = velocity.x / (scale_X/1.2f);
 	StepY();
 	StepX();
 
@@ -228,7 +237,7 @@ void j1Player::ChargingUpdate()
 
 void j1Player::Jump(float boost_y)
 {
-	target_speed.y = -jump_speed - boost_y;
+	target_speed.y = (-jump_speed - boost_y)/ (scale_X / 1.2f);
 	is_grounded = false;
 	state = JUMPING;
 	charge_value = 0;
@@ -270,11 +279,13 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 	{
 		if (c2->rect.h < this->animation_frame.h && c2->rect.w < this->animation_frame.w)
 		{
-			score++;
-			if (grow) {
+			if (c2->enabled)
+			{
+				c2->enabled = false;
+				score++;
 				ScaleEntity(0.2F, 0.2F);
 				grow = false;
-			}
+			}			
 		}
 		else
 			Die();
