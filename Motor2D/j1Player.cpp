@@ -317,3 +317,20 @@ void j1Player::ResetScale()
 	collider->rect.h = 53 * scale_Y;
 	collider->rect.w = 94 * scale_X;
 }
+
+bool j1Player::Save(pugi::xml_node &conf) const
+{
+	j1Entity::Save(conf);
+	pugi::xml_node lives = conf.append_child("lives");
+	lives.append_attribute("value") = this->lives;
+
+	return true;
+}
+
+bool j1Player::Load(pugi::xml_node &conf)
+{
+	j1Entity::Load(conf);
+	lives = conf.child("lives").attribute("value").as_int();
+
+	return true;
+}
