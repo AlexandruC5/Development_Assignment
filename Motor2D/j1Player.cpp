@@ -295,6 +295,7 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 
 void j1Player::Die()
 {
+	App->entitymanager->Reagroup();
 	j1Entity::Die();
 	lives--;
 	ResetScale();
