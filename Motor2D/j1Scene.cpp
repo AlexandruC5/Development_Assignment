@@ -94,7 +94,18 @@ bool j1Scene::Start()
 	App->win->GetWindowSize(x, y);
 	ingame_panel = App->gui->CreateImage({ 0,0 }, { 0,0,(int)x,(int)y }, nullptr, false);
 	menu_background = App->gui->CreateImage({ 0,0 }, { 1659, 2976,(int)x,(int)y }, ingame_panel);
+
 	loading_background = App->gui->CreateImage({ 0,0 }, { 75, 2968, 1280, 720 }, ingame_panel);
+	loading_panel = App->gui->CreateImage({ 450,420 }, { 1286, 2003, 357, 108 }, loading_background);
+	App->gui->ScaleElement(loading_panel, 0.0F, 0.5F);
+	loading_text = App->gui->CreateLabel({ 110,0 }, "fonts/open_sans/OpenSans-Bold.ttf", 28, "LOADING", { 255,255,255 }, 0, loading_panel);
+	SDL_Rect rects[3] = {
+		{ 444,3909,115,73 },
+		{ 571,3903,118,78 },
+		{ 698,3903,121,79 }
+	};
+	loading_animatedimage = App->gui->CreateAnimatedImage({120,30}, rects, 3, 10, loading_panel);
+
 
 	main_menu_panel = App->gui->CreateImage({ 850,50 }, { 551,711,380,539 }, menu_background);
 	App->gui->ScaleElement(main_menu_panel, 0.0F, 0.17F);

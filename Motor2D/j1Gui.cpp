@@ -121,6 +121,20 @@ bool j1Gui::PreUpdate()
 	return true;
 }
 
+bool j1Gui::Update(float dt)
+{
+	BROFILER_CATEGORY("UIUpdate", Profiler::Color::Magenta);
+	for (p2List_item<j1UIElement*>* item = elements.start; item != NULL; item = item->next)
+	{
+		if (item->data->enabled)
+		{
+			item->data->Update(dt);
+		}
+
+	}
+	return true;
+}
+
 // Called after all Updates
 bool j1Gui::PostUpdate()
 {
@@ -183,6 +197,14 @@ j1UIScrollBar * j1Gui::CreateScrollBar(iPoint pos, float min, float max, ScrollT
 	elements.add(scroll);
 
 	return scroll;
+}
+
+j1UIAnimatedImage * j1Gui::CreateAnimatedImage(iPoint pos, SDL_Rect * rect, int total_sprites, int speed, j1UIElement* parent)
+{
+	j1UIAnimatedImage* image = new j1UIAnimatedImage(pos, rect, total_sprites, speed);
+	image->parent = parent;
+	elements.add(image);
+	return image;
 }
 
 void j1Gui::EnableElement(j1UIElement* element)
@@ -379,6 +401,10 @@ j1UIImage::j1UIImage(iPoint pos, SDL_Rect rect, bool image)
 	rect_box = { pos.x,pos.y,rect.w,rect.h };
 	this->rect_sprite = rect;
 	this->image = image;
+}
+
+j1UIImage::j1UIImage()
+{
 }
 
 j1UIImage::~j1UIImage()
@@ -606,4 +632,38 @@ void j1UIScrollBar::SetMinMax(float min, float max)
 {
 	this->min = min;
 	this->max = max;
+}
+
+j1UIAnimatedImage::j1UIAnimatedImage(iPoint pos, SDL_Rect * rect, int total_sprites, int speed)
+{
+	rect_box.x = pos.x;
+	rect_box.y = pos.y;
+	for (int i = 0; i < total_sprites; i++)
+	{
+		animation.PushBack(rect[i]);
+	}
+	animation.speed = speed;
+	animation.loop = true;
+}
+
+j1UIAnimatedImage::~j1UIAnimatedImage()
+{
+}
+
+bool j1UIAnimatedImage::UIBlit()
+{
+	iPoint screen_pos = GetScreenPos();
+	if (clipping && parent)
+		App->render->Blit(App->gui->GetAtlas(), screen_pos.x, screen_pos.y, &animation_frame, 0.0F, false, false, 0.0, INT_MAX, INT_MAX, scale_X, scale_Y, &parent->GetScreenRect());
+	else
+		App->render->Blit(App->gui->GetAtlas(), screen_pos.x, screen_pos.y, &animation_frame, 0.0F, false, false, 0.0, INT_MAX, INT_MAX, scale_X, scale_Y);
+	return true;
+}
+
+bool j1UIAnimatedImage::Update(float dt)
+{
+	animation_frame = animation.GetCurrentFrame(dt);
+	rect_box.h = animation_frame.h;
+	rect_box.w = animation_frame.w;
+	return true;
 }
