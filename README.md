@@ -78,6 +78,18 @@ Alejandro París Gómez
 
 	Infinite background, FPS Cap, Brofiler, DT implementation, Entity Structure, Player Divide and Grow, GUI.
 
+### Cores Explanation
+
+The game has been made with a couple of main modules:
+
+-EntityManager: This module manages all the entities of the game such as player, copies, enemies, etc. It is responsible of creating, deleting and updating them.
+
+-Map Module: This module receives a tmx file created with Tiled and is able to create a tile based map in game, it also creates its colliders.
+
+-Pathfinding: The module that calculates the differents paths that enemies use for their movement. It supports jumps, ground based and air movements.
+
+-GUI: Module responsible for creating, managing and deleting every single UI Element created in the game. It supports scaling, parenting, clipping, dragging and other important features.
+
 ### Repository link
 
 https://github.com/TheSaltMine/Development_Assignment
@@ -100,17 +112,6 @@ Loading screen with animated image.
 ### Video
 
 <video src="Website/Salty_the_Slime_Gameplay_video.mp4" width="640" height="400" controls preload></video>
-
-### Tools used
-* IDE: Microsoft Visual Studio 2018
-* Language: C++
-* Graphics and audio: SDL 2.0
-* Data: pugixml 
-* Level editor: Tiled 
-* Profiler: Brofiler
-* Code repository: GitHub
-* Others: Adobe Photoshop CS6 and SpriteCow
-
 
 ### Credits
 
