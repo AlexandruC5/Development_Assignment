@@ -329,6 +329,9 @@ bool j1Player::Save(pugi::xml_node &conf) const
 	pugi::xml_node score = conf.append_child("score");
 	score.append_attribute("value") = this->score;
 
+	pugi::xml_node scale = conf.append_child("scale");
+	scale.append_attribute("value") = this->scale_X;
+
 	return true;
 }
 
@@ -337,6 +340,10 @@ bool j1Player::Load(pugi::xml_node &conf)
 	j1Entity::Load(conf);
 	lives = conf.child("lives").attribute("value").as_int();
 	score = conf.child("score").attribute("value").as_int();
+
+	float scale_value = conf.child("scale").attribute("value").as_float()-1;
+	ResetScale();
+	ScaleEntity(scale_value, scale_value);
 
 	return true;
 }

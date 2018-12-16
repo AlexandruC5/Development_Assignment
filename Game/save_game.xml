@@ -6,7 +6,7 @@
 	<audio />
 	<scene>
 		<current_level value="1" />
-		<time value="5" />
+		<time value="20" />
 	</scene>
 	<map>
 		<background_1 x="0" />
@@ -15,14 +15,15 @@
 	<collision />
 	<entity_manager>
 		<player_0>
-			<position x="1315.54041" y="2073.01709" />
+			<position x="2915.88184" y="1367.80945" />
 			<velocity x="0" y="0" />
 			<target_speed x="0" y="0" />
 			<state value="0" />
-			<is_grounded value="true" />
-			<flipX value="false" />
-			<lives value="2" />
-			<score value="5" />
+			<is_grounded value="false" />
+			<flipX value="true" />
+			<lives value="3" />
+			<score value="3" />
+			<scale value="1.5999999" />
 		</player_0>
 		<enemy_0>
 			<position x="1361.25525" y="2147.38257" />
@@ -32,20 +33,20 @@
 			<is_grounded value="true" />
 			<flipX value="true" />
 			<state value="3" />
-			<chase value="true" />
+			<chase value="false" />
 			<movement_controls moving_right="false" />
-			<movement_controls moving_left="true" />
+			<movement_controls moving_left="false" />
 			<movement_controls jump="false" />
 		</enemy_0>
 		<enemy_1>
-			<position x="3146.12012" y="1509.1853" />
+			<position x="2740.54395" y="1171.52637" />
 			<velocity x="0" y="0" />
 			<target_speed x="0" y="0" />
-			<state value="0" />
-			<is_grounded value="true" />
+			<state value="3" />
+			<is_grounded value="false" />
 			<flipX value="true" />
-			<state value="0" />
-			<chase value="false" />
+			<state value="3" />
+			<chase value="true" />
 			<movement_controls moving_right="false" />
 			<movement_controls moving_left="false" />
 			<movement_controls jump="false" />
@@ -64,15 +65,15 @@
 			<movement_controls jump="false" />
 		</enemy_2>
 		<flier_3>
-			<position x="2158.12012" y="851.333008" />
+			<position x="2544.37988" y="1353.48853" />
 			<velocity x="0" y="0" />
 			<target_speed x="0" y="0" />
-			<state value="1" />
+			<state value="3" />
 			<is_grounded value="false" />
-			<flipX value="true" />
-			<state value="1" />
-			<chase value="false" />
-			<movement_controls moving_right="false" />
+			<flipX value="false" />
+			<state value="3" />
+			<chase value="true" />
+			<movement_controls moving_right="true" />
 			<movement_controls moving_left="false" />
 			<movement_controls jump="false" />
 			<movement_controls moving_down="false" />
@@ -111,6 +112,6 @@
 	<gui />
 	<swap_scene />
 	<renderer>
-		<camera x="-907.890076" y="-1584" />
+		<camera x="-2397" y="-1154" />
 	</renderer>
 </game_state>

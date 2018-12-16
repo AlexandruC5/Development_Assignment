@@ -247,7 +247,11 @@ bool j1Scene::Update(float dt)
 		App->LoadGame();
 	}
 	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
+	{
+		float scale = App->entitymanager->Reagroup();
+		App->entitymanager->player->ScaleEntity(scale, scale);
 		App->SaveGame();
+	}
 	if (App->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN && App->frame_cap == true)
 	{
 		App->frame_cap = false;
