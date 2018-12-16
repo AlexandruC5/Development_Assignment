@@ -194,6 +194,7 @@ void j1Entity::ScaleEntity(float x_increment, float y_increment)
 	collider->rect.h = 53 * scale_Y;
 	collider->rect.w = 94 * scale_X;
 	collider->rect.y = position.y + collider_offset;
+	grow = true;
 }
 
 float j1Entity::GetScale()

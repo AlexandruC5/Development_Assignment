@@ -8,7 +8,6 @@
 class j1Player : public j1Entity
 {
 private:
-	bool grow = true;
 	//charged jump variables
 	bool charge = false;
 	float charge_value = 0.0F;

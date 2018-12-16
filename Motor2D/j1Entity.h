@@ -71,6 +71,7 @@ public:
 	Collider * collider;
 	EntityState state = IDLE;
 	p2SString id;
+	bool grow = false;
 	int collider_offset = 0;
 
 	unsigned int jump_fx;
