@@ -146,9 +146,9 @@ bool j1Gui::CleanUp()
 	return true;
 }
 
-j1UIImage * j1Gui::CreateImage(iPoint pos, SDL_Rect rect, j1UIElement* parent)
+j1UIImage * j1Gui::CreateImage(iPoint pos, SDL_Rect rect, j1UIElement* parent, bool image_)
 {
-	j1UIImage* image = new j1UIImage(pos, rect);
+	j1UIImage* image = new j1UIImage(pos, rect,image_);
 	image->parent = parent;
 	elements.add(image);
 
@@ -374,10 +374,11 @@ void j1UIElement::SetEnabled(bool enabled)
 	this->enabled = enabled;
 }
 
-j1UIImage::j1UIImage(iPoint pos, SDL_Rect rect)
+j1UIImage::j1UIImage(iPoint pos, SDL_Rect rect, bool image)
 {
 	rect_box = { pos.x,pos.y,rect.w,rect.h };
 	this->rect_sprite = rect;
+	this->image = image;
 }
 
 j1UIImage::~j1UIImage()
@@ -387,11 +388,13 @@ j1UIImage::~j1UIImage()
 bool j1UIImage::UIBlit()
 {
 	iPoint screen_pos = GetScreenPos();
-	if (clipping && parent)
-		App->render->Blit(App->gui->GetAtlas(), screen_pos.x, screen_pos.y, &rect_sprite, 0.0F, false, false, 0.0, INT_MAX, INT_MAX, scale_X, scale_Y, &parent->GetScreenRect()); 
-	else
-		App->render->Blit(App->gui->GetAtlas(), screen_pos.x, screen_pos.y, &rect_sprite, 0.0F, false, false, 0.0, INT_MAX, INT_MAX, scale_X, scale_Y);
-
+		if(image)
+		{
+			if (clipping && parent)
+				App->render->Blit(App->gui->GetAtlas(), screen_pos.x, screen_pos.y, &rect_sprite, 0.0F, false, false, 0.0, INT_MAX, INT_MAX, scale_X, scale_Y, &parent->GetScreenRect());
+			else
+				App->render->Blit(App->gui->GetAtlas(), screen_pos.x, screen_pos.y, &rect_sprite, 0.0F, false, false, 0.0, INT_MAX, INT_MAX, scale_X, scale_Y);
+		}
 	return true;
 }
 

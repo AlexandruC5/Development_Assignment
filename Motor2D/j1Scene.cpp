@@ -45,7 +45,12 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	}
 	current_level = conf.child("start_level").attribute("value").as_int();
 
-	menu_background = App->gui->CreateImage({ 0,0 }, { 2371,1452,1280,720 });
+	uint x, y;
+	App->win->GetWindowSize(x, y);
+
+	ingame_panel = App->gui->CreateImage({ 0,0 }, { 0,0,(int)x,(int)y }, nullptr, false);
+	
+	menu_background = App->gui->CreateImage({ 0,0 }, { 2371,1452,(int)x,(int)y },ingame_panel);
 
 	main_menu_panel = App->gui->CreateImage({ 850,50 }, { 551,711,380,539 }, menu_background);
 	App->gui->ScaleElement(main_menu_panel, 0.0F, 0.17F);
@@ -61,7 +66,7 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	main_menu_button_credits_text = App->gui->CreateLabel({ 35,22 }, "fonts/open_sans/OpenSans-Bold.ttf", 28, "CREDITS", { 255,255,255 }, 0, main_menu_button_credits);
 	main_menu_button_exit_text = App->gui->CreateLabel({ 60,22 }, "fonts/open_sans/OpenSans-Bold.ttf", 28, "EXIT", { 255,255,255 }, 0, main_menu_button_exit);
 
-	settings_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 });
+	settings_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 },ingame_panel);
 	App->gui->ScaleElement(settings_menu_panel, 0.0F, -0.4F);
 	settings_menu_button_main_menu = App->gui->CreateButton({ 100, 320 }, settings_menu_panel);
 	settings_menu_button_main_menu_text = App->gui->CreateLabel({ 60,14 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MAIN\nMENU", { 255,255,255 }, 100, settings_menu_button_main_menu);
@@ -82,7 +87,7 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	settings_menu_sfx_text_value->parent_limit = false;
 	settings_menu_sfx_text_value->clipping = false;
 
-	pause_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 });
+	pause_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 }, ingame_panel);
 	App->gui->ScaleElement(pause_menu_panel, 0.0F, -0.1F);
 	pause_menu_button_resume = App->gui->CreateButton({ 100, 275 }, pause_menu_panel);
 	pause_menu_button_main_menu = App->gui->CreateButton({ 100, 375 }, pause_menu_panel);
@@ -105,7 +110,7 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	pause_menu_sfx_text_value->parent_limit = false;
 	pause_menu_sfx_text_value->clipping = false;
 
-	credits_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 });
+	credits_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 }, ingame_panel);
 	App->gui->ScaleElement(credits_menu_panel, 0.0F, 0.1F);
 	credits_menu_text_panel = App->gui->CreateImage({ 60, 70 }, { 1172,2283,297,395 }, credits_menu_panel);
 	App->gui->ScaleElement(credits_menu_text_panel, -0.12F, -0.1F);
@@ -118,6 +123,15 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	SDL_Rect parent_rect = credits_menu_text_panel->GetScreenRect();
 	SDL_Rect screen_rect = credits_menu_text->GetScreenRect();
 	credits_menu_text_scroll = App->gui->CreateScrollBar({ 330, 150 }, screen_rect.y, screen_rect.y - (screen_rect.h - parent_rect.h), VERTICAL, credits_menu_panel);
+
+	lives_label = App->gui->CreateLabel({45,10}, "fonts/open_sans/OpenSans-Bold.ttf", 22, "x 3", { 255,255,255 }, 80,ingame_panel);
+	lives_image = App->gui->CreateImage({ 5,5 }, { 1974,1998,94,87 }, ingame_panel);
+	App->gui->ScaleElement(lives_image, -0.6F, -0.6F);
+
+	time_lavel = App->gui->CreateLabel({ ingame_panel->GetLocalRect().w/2,10 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "00:00", { 255,255,255 }, 80, ingame_panel);
+
+	//score_image = App->gui->CreateImage({ ingame_panel->GetLocalRect().w - 20,5 }, { 1974,1998,94,87 }, ingame_panel);
+
 
 	App->gui->DisableElement(pause_menu_panel);
 	App->gui->DisableElement(settings_menu_panel);

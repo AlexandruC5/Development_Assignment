@@ -68,9 +68,10 @@ public:
 class j1UIImage : public j1UIElement
 {
 public:
-	j1UIImage(iPoint pos, SDL_Rect rect);
+	j1UIImage(iPoint pos, SDL_Rect rect,bool image = true);
 	~j1UIImage();
 	bool UIBlit();
+	bool image = true;
 };
 class j1UILabel : public j1UIElement
 {
@@ -150,7 +151,7 @@ public:
 
 	// TODO 2: Create the factory methods
 	// Gui creation functions
-	j1UIImage* CreateImage(iPoint pos, SDL_Rect rect, j1UIElement* parent = nullptr);
+	j1UIImage* CreateImage(iPoint pos, SDL_Rect rect, j1UIElement* parent = nullptr, bool image = true);
 	j1UILabel* CreateLabel(iPoint pos, p2SString path, int size, p2SString text, SDL_Color color, int max_width = 0, j1UIElement* parent = nullptr);
 	j1UIButton* CreateButton(iPoint pos, j1UIElement* parent = nullptr, bool is_interactable = true);
 	j1UIScrollBar* CreateScrollBar(iPoint pos, float min, float max, ScrollType type = VERTICAL, j1UIElement* parent = nullptr);

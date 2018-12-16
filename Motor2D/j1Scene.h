@@ -105,6 +105,15 @@ private:
 	j1UIElement* credits_menu_text_panel;
 	j1UIElement* credits_menu_text;
 	j1UIScrollBar* credits_menu_text_scroll;
+
+	j1UIElement* ingame_panel;
+	j1UIElement* lives_label;
+	j1UIElement* lives_image;
+	j1UIElement* time_lavel;
+	j1UIElement* score_image;
+	j1UIElement* score_lavel;
+
+
 };
 
 #endif // __j1SCENE_H__
