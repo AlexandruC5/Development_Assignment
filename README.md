@@ -50,6 +50,8 @@ Grow up, divide and be the best.
 	+/-: Increase/Decrease music volume.
 	
 	SHIFT+(+/-): Increase/Decrease fx volume.
+	
+	You need to acquire specific score to pass the levels.
 
 ### Instructions to execute
 
