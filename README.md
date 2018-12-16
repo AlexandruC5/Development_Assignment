@@ -56,18 +56,23 @@ Grow up, divide and be the best.
 ### Authors
 Axel Alavedra Cabello
 
+![Axel Alavedra Screenshot](https://raw.githubusercontent.com/AlmaCeax/ProjectI-AlmaCeax/master/Wiki/0.Home/axel.jpg)
+
 [Github account](https://github.com/AxelAlavedra)
+
 
 	Pathfinding, Enemies, Entity Structure.
 
 Alejandro París Gómez
+
+![Alejandro París Screenshot](https://raw.githubusercontent.com/AlmaCeax/ProjectI-AlmaCeax/master/Wiki/0.Home/alejandro.jpg)
 
 [Github account](https://github.com/AlejandroParis)
 
 	FPS Cap, Brofiler, DT implementation, Entity Structure.
 
 ### Repository link
-https://github.com/AxelAlavedra/Development_Assignment
+https://github.com/TheSaltMine/Development_Assignment
 
 ### Innovations
 
