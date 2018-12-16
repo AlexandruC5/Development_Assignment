@@ -9,18 +9,19 @@
 	</scene>
 	<map>
 		<background_1 x="0" />
-		<background_2 x="-1925" />
+		<background_2 x="1925" />
 	</map>
 	<collision />
 	<entity_manager>
 		<player_0>
-			<position x="190.053162" y="2091.229" />
+			<position x="16" y="2091.76147" />
 			<velocity x="0" y="0" />
 			<target_speed x="0" y="0" />
 			<state value="0" />
 			<is_grounded value="true" />
 			<flipX value="true" />
-			<lives value="2" />
+			<lives value="1" />
+			<score value="2" />
 		</player_0>
 		<enemy_0>
 			<position x="1583.32996" y="2147.38257" />
@@ -109,6 +110,6 @@
 	<gui />
 	<swap_scene />
 	<renderer>
-		<camera x="0" y="-1584" />
+		<camera x="-1.3398434e-05" y="-1584" />
 	</renderer>
 </game_state>
