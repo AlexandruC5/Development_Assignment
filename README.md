@@ -75,7 +75,7 @@ Alejandro París Gómez
 https://github.com/TheSaltMine/Development_Assignment
 
 ### Web link
-ShellExecuteA(NULL, "open", “https://thesaltmine.github.io/Development_Assignment/”, NULL, NULL, SW_SHOWNORMAL);
+ShellExecute(NULL, TEXT("open"), TEXT("https://thesaltmine.github.io/Development_Assignment/"), NULL, NULL, SW_SHOWNORMAL);
 
 ### Innovations
 
