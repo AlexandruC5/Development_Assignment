@@ -155,56 +155,75 @@ bool j1Map::Load(const char* file_name)
 	}
 
 	// Load all tilesets info ------------------------------------------
-	pugi::xml_node tileset;
-	for(tileset = map_file.child("map").child("tileset"); tileset && ret; tileset = tileset.next_sibling("tileset"))
+	if (ret)
 	{
-		TileSet* set = new TileSet();
-
-		if(ret == true)
+		pugi::xml_node tileset;
+		for (tileset = map_file.child("map").child("tileset"); tileset && ret; tileset = tileset.next_sibling("tileset"))
 		{
-			ret = LoadTilesetDetails(tileset, set);
-		}
+			TileSet* set = new TileSet();
 
-		if(ret == true)
-		{
-			ret = LoadTilesetImage(tileset, set);
-		}
+			if (ret == true)
+			{
+				ret = LoadTilesetDetails(tileset, set);
+			}
 
-		data.tilesets.add(set);
+			if (ret == true)
+			{
+				ret = LoadTilesetImage(tileset, set);
+			}
+
+			data.tilesets.add(set);
+		}
 	}
-	// Load all layers info
-	pugi::xml_node layer;
-	for (layer = map_file.child("map").child("layer"); layer && ret; layer = layer.next_sibling("layer"))
+	
+	if (ret)
 	{
-		MapLayer* set = new MapLayer();
-
-		if (ret == true)
+		// Load all layers info
+		pugi::xml_node layer;
+		for (layer = map_file.child("map").child("layer"); layer && ret; layer = layer.next_sibling("layer"))
 		{
-			ret = LoadLayer(layer, set);
-		}
+			MapLayer* set = new MapLayer();
 
-		data.layers.add(set);
+			if (ret == true)
+			{
+				ret = LoadLayer(layer, set);
+			}
+
+			data.layers.add(set);
+		}
 	}
+	
 
 	//Load collision layer and create colliders
-	pugi::xml_node objects = map_file.child("map").find_child_by_attribute("name", "colliders");
-	ret = LoadCollisionLayer(objects);
+	if (ret)
+	{
+		pugi::xml_node objects = map_file.child("map").find_child_by_attribute("name", "colliders");
+		ret = LoadCollisionLayer(objects);
+	}
+
 
 	//Load image layer
-	pugi::xml_node background = map_file.child("map").child("imagelayer");
-	data.background_1.background_img = data.background_2.background_img = App->tex->Load(PATH(folder.GetString(), background.child("image").attribute("source").as_string()));
-	data.background_1.background_rect = data.background_2.background_rect = { data.background_1.default_x,0,background.child("image").attribute("width").as_int(), background.child("image").attribute("height").as_int() };
-	data.background_1.background_offset = data.background_2.background_offset = background.attribute("offsety").as_float();
-	data.background_1.background_speed = data.background_2.background_speed = map_file.child("map").child("imagelayer").child("properties").find_child_by_attribute("name","speed").attribute("value").as_float();
-	data.background_2.background_rect.x = data.background_2.default_x == 0? data.background_1.background_rect.w:data.background_2.default_x;
-	data.background_1.default_x = 0;
-	data.background_2.default_x = 0;
+	if (ret)
+	{
+		pugi::xml_node background = map_file.child("map").child("imagelayer");
+		data.background_1.background_img = data.background_2.background_img = App->tex->Load(PATH(folder.GetString(), background.child("image").attribute("source").as_string()));
+		data.background_1.background_rect = data.background_2.background_rect = { data.background_1.default_x,0,background.child("image").attribute("width").as_int(), background.child("image").attribute("height").as_int() };
+		data.background_1.background_offset = data.background_2.background_offset = background.attribute("offsety").as_float();
+		data.background_1.background_speed = data.background_2.background_speed = map_file.child("map").child("imagelayer").child("properties").find_child_by_attribute("name", "speed").attribute("value").as_float();
+		data.background_2.background_rect.x = data.background_2.default_x == 0 ? data.background_1.background_rect.w : data.background_2.default_x;
+		data.background_1.default_x = 0;
+		data.background_2.default_x = 0;
+	}
 
 	//Load Utils
-	pugi::xml_node utils = map_file.child("map").find_child_by_attribute("name", "utils");
-	LoadUtilsLayer(utils);
+	if (ret)
+	{
+		pugi::xml_node utils = map_file.child("map").find_child_by_attribute("name", "utils");
+		LoadUtilsLayer(utils);
+	}
 
-	LoadEnemiesLayer(map_file.child("map").find_child_by_attribute("name", "enemies"));
+	if(ret)
+		LoadEnemiesLayer(map_file.child("map").find_child_by_attribute("name", "enemies"));
 
 	if(ret == true)
 	{
@@ -232,6 +251,10 @@ bool j1Map::Load(const char* file_name)
 			LOG("tile width: %d tile height: %d", l->width, l->height);
 			item_layer = item_layer->next;
 		}
+	}
+	else
+	{
+		LOG("Map not loaded");
 	}
 
 	map_loaded = ret;
@@ -425,10 +448,10 @@ bool j1Map::LoadUtilsLayer(pugi::xml_node & node)
 {
 	pugi::xml_node end_trigger = node.find_child_by_attribute("name", "end");
 	SDL_Rect temp_trigger;
-	temp_trigger.x = end_trigger.attribute("x").as_int();
-	temp_trigger.y = end_trigger.attribute("y").as_int();
-	temp_trigger.w = end_trigger.attribute("width").as_int();
-	temp_trigger.h = end_trigger.attribute("height").as_int();
+	temp_trigger.x = end_trigger.attribute("x").as_int(0);
+	temp_trigger.y = end_trigger.attribute("y").as_int(0);
+	temp_trigger.w = end_trigger.attribute("width").as_int(0);
+	temp_trigger.h = end_trigger.attribute("height").as_int(0);
 	data.colliders.add(App->collision->AddCollider(temp_trigger, COLLIDER_TRIGGER, App->scene));
 
 	App->render->camera.position.y = -(App->map->data.height * App->map->data.tile_height - App->render->camera.body.h);
@@ -438,10 +461,9 @@ bool j1Map::LoadUtilsLayer(pugi::xml_node & node)
 
 	pugi::xml_node spawn = node.find_child_by_attribute("name", "spawn");
 	
-	fPoint position = { spawn.attribute("x").as_float(), spawn.attribute("y").as_float() };
-	if (!App->entitymanager->player)
-		App->entitymanager->CreateEntity(EntityType::PLAYER, position);
-	App->entitymanager->player->SetPosition(position.x, position.y);
+	fPoint position = { spawn.attribute("x").as_float(0), spawn.attribute("y").as_float(0) };
+	App->entitymanager->player->ResetEntity();
+	App->entitymanager->player->SetPosition(position.x, position.y-5);
 
 	return true;
 }

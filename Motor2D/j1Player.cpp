@@ -286,7 +286,7 @@ void j1Player::Die()
 	lives--;
 	ResetScale();
 	if (lives > 0)
-		App->swap_scene->FadeToBlack();
+		App->swap_scene->FadeToBlack(1.0F);
 	else
 		App->scene->GameOver();
 }

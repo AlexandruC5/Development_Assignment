@@ -16,7 +16,7 @@ private:
 	float boost_x = 0.0F;
 	float max_charge = 0.0F;
 	float charge_increment = 0.0F;
-	int lives = 0;
+	int lives = 3;
 	int starting_lives = 0;
 
 	void IdleUpdate();

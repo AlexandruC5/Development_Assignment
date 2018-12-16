@@ -3827,7 +3827,7 @@
   <object id="37" type="0" x="2326" y="1832" width="84" height="100"/>
  </objectgroup>
  <objectgroup color="#ffff00" name="utils">
-  <object id="12" name="spawn" x="16" y="2096"/>
+  <object id="12" name="spawn" x="16" y="2086"/>
   <object id="13" name="end" x="8557.94" y="5.9397" width="354.545" height="1401.45"/>
  </objectgroup>
  <imagelayer name="Background" visible="0" offsetx="0" offsety="-700">

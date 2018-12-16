@@ -5090,7 +5090,7 @@
   </properties>
  </imagelayer>
  <objectgroup color="#ffff00" name="utils">
-  <object id="97" name="spawn" x="16" y="2091"/>
+  <object id="97" name="spawn" x="16" y="2086"/>
   <object id="98" name="end" x="8696.55" y="875.242" width="259.273" height="286.303"/>
  </objectgroup>
  <layer name="Navigation" width="70" height="18">

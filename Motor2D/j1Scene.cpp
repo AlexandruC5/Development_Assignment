@@ -33,6 +33,7 @@ j1Scene::~j1Scene()
 // Called before render is available
 bool j1Scene::Awake(pugi::xml_node& conf)
 {
+	game_running = true;
 	pugi::xml_node level;
 	for (level = conf.child("levels").child("level"); level; level = level.next_sibling("level"))
 	{
@@ -45,7 +46,8 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	}
 	current_level = conf.child("start_level").attribute("value").as_int();
 
-	menu_background = App->gui->CreateImage({ 0,0 }, { 2371,1452,1280,720 });
+	menu_background = App->gui->CreateImage({ 0,0 }, { 1659, 2976, 1280, 720 });
+	loading_background = App->gui->CreateImage({ 0,0 }, { 75, 2968, 1280, 720 });
 
 	main_menu_panel = App->gui->CreateImage({ 850,50 }, { 551,711,380,539 }, menu_background);
 	App->gui->ScaleElement(main_menu_panel, 0.0F, 0.17F);
@@ -122,14 +124,37 @@ bool j1Scene::Awake(pugi::xml_node& conf)
 	App->gui->DisableElement(pause_menu_panel);
 	App->gui->DisableElement(settings_menu_panel);
 	App->gui->DisableElement(credits_menu_panel);
+	App->gui->DisableElement(loading_background);
 
 	return true;
 }
 
+void j1Scene::LoadLevel()
+{
+	load_data.finished = false;
+	loaded_scene = false;
+	load_data.path = levels.At(current_level)->data.map_path.GetString();
+
+	load_map_thread = SDL_CreateThread(LoadLevelMap, "LoadLevelMap", (void *)&load_data);
+
+}
+int j1Scene::LoadLevelMap(void* data)
+{
+	App->map->CleanUp();
+	App->entitymanager->CleanMapEntities();
+
+	Load_Data* load_d = (Load_Data*) data;
+	App->map->Load(load_d->path.GetString());
+
+	load_d->finished = true;
+
+	return 0;
+}
 // Called before the first frame
 bool j1Scene::Start()
 {
 	BROFILER_CATEGORY("StartScene", Profiler::Color::Plum);
+	
 	LoadLevel();
 
 	return true;
@@ -207,10 +232,39 @@ bool j1Scene::Update(float dt)
 	else if (-(App->render->camera.position.x - App->render->camera.body.w) > App->map->data.width*App->map->data.tile_width)
 		App->render->camera.position.x = -(App->map->data.width * App->map->data.tile_width - App->render->camera.body.w);
 
-	if(levels.At(current_level)->data.game_level) App->map->Draw();
+	if(levels.At(current_level)->data.game_level && loaded_scene)
+		App->map->Draw();
 	
 
 	//SLIDER UPDATE
+	if (load_data.finished)
+	{
+		if (levels.At(current_level)->data.game_level)
+		{
+			//pathfinding
+			int w, h;
+			uchar* data = NULL;
+			if (App->map->CreateWalkabilityMap(w, h, &data))
+				App->pathfinding->SetMap(w, h, data);
+
+			RELEASE_ARRAY(data);
+			App->paused = false;
+		}
+		else
+		{
+			App->paused = true;
+			App->gui->EnableElement(menu_background);
+		}
+
+		if (!App->entitymanager->player)
+			App->entitymanager->CreateEntity(EntityType::PLAYER, { 0, 0 });
+
+		App->audio->PlayMusic(levels.At(current_level)->data.sound_path.GetString());
+
+		load_data.finished = false;
+		loaded_scene = true;
+		if(loading_background->enabled) App->gui->DisableElement(loading_background);
+	}
 	credits_menu_text->SetScreenPos(credits_menu_text->GetScreenRect().x, credits_menu_text_scroll->GetValue());
 
 	if (settings_menu_panel->enabled)
@@ -223,7 +277,7 @@ bool j1Scene::Update(float dt)
 		tmp_string.create("%i", (int)((settings_menu_sfx_slider->GetValue() / MIX_MAX_VOLUME) * 100));
 		settings_menu_sfx_text_value->SetText(tmp_string);
 		App->audio->SetFXVolume((int)settings_menu_sfx_slider->GetValue());
-
+		
 		pause_menu_music_slider->SetValue(App->audio->GetMusicVolume());
 		pause_menu_sfx_slider->SetValue(App->audio->GetFXVolume());
 	}
@@ -245,7 +299,7 @@ bool j1Scene::Update(float dt)
 	if (main_menu_button_continue->interactable != App->save_file_exists)
 		((j1UIButton*)main_menu_button_continue)->SetLocked(App->save_file_exists);
 
-	return true;
+	return game_running;
 }
 
 // Called each loop iteration
@@ -333,35 +387,11 @@ bool j1Scene::Save(pugi::xml_node &node) const
 	return levels.At(current_level)->data.game_level?true:false;
 }
 
-void j1Scene::LoadLevel()
-{
-	App->map->CleanUp();
-	App->entitymanager->CleanMapEntities();
 
-	App->map->Load(levels.At(current_level)->data.map_path.GetString());
-	App->entitymanager->player->ResetEntity();
-
-	if (levels.At(current_level)->data.game_level)
-	{
-		//pathfinding
-		int w, h;
-		uchar* data = NULL;
-		if (App->map->CreateWalkabilityMap(w, h, &data))
-			App->pathfinding->SetMap(w, h, data);
-
-		RELEASE_ARRAY(data);
-	}
-	else
-	{
-		App->paused = true;
-		App->gui->EnableElement(menu_background);
-	}
-
-	App->audio->PlayMusic(levels.At(current_level)->data.sound_path.GetString());
-}
 
 void j1Scene::GameOver()
 {
+	App->gui->EnableElement(loading_background);
 	current_level = 0;
 	App->swap_scene->FadeToBlack(0.0F);
 }
@@ -397,22 +427,22 @@ bool j1Scene::GUIEvent(j1UIElement * element, GUI_Event gui_event)
 				current_level = 0;
 				App->swap_scene->FadeToBlack(0.0F);
 
-				App->gui->EnableElement(menu_background);
+				App->gui->EnableElement(loading_background);
 				App->gui->DisableElement(pause_menu_panel);
 			}
 			else if(element == main_menu_button_play)
 			{
 				App->gui->DisableElement(menu_background);
+				App->gui->EnableElement(loading_background);
 
 				current_level = levels.At(current_level)->data.next_level;
 				App->swap_scene->FadeToBlack(0.0F);
 				App->entitymanager->player->ResetLives();
-
-				App->paused = false;
 			}
 			else if(element == main_menu_button_continue)
 			{
-				App->gui->DisableElement(main_menu_panel);
+				App->gui->DisableElement(menu_background);
+				App->gui->EnableElement(loading_background);
 
 				App->LoadGame();
 				App->paused = false;
@@ -429,7 +459,7 @@ bool j1Scene::GUIEvent(j1UIElement * element, GUI_Event gui_event)
 			}
 			else if (element == main_menu_button_exit)
 			{
-				exit(0);
+				game_running = false;
 			}
 			else if (element == credits_menu_button_main_menu)
 			{

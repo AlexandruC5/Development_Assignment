@@ -18,6 +18,12 @@ struct Level {
 	bool game_level = true;
 };
 
+struct Load_Data
+{
+	p2SString path;
+	bool finished = false;
+};
+
 class j1Scene : public j1Module
 {
 public:
@@ -52,16 +58,22 @@ public:
 
 	bool GUIEvent(j1UIElement* element, GUI_Event gui_event);
 
+	static int LoadLevelMap(void* data);
 	void LoadLevel();
 	void GameOver();
 
 	int current_level = 0;
 
-
 private:
+	SDL_Thread* load_map_thread = nullptr;
+	Load_Data load_data;
+	bool game_running = true;
+	bool loaded_scene = false;
+
 	p2List<Level> levels;
 
 	j1UIElement* menu_background;
+	j1UIElement* loading_background;
 
 	j1UIElement* main_menu_panel;
 	j1UIElement* main_menu_button_play;
