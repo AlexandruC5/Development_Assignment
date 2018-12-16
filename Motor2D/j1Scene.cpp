@@ -113,6 +113,10 @@ bool j1Scene::Start()
 	};
 	loading_animatedimage = App->gui->CreateAnimatedImage({120,30}, rects, 3, 10, loading_panel);
 
+	website_button = App->gui->CreateButton({ 65,620 }, menu_background);
+	App->gui->ScaleElement(website_button, -0.2F,-0.2F);
+	website_button_text = App->gui->CreateLabel({ 30, 22 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "WEBSITE", { 255,255,255 }, 0, website_button);
+
 	main_menu_panel = App->gui->CreateImage({ 850,50 }, { 551,711,380,539 }, menu_background);
 	App->gui->ScaleElement(main_menu_panel, 0.0F, 0.17F);
 	main_menu_button_play = App->gui->CreateButton({ 100, 52 }, main_menu_panel);
@@ -599,6 +603,10 @@ bool j1Scene::GUIEvent(j1UIElement * element, GUI_Event gui_event)
 			else if (element == settings_menu_sfx_slider->thumb || element == pause_menu_sfx_slider->thumb)
 			{
 				if(App->entitymanager->player->jump_fx) App->audio->PlayFx(App->entitymanager->player->jump_fx);
+			}
+			else if (element == website_button)
+			{
+				ShellExecuteA(NULL, "open", "https://thesaltmine.github.io/Development_Assignment/", NULL, NULL, SW_SHOWNORMAL);
 			}
 		}
 		break;

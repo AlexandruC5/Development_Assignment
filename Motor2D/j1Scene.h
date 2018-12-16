@@ -71,6 +71,7 @@ public:
 	j1UILabel* score_text;
 	j1UILabel* time_text;
 	Timer level_time;
+
 private:
 	bool game_running = true;
 
@@ -79,6 +80,9 @@ private:
 	j1UIElement* loading_animatedimage;
 	j1UIElement* loading_panel;
 	j1UIElement* loading_text;
+
+	j1UIElement* website_button;
+	j1UIElement* website_button_text;
 
 	j1UIElement* main_menu_panel;
 	j1UIElement* main_menu_button_play;
