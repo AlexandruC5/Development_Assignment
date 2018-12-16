@@ -5,6 +5,7 @@
 #include "j1Scene.h"
 #include "j1Map.h"
 #include "j1SwapScene.h"
+#include "j1EntityManager.h"
 #include "j1Gui.h"
 
 j1SwapScene::j1SwapScene()
@@ -123,6 +124,12 @@ bool j1SwapScene::LoadScreen(float time, bool save_game)
 		App->paused = false;
 		this->save_game = save_game;
 		ret = true;
+		App->scene->saved_time = 0;
+		App->entitymanager->player->ResetLives();
+		App->scene->time_text->SetColor({ 0, 0, 0 });
+		App->scene->score_text->SetColor({ 255,0,0 });
+		App->entitymanager->player->score = 0;
+		App->entitymanager->player->ResetScale();
 	}
 
 	return ret;

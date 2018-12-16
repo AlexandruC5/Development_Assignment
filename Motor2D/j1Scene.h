@@ -67,9 +67,12 @@ public:
 	j1UIElement* settings_menu_panel;
 	j1UIElement* credits_menu_panel;
 	j1UIElement* ingame_panel;
+	uint32 saved_time = 0;
+	j1UILabel* score_text;
+	j1UILabel* time_text;
+	Timer level_time;
 private:
 	bool game_running = true;
-	uint32 saved_time = 0;
 
 	p2List<Level> levels;
 
@@ -123,11 +126,11 @@ private:
 
 	j1UILabel* lives_text;
 	j1UIElement* lives_image;
-	j1UILabel* time_text;
+	
 	j1UIElement* score_image;
-	j1UILabel* score_text;
+	
 
-	Timer level_time;
+	
 };
 
 #endif // __j1SCENE_H__

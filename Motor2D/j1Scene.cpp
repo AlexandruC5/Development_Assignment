@@ -279,7 +279,14 @@ bool j1Scene::Update(float dt)
 		App->entitymanager->player->ScaleEntity(scalex, scalex);
 	}
 
-
+	if (App->entitymanager->player->score > 4 && current_level == 1)
+	{
+		score_text->SetColor({ 0,255,0 });
+	}
+	else if (App->entitymanager->player->score > 4 && current_level == 2)
+	{
+		score_text->SetColor({ 0,255,0 });
+	}
 	
 	App->render->camera.velocity = ((App->render->camera.target_speed * 0.4F) + (App->render->camera.velocity * (1 - 0.4F)));
 
@@ -475,11 +482,13 @@ bool j1Scene::CleanUp()
 
 bool j1Scene::OnCollision(Collider * c1, Collider * c2)
 {
-	App->entitymanager->player->state = WIN;
+	if (App->entitymanager->player->score > 4 && current_level == 1 || App->entitymanager->player->score > 4 && current_level == 2)
+	{
+		App->entitymanager->player->state = WIN;
 
-	current_level = levels.At(current_level)->data.next_level;
-	App->swap_scene->LoadScreen();
-
+		current_level = levels.At(current_level)->data.next_level;
+		App->swap_scene->LoadScreen();
+	}
 	return true;
 }
 
@@ -552,12 +561,10 @@ bool j1Scene::GUIEvent(j1UIElement * element, GUI_Event gui_event)
 				App->gui->DisableElement(pause_menu_panel);
 				App->swap_scene->LoadScreen();
 			}
-			else if(element == main_menu_button_play)
+			else if (element == main_menu_button_play)
 			{
 				current_level = levels.At(current_level)->data.next_level;
 				App->swap_scene->LoadScreen();
-				saved_time = 0;
-				App->entitymanager->player->ResetLives();
 			}
 			else if(element == main_menu_button_continue)
 			{
