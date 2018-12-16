@@ -363,6 +363,9 @@ bool j1Scene::Update(float dt)
 
 			App->gui->EnableElement(menu_background);
 			App->gui->DisableElement(pause_menu_panel);
+
+
+
 		}
 	}
 

@@ -129,7 +129,8 @@ bool j1SwapScene::LoadScreen(float time, bool save_game)
 		App->scene->time_text->SetColor({ 0, 0, 0 });
 		App->scene->score_text->SetColor({ 255,0,0 });
 		App->entitymanager->player->score = 0;
-		App->entitymanager->player->ResetScale();
+		App->entitymanager->player->Die();
+		App->entitymanager->player->lives++;
 	}
 
 	return ret;
