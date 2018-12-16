@@ -85,6 +85,7 @@ void j1Scene::LoadLevel(bool load_save)
 		App->render->Load(App->current_save.child("game_state").child("renderer"));
 	}
 
+	level_time.Start();
 }
 // Called before the first frame
 bool j1Scene::Start()
@@ -331,13 +332,13 @@ bool j1Scene::Update(float dt)
 		lives_text->SetText(tmp_string);
 
 
-		tmp_string.create("%i", (int)(level_time.Read()/1000));
+		tmp_string.create("%i", (int)(level_time.Read()/1000)+saved_time);
 		time_text->SetText(tmp_string);
-		if (((int)level_time.Read() / 1000) >= 900)
+		if (((int)level_time.Read() / 1000) + saved_time >= 900)
 		{
 			time_text->SetColor({ 255,0,0 });
 		}
-		if (((int)level_time.Read() / 1000) >= 1000)
+		if (((int)level_time.Read() / 1000) + saved_time >= 1000)
 		{
 			current_level = 0;
 			App->swap_scene->FadeToBlack(0.0F);
@@ -481,6 +482,8 @@ bool j1Scene::Load(pugi::xml_node &node)
 		if (levels.At(current_level)->data.game_level && menu_background->enabled)
 			menu_background->enabled = false;
 	}
+	saved_time = node.child("time").attribute("value").as_uint(0);
+	level_time.Start();
 
 	return true;
 }
@@ -490,6 +493,10 @@ bool j1Scene::Save(pugi::xml_node &node) const
 	pugi::xml_node scene_node;
 	scene_node = node.append_child("current_level");
 	scene_node.append_attribute("value") = current_level;
+
+	pugi::xml_node time_node = node.append_child("time");
+	time_node.append_attribute("value") = level_time.Read() / 1000 + saved_time;
+	
 
 	return levels.At(current_level)->data.game_level?true:false;
 }

@@ -66,6 +66,7 @@ public:
 	j1UIElement* menu_background;
 private:
 	bool game_running = true;
+	uint32 saved_time = 0;
 
 	p2List<Level> levels;
 
