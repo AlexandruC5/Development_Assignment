@@ -101,7 +101,7 @@ Loading screen with animated image.
 
 <video src="Website/Salty_the_Slime_Gameplay_video.mp4" width="640" height="400" controls preload></video>
 
-## Tools used
+### Tools used
 * IDE: Microsoft Visual Studio 2018
 * Language: C++
 * Graphics and audio: SDL 2.0
