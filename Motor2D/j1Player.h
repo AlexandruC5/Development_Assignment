@@ -23,7 +23,7 @@ private:
 	void ChargingUpdate();
 	void GodUpdate();
 	void Jump(float boost_y);
-	void Die();
+	
 
 public:
 	j1Player(EntityType type, pugi::xml_node, fPoint position, p2SString id,int clone_number);
@@ -41,6 +41,7 @@ public:
 	void ResetScale();
 	bool Save(pugi::xml_node &conf) const;
 	bool Load(pugi::xml_node &conf);
+	void Die();
 };
 
 #endif

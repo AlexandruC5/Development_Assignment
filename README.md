@@ -23,6 +23,10 @@ Grow up, divide and be the best.
 	
 	A/D: Horizontal movement.
 	
+	Q: Divide the slime
+	
+	E: Reagroup the slimes
+	
 	Debug Keys:
 	
 	F1: Load first scene.
@@ -34,6 +38,8 @@ Grow up, divide and be the best.
 	F5: Save.
 
 	F6: Load.
+	
+	F8: Debug UI.
 
 	F9: Colliders/Pathfinding Draw.
 
@@ -60,7 +66,6 @@ Axel Alavedra Cabello
 
 [Github account](https://github.com/AxelAlavedra)
 
-
 	Pathfinding, Enemies, Entity Structure.
 
 Alejandro París Gómez
@@ -74,15 +79,20 @@ Alejandro París Gómez
 ### Repository link
 https://github.com/TheSaltMine/Development_Assignment
 
-### Web link
-ShellExecute(NULL, TEXT("open"), TEXT("https://thesaltmine.github.io/Development_Assignment/"), NULL, NULL, SW_SHOWNORMAL);
-
 ### Innovations
 
 Implemented a method to only render the tiles inside the camera.
 Implemented infinite background scrolling, two backgrounds move one right before the other, 
 when one exits the camera it's repositioned behind the other, creating the effect of infinite parallax.
 Charged jump with vertical or diagional force.
+
+### Last Innovations
+
+The player can grow up eating enemies and can divide itself.
+The scale of the player affects his movility.
+You can only pass the levels by reaching a minimum score eating enemies.
+Escalable and dynamic UI. 
+Charging screen.
 
 ### Credits
 
@@ -92,6 +102,9 @@ Sprites:
 	
 Slime by [Yanfly](http://yanfly.moe/)
 Downloaded from [here](http://yanfly.moe/wp-content/uploads/2015/12/Slime1_1.png)
+
+All UI Sprites [Game Art 2D](https://www.gameart2d.com/)
+Downloaded from [here](https://www.gameart2d.com/free-fantasy-game-gui.html)
 
 Tilesets: 
 

@@ -6,6 +6,7 @@
 #include "j1Input.h"
 #include "j1EntityManager.h"
 #include "j1Player.h"
+#include "j1Collision.h"
 #include "Brofiler/Brofiler.h"
 
 j1EntityManager::j1EntityManager() : j1Module()
@@ -171,6 +172,7 @@ float j1EntityManager::Reagroup()
 			scale += entity->data->GetScale();
 			if (entity->data->GetType() == EntityType::PLAYERCLONE)
 			{
+				entity->data->collider->to_delete = true;
 				entities.del(entity);
 			}
 		}
