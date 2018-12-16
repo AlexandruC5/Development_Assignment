@@ -128,9 +128,10 @@ bool j1Scene::Start()
 	main_menu_button_exit_text = App->gui->CreateLabel({ 60,22 }, "fonts/open_sans/OpenSans-Bold.ttf", 28, "EXIT", { 255,255,255 }, 0, main_menu_button_exit);
 
 	settings_menu_panel = App->gui->CreateImage({ 450,50 }, { 551,711,380,539 }, menu_background);
-	App->gui->ScaleElement(settings_menu_panel, 0.0F, -0.4F);
+	App->gui->ScaleElement(settings_menu_panel, 0.0F, -0.2F);
 	settings_menu_button_main_menu = App->gui->CreateButton({ 100, 320 }, settings_menu_panel);
 	settings_menu_button_main_menu_text = App->gui->CreateLabel({ 60,14 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "MAIN\nMENU", { 255,255,255 }, 100, settings_menu_button_main_menu);
+
 	settings_menu_music_slider = credits_menu_text_scroll = App->gui->CreateScrollBar({ 110, 150 }, 0, MIX_MAX_VOLUME, HORIZONTAL, settings_menu_panel);
 	settings_menu_music_slider->SetValue(App->audio->GetMusicVolume());
 	settings_menu_music_text = App->gui->CreateLabel({ -55,-4 }, "fonts/open_sans/OpenSans-Bold.ttf", 16, "MUSIC", { 255,255,255 }, 0, settings_menu_music_slider);
@@ -139,6 +140,7 @@ bool j1Scene::Start()
 	settings_menu_music_text_value = App->gui->CreateLabel({ 205,-4 }, "fonts/open_sans/OpenSans-Bold.ttf", 16, " ", { 255,255,255 }, 0, settings_menu_music_slider);
 	settings_menu_music_text_value->parent_limit = false;
 	settings_menu_music_text_value->clipping = false;
+
 	settings_menu_sfx_slider = credits_menu_text_scroll = App->gui->CreateScrollBar({ 110, 250 }, 0, MIX_MAX_VOLUME, HORIZONTAL, settings_menu_panel);
 	settings_menu_sfx_slider->SetValue(App->audio->GetFXVolume());
 	settings_menu_sfx_text = App->gui->CreateLabel({ -55,-4 }, "fonts/open_sans/OpenSans-Bold.ttf", 16, "SFX", { 255,255,255 }, 0, settings_menu_sfx_slider);
@@ -187,7 +189,7 @@ bool j1Scene::Start()
 
 	lives_text = App->gui->CreateLabel({ 45,10 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "x 3", { 0,0,0 }, 80, ingame_panel);
 	lives_image = App->gui->CreateImage({ 5,5 }, { 1974,1998,94,87 }, ingame_panel);
-	App->gui->ScaleElement(lives_image, -0.6F, -0.6F);
+	App->gui->ScaleElement(lives_image, -0.6, -0.6F);
 
 	time_text = App->gui->CreateLabel({ (ingame_panel->GetLocalRect().w / 2) - 20,10 }, "fonts/open_sans/OpenSans-Bold.ttf", 22, "00:00", { 0,0,0 }, 80, ingame_panel);
 
@@ -259,15 +261,12 @@ bool j1Scene::Update(float dt)
 		}
 		else
 		{
+			App->gui->ScaleElement(pause_menu_panel, -0.5F, -0.5F);
+			App->gui->ScaleElement(pause_menu_panel, 0.5F, 0.5F, 0.2F);
 			App->paused = true;
 			App->gui->EnableElement(pause_menu_panel);
 		}
 	}
-
-	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
-		App->gui->ScaleElement(main_menu_panel, -0.5F, -0.5F, 0.5F);
-	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
-		App->gui->ScaleElement(main_menu_panel, 0.5F, 0.5F, 0.5F);
 
 	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN)
 	{
@@ -566,13 +565,17 @@ bool j1Scene::GUIEvent(j1UIElement * element, GUI_Event gui_event)
 			}
 			else if (element == main_menu_button_settings)
 			{
+				App->gui->ScaleElement(settings_menu_panel, -0.5f, -0.5f);
 				App->gui->EnableElement(settings_menu_panel);
 				App->gui->DisableElement(main_menu_panel);
+				App->gui->ScaleElement(settings_menu_panel, 0.5f, 0.5f, 0.2F);
 			}
 			else if (element == main_menu_button_credits)
 			{
+				App->gui->ScaleElement(credits_menu_panel, -0.5f, -0.5f);
 				App->gui->EnableElement(credits_menu_panel);
 				App->gui->DisableElement(main_menu_panel);
+				App->gui->ScaleElement(credits_menu_panel, 0.5f, 0.5f, 0.2F);
 			}
 			else if (element == main_menu_button_exit)
 			{
