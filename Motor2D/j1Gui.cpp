@@ -8,6 +8,7 @@
 #include "j1Scene.h"
 #include "j1Gui.h"
 #include "j1Textures.h"
+#include "j1Audio.h"
 #include "Brofiler/Brofiler.h"
 
 j1Gui::j1Gui() : j1Module()
@@ -548,6 +549,7 @@ bool j1UIButton::UIBlit()
 void j1UIButton::OnMouseClick()
 {
 	rect_sprite = anim[2];
+	App->audio->PlayFx(sound);
 }
 
 void j1UIButton::OnMouseHover()
@@ -588,6 +590,8 @@ j1UIButton::j1UIButton(iPoint position, bool is_interactable)
 	anim[2] = { 2839,524,180,89 };
 	anim[3] = { 3029,524,180,89 };
 	rect_sprite = anim[interactable?0:3];
+
+	sound = App->audio->LoadFx("fx_button.wav");
 }
 
 j1UIScrollBar::j1UIScrollBar(iPoint pos, ScrollType type)

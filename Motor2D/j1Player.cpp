@@ -307,6 +307,7 @@ void j1Player::Die()
 void j1Player::ResetLives()
 {
 	lives = starting_lives;
+	score = 0;
 }
 
 void j1Player::ResetScale()
@@ -317,4 +318,24 @@ void j1Player::ResetScale()
 	collider_offset = 40 * scale_Y;
 	collider->rect.h = 53 * scale_Y;
 	collider->rect.w = 94 * scale_X;
+}
+
+bool j1Player::Save(pugi::xml_node &conf) const
+{
+	j1Entity::Save(conf);
+	pugi::xml_node lives = conf.append_child("lives");
+	lives.append_attribute("value") = this->lives;
+	pugi::xml_node score = conf.append_child("score");
+	score.append_attribute("value") = this->score;
+
+	return true;
+}
+
+bool j1Player::Load(pugi::xml_node &conf)
+{
+	j1Entity::Load(conf);
+	lives = conf.child("lives").attribute("value").as_int();
+	score = conf.child("score").attribute("value").as_int();
+
+	return true;
 }

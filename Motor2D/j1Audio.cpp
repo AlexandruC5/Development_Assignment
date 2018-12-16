@@ -158,7 +158,7 @@ unsigned int j1Audio::LoadFx(const char* file)
 
 	if(chunk == NULL)
 	{
-		LOG("Cannot load wav %s. Mix_GetError(): %s", path, Mix_GetError());
+		LOG("Cannot load wav %s. Mix_GetError(): %s", path.GetString(), Mix_GetError());
 	}
 	else
 	{

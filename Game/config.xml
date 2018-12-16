@@ -149,8 +149,8 @@
   <audio>
     <fx_folder>audio/fx</fx_folder>
     <music_folder>audio/music</music_folder>
-    <music_volume value="50"/>
-    <fx_volume value="25"/>
+    <music_volume value="96"/>
+    <fx_volume value="96"/>
   </audio>
 
 </config>

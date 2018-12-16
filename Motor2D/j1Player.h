@@ -39,6 +39,8 @@ public:
 	void OnCollision(Collider* c1, Collider* c2);
 	void ResetLives();
 	void ResetScale();
+	bool Save(pugi::xml_node &conf) const;
+	bool Load(pugi::xml_node &conf);
 };
 
 #endif

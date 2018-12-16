@@ -109,6 +109,7 @@ public:
 	~j1UIButton();
 
 	SDL_Rect* anim;
+	int sound;
 
 	bool UIBlit();
 	void OnMouseClick();
