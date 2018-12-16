@@ -4,7 +4,7 @@
 Salty the Slime v.0.0.2
 
 ### Description
-Platformer game made for Development subject with SDL2. 
+Platformer game made for Development subject with SDL2.
 Be a salty slime jumping around the levels.
 Grow up, divide and be the best.
 
@@ -46,10 +46,6 @@ Grow up, divide and be the best.
 	F10: God Mode.
 	
 	F11: Cap/Uncap FPS
-
-	+/-: Increase/Decrease music volume.
-	
-	SHIFT+(+/-): Increase/Decrease fx volume.
 
 ### Instructions to execute
 
