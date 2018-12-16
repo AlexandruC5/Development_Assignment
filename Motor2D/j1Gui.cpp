@@ -46,17 +46,6 @@ bool j1Gui::PreUpdate()
 	if (App->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
 		debug_draw = !debug_draw;
 
-	//scale stuff
-	if (scaling_element != nullptr)
-	{
-		Uint32 now = scale_timer.Read();
-
-		if (now < scale_time)
-			DoScale(scaling_element, scale_increment_x, scale_increment_y);
-		else if (now >= scale_time)
-			scaling_element = nullptr;
-	}
-
 
 	j1UIElement* selected_element = GetElementUnderMouse();
 
@@ -125,6 +114,37 @@ bool j1Gui::PreUpdate()
 
 bool j1Gui::Update(float dt)
 {
+	//scale stuff
+	if (scaling_elements.count()> 0)
+	{
+		bool done = false;
+		Uint32 now = scale_timer.Read();
+		for (p2List_item<j1UIElement*>* item = scaling_elements.start; item != NULL; item = item->next)
+		{			
+			j1UIElement* element = item->data;
+			float current_scale_x, current_scale_y;
+			element->GetScale(current_scale_x, current_scale_y);
+
+			if (now < scale_time)
+			{
+				float time_norm_value = (float)((float)now / (float)scale_time);
+				time_norm_value = floor((time_norm_value * 100) + .5) / 100;
+
+				float new_scale_x = (time_norm_value * (element->final_scale_X - element->starting_scale_X)) + element->starting_scale_X;
+				float new_scale_y = (time_norm_value * (element->final_scale_Y - element->starting_scale_Y)) + element->starting_scale_Y;
+
+				DoScale(element, new_scale_x - current_scale_x, new_scale_y - current_scale_y);
+			}
+			else
+			{
+				done = true;
+				DoScale(element, element->final_scale_X, element->final_scale_Y, true);
+			}
+		}	
+		if (done)
+			scaling_elements.clear();
+	}
+
 	BROFILER_CATEGORY("UIUpdate", Profiler::Color::Magenta);
 	for (p2List_item<j1UIElement*>* item = elements.start; item != NULL; item = item->next)
 	{
@@ -165,12 +185,12 @@ bool j1Gui::CleanUp()
 	elements.clear();
 	App->tex->UnLoad(atlas);
 	atlas = nullptr;
-	scaling_element = nullptr;
+	scaling_elements.clear();
 
 	return true;
 }
 
-j1UIImage * j1Gui::CreateImage(iPoint pos, SDL_Rect rect, j1UIElement* parent, bool image_)
+j1UIImage* j1Gui::CreateImage(iPoint pos, SDL_Rect rect, j1UIElement* parent, bool image_)
 {
 	j1UIImage* image = new j1UIImage(pos, rect, image_);
 	image->parent = parent;
@@ -185,7 +205,6 @@ j1UILabel * j1Gui::CreateLabel(iPoint pos, p2SString path, int size, p2SString t
 	j1UILabel* label = new j1UILabel(pos, font, text, color, max_width);
 	label->parent = parent;
 	elements.add(label);
-
 
 	return label;
 }
@@ -263,21 +282,31 @@ j1UIElement* j1Gui::GetElementUnderMouse()
 
 void j1Gui::ScaleElement(j1UIElement* element, float scaleX, float scaleY, float time)
 {
-	if (time != 0.0F)
+	if (time > 0.0)
 	{
 		scale_timer.Start();
-		scaling_element = element;
-		scale_time = (uint32)(time * 0.5F * 1000.0F);
-		scale_increment_x = (scaleX / time) / App->frame_rate;
-		scale_increment_y = (scaleY / time) / App->frame_rate;
+		scale_time = (uint32)(time * 1000.0F);
+		element->GetScale(element->starting_scale_X, element->starting_scale_Y);
+		element->final_scale_X = floor(((element->starting_scale_X + scaleX) * 100) + .5) / 100;
+		element->final_scale_Y = floor(((element->starting_scale_Y + scaleY) * 100) + .5) / 100;
+		scaling_elements.add(element);
+
+		for (p2List_item<j1UIElement*>* child_item = elements.start; child_item != NULL; child_item = child_item->next)
+		{
+			if (child_item->data->parent && child_item->data->parent == element)
+			{
+				ScaleElement(child_item->data, scaleX, scaleY, time);
+			}
+		}
 	}
 	else
 	{
-		DoScale(element, scaleX, scaleY);
+		InstantScale(element, scaleX, scaleY);
 	}
+
 }
 
-void j1Gui::DoScale(j1UIElement* element, float scaleX, float scaleY)
+void j1Gui::InstantScale(j1UIElement* element, float scaleX, float scaleY)
 {
 	float scale_x, scale_y;
 	element->GetScale(scale_x, scale_y);
@@ -289,8 +318,25 @@ void j1Gui::DoScale(j1UIElement* element, float scaleX, float scaleY)
 	{
 		if (child_item->data->parent && child_item->data->parent == element)
 		{
-			DoScale(child_item->data, scaleX, scaleY);
+			InstantScale(child_item->data, scaleX, scaleY);
 		}
+	}
+
+}
+
+void j1Gui::DoScale(j1UIElement* element, float scaleX, float scaleY, bool assign)
+{
+	if (!assign)
+	{
+		float scale_x, scale_y;
+		element->GetScale(scale_x, scale_y);
+		scale_x += scaleX;
+		scale_y += scaleY;
+		element->SetScale(scale_x, scale_y);
+	}
+	else
+	{
+		element->SetScale(scaleX, scaleY);
 	}
 }
 
@@ -595,11 +641,12 @@ j1UIButton::j1UIButton(iPoint position, bool is_interactable)
 }
 
 j1UIScrollBar::j1UIScrollBar(iPoint pos, ScrollType type)
-{
-	thumb = App->gui->CreateImage({ 0,0 }, { 2597,623,89,89 }, this);
+{	
+	thumb = App->gui->CreateImage({ 0, 0 }, { 2597,623,89,89 }, this);
 	thumb->SetScale(0.2F, 0.2F);
 	thumb->dragable = true;
 	thumb->interactable = true;
+
 	this->type = type;
 
 	if (type == VERTICAL)

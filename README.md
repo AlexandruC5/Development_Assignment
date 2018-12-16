@@ -79,9 +79,6 @@ Alejandro París Gómez
 ### Repository link
 https://github.com/TheSaltMine/Development_Assignment
 
-### Web link
-ShellExecute(NULL, TEXT("open"), TEXT("https://thesaltmine.github.io/Development_Assignment/"), NULL, NULL, SW_SHOWNORMAL);
-
 ### Innovations
 
 Implemented a method to only render the tiles inside the camera.

@@ -39,6 +39,11 @@ public:
 	bool clipping = true; //Zona que se pinta es el rectangulo del padre.
 	bool parent_limit = true;
 
+	float starting_scale_X = 1.0F;
+	float starting_scale_Y = 1.0F;
+	float final_scale_X = 1.0F;
+	float final_scale_Y = 1.0F;
+
 
 	j1UIElement(j1UIElement* parent = nullptr);
 	~j1UIElement();
@@ -183,6 +188,8 @@ public:
 	void EnableElement(j1UIElement* element);
 	void DisableElement(j1UIElement* element);
 
+	
+
 
 	SDL_Texture* GetAtlas() const;
 
@@ -192,11 +199,11 @@ private:
 	p2SString atlas_file_name;
 
 	//scaling
-	j1UIElement* scaling_element = nullptr;
+	void InstantScale(j1UIElement* element, float scaleX, float scaleY);
+	p2List<j1UIElement*> scaling_elements;
 	uint scale_time = 0;
 	Timer scale_timer;
-	float scale_increment_x, scale_increment_y;
-	void DoScale(j1UIElement* element, float scaleX, float scaleY);
+	void DoScale(j1UIElement* element, float scaleX, float scaleY, bool assign = false);
 	bool debug_draw = false;
 };
 
