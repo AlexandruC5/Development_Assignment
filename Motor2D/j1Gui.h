@@ -83,6 +83,7 @@ public:
 	~j1UILabel();
 	bool UIBlit();
 	void SetText(p2SString text);
+	void SetColor(SDL_Color color);
 };
 class j1UIButton : public j1UIElement
 {

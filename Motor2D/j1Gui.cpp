@@ -480,6 +480,11 @@ void j1UILabel::SetText(p2SString text)
 	this->text = text;
 }
 
+void j1UILabel::SetColor(SDL_Color color)
+{
+	this->color = color;
+}
+
 
 
 j1UIButton::~j1UIButton()

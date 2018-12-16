@@ -268,6 +268,18 @@ bool j1Scene::Update(float dt)
 
 		tmp_string.create("%i", (int)(level_time.Read()/1000));
 		time_text->SetText(tmp_string);
+		if (((int)level_time.Read() / 1000) >= 900)
+		{
+			time_text->SetColor({ 255,0,0 });
+		}
+		if (((int)level_time.Read() / 1000) >= 1000)
+		{
+			current_level = 0;
+			App->swap_scene->FadeToBlack(0.0F);
+
+			App->gui->EnableElement(menu_background);
+			App->gui->DisableElement(pause_menu_panel);
+		}
 	}
 
 	if (main_menu_button_continue->interactable != App->save_file_exists)
@@ -368,6 +380,8 @@ void j1Scene::LoadLevel()
 
 	App->map->Load(levels.At(current_level)->data.map_path.GetString());
 	App->entitymanager->player->ResetEntity();
+	level_time.Start();
+	time_text->SetColor({ 0,0,0 });
 
 	if (levels.At(current_level)->data.game_level)
 	{
@@ -435,7 +449,6 @@ bool j1Scene::GUIEvent(j1UIElement * element, GUI_Event gui_event)
 				current_level = levels.At(current_level)->data.next_level;
 				App->swap_scene->FadeToBlack(0.0F);
 				App->entitymanager->player->ResetLives();
-				level_time.Start();
 
 				App->paused = false;
 			}
